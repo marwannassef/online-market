@@ -1,18 +1,19 @@
 package com.miu.onlinemarket.preconfig;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import com.miu.onlinemarket.domain.Role;
 import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.repository.RoleRepository;
 import com.miu.onlinemarket.repository.UserRepository;
 import com.miu.onlinemarket.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 @Component
 public class OnApplicationStartUp {
@@ -56,7 +57,10 @@ public class OnApplicationStartUp {
         user.setDateOfBirth(LocalDate.parse("1990-03-22"));
         user.setUsername("admin");
         user.setPassword("admin");
-        userService.addAdminUser(user);
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleRepo.findByName("ROLE_ADMIN"));
+        user.setRoles(roles);
+        userService.save(user);
     }
 
     private void createSeller() {
@@ -68,7 +72,7 @@ public class OnApplicationStartUp {
         user.setDateOfBirth(LocalDate.parse("1990-03-22"));
         user.setUsername("seller");
         user.setPassword("seller");
-        HashSet<Role> roles = new HashSet<>();
+        List<Role> roles = new ArrayList<>();
         roles.add(roleRepo.findByName("ROLE_SELLER"));
         user.setRoles(roles);
         userService.save(user);
@@ -83,7 +87,7 @@ public class OnApplicationStartUp {
         user.setDateOfBirth(LocalDate.parse("1990-03-22"));
         user.setUsername("buyer");
         user.setPassword("buyer");
-        HashSet<Role> roles = new HashSet<>();
+        List<Role> roles = new ArrayList<>();
         roles.add(roleRepo.findByName("ROLE_BUYER"));
         user.setRoles(roles);
         userService.save(user);

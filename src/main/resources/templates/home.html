@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<link type="text/css" rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	th:href="@{css/bootstrap.min.css}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Role visualization</title>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<div sec:authorize="hasAuthority('ROLE_ADMIN')">Has Authority ADMIN</div>
+	<div sec:authorize="hasAuthority('ROLE_SELLER')">Has Authority SELLER</div>
+	<div sec:authorize="hasAuthority('ROLE_BUYER')">Has Authority BUYER</div>
+</body>
+</html>

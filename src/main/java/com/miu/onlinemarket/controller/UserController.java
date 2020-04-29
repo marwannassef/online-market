@@ -1,97 +1,74 @@
 package com.miu.onlinemarket.controller;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.miu.onlinemarket.service.UserService;
+import com.miu.onlinemarket.domain.Role;
+import com.miu.onlinemarket.domain.User;
+import com.miu.onlinemarket.repository.UserRepository;
 
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	UserRepository userRepository;
 
-    @Value("${jwt.http.request.header}")
-    private String tokenHeader;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserDetailsService jwtUserDetailsService;
-
-    @GetMapping("/login")
-	public String greeting(Model model) {
-//    	model.addAttribute("authenticationRequest", new JwtTokenRequest());
+	@RequestMapping(value = { "/login", "/" })
+	public String login(Model model) {
 		return "login";
 	}
 
-//    @RequestMapping(value = "${jwt.get.token.uri}", method = RequestMethod.POST)
-//    public String createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest)
-//            throws AuthenticationException {
-//        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-//        final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-//        final String token = jwtTokenUtil.generateToken(userDetails);
-//        return "greeting";
-//    }
+	@RequestMapping(value = "/home")
+	public String home(Model model) {
+		return "home";
+	}
 
-    private void authenticate(String username, String password) {
-        Objects.requireNonNull(username);
-        Objects.requireNonNull(password);
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-//            throw new AuthenticationException("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-//            throw new AuthenticationException("INVALID_CREDENTIALS", e);
-        } catch (Exception e) {
-//            throw new AuthenticationException("INVALID_CREDENTIALS", e);
-        }
-    }
+	@RequestMapping(value = "/signup")
+	public String signUp(Model model) {
+		model.addAttribute("user", new User());
+		return "signup";
+	}
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+	@RequestMapping(value = "saveuser", method = RequestMethod.POST)
+	public String save(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+		System.out.println(bindingResult.toString());
+		if (!bindingResult.hasErrors()) { // validation errors
+			if (user.getPassword().equals(user.getPasswordCheck())) { // check password match
+				String pwd = user.getPassword();
+				BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+				String hashPwd = bc.encode(pwd);
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    @GetMapping(value = "user/get_all")
-//    public List<User> list() {
-//        return userService.findAll();
-//    }
-//
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    @GetMapping(value = "user/get/{userId}")
-//    public User getUserById(@PathVariable Long userId) {
-//        return userService.findById(userId);
-//    }
-//
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    @PostMapping(value = "user/add")
-//    public User addNewUser(@Valid @RequestBody User user) {
-//        return userService.save(user);
-//    }
-//
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    @PutMapping(value = "user/update/{userId}")
-//    public User updateUser(@Valid @RequestBody User editedUser, @PathVariable Long userId) {
-//        return userService.update(editedUser, userId);
-//    }
-//
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    @DeleteMapping(value = "user/delete/{userId}")
-//    public void deleteUser(@PathVariable Long userId) {
-//        userService.delete(userId);
-//    }
+				User newUser = new User();
+				newUser.setPassword(hashPwd);
+				newUser.setEmail(user.getUsername());
+				List<Role> roles = new ArrayList<Role>();
+				roles.add(new Role("USER"));
+				newUser.setRoles(roles);
+				if (userRepository.findByUsername(user.getUsername()) == null) {
+					userRepository.save(newUser);
+				} else {
+					bindingResult.rejectValue("username", "error.userexists", "Username already exists");
+					return "signup";
+				}
+			} else {
+				bindingResult.rejectValue("passwordCheck", "error.pwdmatch", "Passwords does not match");
+				return "signup";
+			}
+		} else {
+			return "signup";
+		}
+		return "signup";
+	}
 
 }

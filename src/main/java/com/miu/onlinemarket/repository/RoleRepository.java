@@ -1,12 +1,13 @@
 package com.miu.onlinemarket.repository;
 
-import com.miu.onlinemarket.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.miu.onlinemarket.domain.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-    Role findByName(String name);
+	Role findByName(String role);
 
 }

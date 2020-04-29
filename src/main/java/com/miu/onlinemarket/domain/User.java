@@ -1,7 +1,7 @@
 package com.miu.onlinemarket.domain;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,11 +59,13 @@ public class User {
 
     @Column(name = "password")
     private String password;
+    
+    private String passwordCheck;
 
     @NotNull(message = "*Please provide role")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<@Valid Role> roles;
+    private List<@Valid Role> roles;
 
     public User() {
     }
@@ -80,11 +82,11 @@ public class User {
         this.roles = user.getRoles();
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
@@ -151,5 +153,13 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+	public String getPasswordCheck() {
+		return passwordCheck;
+	}
+
+	public void setPasswordCheck(String passwordCheck) {
+		this.passwordCheck = passwordCheck;
+	}
 
 }
