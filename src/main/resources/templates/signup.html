@@ -12,7 +12,7 @@
 		<h1>Sign-up</h1>
 		<div class="col-md-4">
 			<form th:object="${user}" th:action="@{/addUser}" action="#"
-				method="post">
+				method="post" enctype="multipart/form-data">
 				<input type="text" th:field="*{firstName}" class="form-control"
 					placeholder="First Name" />
 				<p th:if="${#fields.hasErrors('firstName')}"
