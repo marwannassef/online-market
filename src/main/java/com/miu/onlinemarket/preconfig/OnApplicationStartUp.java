@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -27,6 +29,9 @@ public class OnApplicationStartUp {
     @Autowired
     private RoleRepository roleRepo;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
         List<User> users = userRepo.findAll();
@@ -37,6 +42,7 @@ public class OnApplicationStartUp {
         createAdminUser();
         createSeller();
         createBuyer();
+        createProduct();
     }
 
     private void fillRoleTable() {
@@ -91,6 +97,15 @@ public class OnApplicationStartUp {
         roles.add(roleRepo.findByName("ROLE_BUYER"));
         user.setRoles(roles);
         userService.save(user);
+    }
+
+    private void createProduct() {
+        Product product = new Product();
+        product.setName("Mobile");
+        productRepository.save(product);
+        Product product2 = new Product();
+        product2.setName("TV");
+        productRepository.save(product2);
     }
 
 }

@@ -17,5 +17,10 @@
 	<div sec:authorize="hasAuthority('ROLE_ADMIN')">Has Authority ADMIN</div>
 	<div sec:authorize="hasAuthority('ROLE_SELLER')">Has Authority SELLER</div>
 	<div sec:authorize="hasAuthority('ROLE_BUYER')">Has Authority BUYER</div>
+
+	<tr th:each="product: ${productList}">
+		<td th:text="${product.name}"></td>
+
+	</tr>
 </body>
 </html>
