@@ -6,6 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.CreditCardNumber;
 
 @Entity
 public class PaymentMethod {
@@ -14,12 +18,17 @@ public class PaymentMethod {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@NotEmpty
+	@CreditCardNumber
 	private String cardNumber;
 
+	@Future
 	private LocalDate expiryDate;
 
+	@NotEmpty
 	private String cvv;
 
+	@NotEmpty
 	private String nameOnCard;
 
 	public PaymentMethod() {

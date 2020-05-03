@@ -31,16 +31,15 @@ public class User {
     private long userId;
 
     @Column(name = "first_name")
-    @NotEmpty(message = "{Validation.required}")
+    @NotEmpty
     private String firstName;
 
     @Column(name = "last_name")
-    @NotEmpty(message = "{Validation.required}")
+    @NotEmpty
     private String lastName;
 
     @Column(name = "date_of_birth")
-    @NotNull(message = "{Validation.required}")
-    @DateTimeFormat(pattern = "YYYY/MM/dd")
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate dateOfBirth;
 
     @Column(name = "email")
@@ -48,16 +47,15 @@ public class User {
     private String email;
 
     @Column(name = "phone_number")
-    @NotEmpty(message = "{Validation.required}")
     @Pattern(regexp = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$", message = "* please provide valid phone number")
     private String phoneNumber;
 
     @Column(name = "user_name", unique = true)
-    @NotEmpty(message = "{Validation.required}")
     @Size(min = 5, max = 14, message = "{Size.name}")
     private String username;
 
     @Column(name = "password")
+    @NotEmpty
     private String password;
     
     private String passwordCheck;

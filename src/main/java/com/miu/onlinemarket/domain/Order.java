@@ -12,7 +12,7 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private double totalPrice;
+	private double totalPrice = 0;
 
 	@OneToMany
 	@JoinColumn(name = "orders_id")

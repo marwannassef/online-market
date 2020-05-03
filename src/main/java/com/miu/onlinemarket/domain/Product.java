@@ -3,6 +3,7 @@ package com.miu.onlinemarket.domain;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Product {
@@ -11,13 +12,15 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@NotEmpty
 	private String name;
 
+	@NotEmpty
 	private String description;
 
-	private long price;
+	private long price = 0;
 
-	private long quantity;
+	private long quantity = 0;
 
 	@ManyToOne
 	@JoinColumn(name = "seller_id")

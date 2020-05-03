@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Item {
@@ -16,8 +17,9 @@ public class Item {
 	@OneToOne
 	private Product product;
 
-	private long quantity;
+	private long quantity = 0;
 
+	@NotEmpty
 	private String shippingStatus;
 
 	public Item(Product product, long quantity, String shippingStatus) {

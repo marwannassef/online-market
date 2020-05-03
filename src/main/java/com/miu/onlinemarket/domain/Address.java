@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -18,22 +19,23 @@ public class Address {
 	@Size(min = 5, max = 20)
 	private String street;
 
-	@NotEmpty
-	private String city;
+	@Min(value = 1, message = "{validation.number.min}")
+	private long city;
+
+	@Min(value = 1, message = "{validation.number.min}")
+	private long state;
 
 	@NotEmpty
-	private String state;
-
-	@NotEmpty
+	@Size(min = 5, max = 5, message = "{validation.zipCode.size}")
 	private String zipCode;
 
-	@NotEmpty
-	private String country;
+	@Min(value = 1, message = "{validation.number.min}")
+	private long country;
 
 	public Address() {
 	}
 
-	public Address(String street, String city, String state, String zipCode, String country) {
+	public Address(String street, long city, long state, String zipCode, long country) {
 		this.street = street;
 		this.city = city;
 		this.state = state;
@@ -57,19 +59,19 @@ public class Address {
 		this.street = street;
 	}
 
-	public String getCity() {
+	public long getCity() {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(long city) {
 		this.city = city;
 	}
 
-	public String getState() {
+	public long getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
@@ -81,11 +83,11 @@ public class Address {
 		this.zipCode = zipCode;
 	}
 
-	public String getCountry() {
+	public long getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(long country) {
 		this.country = country;
 	}
 

@@ -1,6 +1,7 @@
 package com.miu.onlinemarket.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Review {
@@ -9,9 +10,10 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@NotEmpty
 	private String review;
 
-	private boolean reviewStatus;
+	private boolean reviewStatus = false;
 
 	@OneToOne
 	@JoinColumn(name = "buyer_id")
