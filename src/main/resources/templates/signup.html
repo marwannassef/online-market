@@ -1,34 +1,70 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{layouts/dashboard_layout}"
+	xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>Add student</title>
-<link type="text/css" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-	th:href="@{css/bootstrap.min.css}" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Sign-up</title>
 </head>
 <body>
-	<h1>Sign-up</h1>
-	<div class="col-md-4">
-		<form th:object="${user}" th:action="@{/saveuser}" action="#"
-			method="post">
-			<input type="text" th:field="*{username}" class="form-control"
-				placeholder="Username" />
-			<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username
-				Error</p>
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<input type="password" th:field="*{password}" class="form-control"
-				placeholder="Password" />
-			<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password
-				Error</p>
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<input type="password" th:field="*{passwordCheck}"
-				class="form-control" placeholder="Re-enter Password" />
-			<p th:if="${#fields.hasErrors('passwordCheck')}"
-				th:errors="*{passwordCheck}">Password Match Error</p>
 
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<input type="submit" class="btn btn-primary" value="Save"></input>
-		</form>
+	<div class="col" layout:fragment="main-content">
+		<h1>Sign-up</h1>
+		<div class="col-md-4">
+			<form th:object="${user}" th:action="@{/addUser}" action="#"
+				method="post">
+				<input type="text" th:field="*{firstName}" class="form-control"
+					placeholder="First Name" />
+				<p th:if="${#fields.hasErrors('firstName')}"
+					th:errors="*{firstName}">Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="text" th:field="*{lastName}" class="form-control"
+					placeholder="Last Name" />
+				<p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="date" th:field="*{dateOfBirth}" class="form-control"
+					placeholder="Date of Birth" />
+				<p th:if="${#fields.hasErrors('dateOfBirth')}"
+					th:errors="*{dateOfBirth}">Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="email" th:field="*{email}" class="form-control"
+					placeholder="Email" />
+				<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="tel" th:field="*{phoneNumber}" class="form-control"
+					placeholder="Phone Number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"/>
+				<p th:if="${#fields.hasErrors('phoneNumber')}"
+					th:errors="*{phoneNumber}">Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="text" th:field="*{username}" class="form-control"
+					placeholder="Username" />
+				<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="password" th:field="*{password}" class="form-control"
+					placeholder="Password" />
+				<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="password" th:field="*{passwordCheck}"
+					class="form-control" placeholder="Re-enter Password" />
+				<p th:if="${#fields.hasErrors('passwordCheck')}"
+					th:errors="*{passwordCheck}">Password Match Error</p>
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="file" id="file" th:field="*{image}"
+					accept="image/png, image/jpeg" />
+				<div style="clear: both; display: block; height: 10px;"></div>
+
+				<input type="submit" class="btn btn-primary" value="Save"></input>
+			</form>
+		</div>
 	</div>
+
 </body>
 </html>

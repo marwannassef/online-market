@@ -129,7 +129,7 @@ public class OnApplicationStartUp {
 			}
 			countries.add(country);
 		}
-		System.out.print(countries);
+//		System.out.print(countries);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -159,7 +159,7 @@ public class OnApplicationStartUp {
 				states.put(state.getCountry_id(), stateList);
 			}
 		}
-		System.out.print(states);
+//		System.out.print(states);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -189,7 +189,7 @@ public class OnApplicationStartUp {
 				cities.put(city.getState_id(), cityList);
 			}
 		}
-		System.out.print(cities);
+//		System.out.print(cities);
 	}
 
 }

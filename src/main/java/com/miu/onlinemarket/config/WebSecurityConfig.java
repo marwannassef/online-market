@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
     	http
-    		.authorizeRequests().antMatchers("/css/**", "/signup/**", "/console/**").permitAll()
+    		.authorizeRequests().antMatchers("/css/**", "/signup/**").permitAll()
     			.and()
             .authorizeRequests()
                 .anyRequest().authenticated()
@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity webSecurity) {
-		webSecurity.ignoring().antMatchers(HttpMethod.OPTIONS, "/**").and().ignoring().antMatchers("/h2/**/**");																																															// Production!;
+		webSecurity.ignoring().antMatchers(HttpMethod.OPTIONS, "/**").and().ignoring().antMatchers("/console/**/**");																																															// Production!;
 	}
 
 }
