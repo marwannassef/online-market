@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{layouts/dashboard_layout}"
+	xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<link type="text/css" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-	th:href="@{css/bootstrap.min.css}" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>User login</title>
+<title>Home Page</title>
 </head>
 <body>
-	<div class="col-md-4 col-md-offset-4">
-		<div class="alert alert-danger" th:if="${param.error}">Invalid
-			username and password.</div>
-		<div class="alert alert-warning" th:if="${param.logout}">You
-			have been logged out.</div>
+
+	<div class="col" layout:fragment="main-content">
+		<div th:if="${param.error}">Invalid Username and Password.</div>
+		<div th:if="${param.logout}">You have been logged out.</div>
 		<form th:action="@{/login}" method="post">
 			<div>
 				<label> User Name : <input type="text" name="username"
@@ -24,10 +23,11 @@
 				</label>
 			</div>
 			<div>
-				<input type="submit" value="Sign In" class="btn btn-primary" />
+				<input type="submit" value="Sign In" />
 			</div>
 		</form>
 		<a th:href="@{/signup}">Sign-up</a>
 	</div>
+
 </body>
 </html>
