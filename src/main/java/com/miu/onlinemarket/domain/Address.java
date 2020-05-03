@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Address {
@@ -12,14 +14,20 @@ public class Address {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@NotEmpty
+	@Size(min = 5, max = 20)
 	private String street;
 
+	@NotEmpty
 	private String city;
 
+	@NotEmpty
 	private String state;
 
+	@NotEmpty
 	private String zipCode;
 
+	@NotEmpty
 	private String country;
 
 	public Address() {
