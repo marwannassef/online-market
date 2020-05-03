@@ -1,39 +1,50 @@
 package com.miu.onlinemarket.domain;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Seller extends User {
-    private Boolean approve_sale = false;
-    @OneToMany(mappedBy = "seller")
-    List<Product> products = new ArrayList<Product>();
 
-    public Seller() {}
-    public Seller(User user, Boolean approve_sale, List<Product> products) {
-        super(user);
-        this.approve_sale = approve_sale;
-        this.products = products;
-    }
+	private Boolean approved = false;
 
-    public Boolean getApprove_sale() {
-        return approve_sale;
-    }
+	@OneToMany(mappedBy = "products")
+	List<Product> products;
 
-    public void setApprove_sale(Boolean approve_selling) {
-        this.approve_sale = approve_selling;
-    }
+	@OneToMany(mappedBy = "items")
+	List<Item> items;
 
-    public List<Product> getProducts() {
-        return products;
-    }
+	public Seller(User user, Boolean approved, List<Product> products, List<Item> items) {
+		super(user);
+		this.approved = approved;
+		this.products = products;
+		this.items = items;
+	}
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-    public void addProduct( Product product) {
-        this.products.add(product);
-    }
+	public Boolean getApproved() {
+		return approved;
+	}
+
+	public void setApproved(Boolean approved) {
+		this.approved = approved;
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+	public List<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
+
 }

@@ -1,78 +1,98 @@
 package com.miu.onlinemarket.domain;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 @Entity
-public class Product{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String description;
-    Long price;
-    Long quantity;
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
-    Seller seller;
-    @OneToOne(mappedBy = "product")
-    ShippingCart shippingCart;
-    public Product(){}
-    public Product(String description, Long price, Long quantity, Seller seller,ShippingCart shippingCart) {
-        this.description = description;
-        this.price = price;
-        this.quantity = quantity;
-        this.seller = seller;
-        this.shippingCart = shippingCart;
-    }
+public class Product {
 
-    public ShippingCart getShippingCart() {
-        return shippingCart;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public void setShippingCart(ShippingCart shippingCart) {
-        this.shippingCart = shippingCart;
-    }
+	private String name;
 
-    public Long getId() {
-        return id;
-    }
+	private String description;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private long price;
 
-    public String getDescription() {
-        return description;
-    }
+	private long quantity;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@ManyToOne
+	Seller seller;
 
-    public Long getPrice() {
-        return price;
-    }
+	@OneToMany
+	List<Review> reviews;
 
-    public void setPrice(Long price) {
-        this.price = price;
-    }
+	public Product(String name, String description, long price, long quantity, Seller seller, List<Review> reviews) {
+		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.quantity = quantity;
+		this.seller = seller;
+		this.reviews = reviews;
+	}
 
-    public Long getQuantity() {
-        return quantity;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public Seller getSeller() {
-        return seller;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public long getPrice() {
+		return price;
+	}
+
+	public void setPrice(long price) {
+		this.price = price;
+	}
+
+	public long getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(long quantity) {
+		this.quantity = quantity;
+	}
+
+	public Seller getSeller() {
+		return seller;
+	}
+
+	public void setSeller(Seller seller) {
+		this.seller = seller;
+	}
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
+
 }

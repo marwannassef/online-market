@@ -4,62 +4,58 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Item {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long quantity;
-    private String review;
-    boolean display_review = false;
-    private boolean shipping_status = false;
 
-    public Item (){}
-    public Item(long quantity, String review, boolean display_review, boolean shipping_status) {
-        this.quantity = quantity;
-        this.review = review;
-        this.display_review = display_review;
-        this.shipping_status = shipping_status;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public long getId() {
-        return id;
-    }
+	@OneToOne
+	private Product product;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	private long quantity;
 
-    public long getQuantity() {
-        return quantity;
-    }
+	private String shippingStatus;
 
-    public void setQuantity(long quantity) {
-        this.quantity = quantity;
-    }
+	public Item(Product product, long quantity, String shippingStatus) {
+		this.product = product;
+		this.quantity = quantity;
+		this.shippingStatus = shippingStatus;
+	}
 
-    public String getReview() {
-        return review;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setReview(String review) {
-        this.review = review;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public boolean isDisplay_review() {
-        return display_review;
-    }
+	public Product getProduct() {
+		return product;
+	}
 
-    public void setDisplay_review(boolean display_review) {
-        this.display_review = display_review;
-    }
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 
-    public boolean isShipping_status() {
-        return shipping_status;
-    }
+	public long getQuantity() {
+		return quantity;
+	}
 
-    public void setShipping_status(boolean shipping_status) {
-        this.shipping_status = shipping_status;
-    }
+	public void setQuantity(long quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getShippingStatus() {
+		return shippingStatus;
+	}
+
+	public void setShippingStatus(String shippingStatus) {
+		this.shippingStatus = shippingStatus;
+	}
+
 }
