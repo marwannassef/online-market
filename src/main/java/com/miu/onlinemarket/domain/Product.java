@@ -2,12 +2,7 @@ package com.miu.onlinemarket.domain;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 public class Product {
@@ -25,10 +20,15 @@ public class Product {
 	private long quantity;
 
 	@ManyToOne
+	@JoinColumn(name = "seller_id")
 	Seller seller;
 
 	@OneToMany
+	@JoinColumn(name = "product_id")
 	List<Review> reviews;
+
+	public Product() {
+	}
 
 	public Product(String name, String description, long price, long quantity, Seller seller, List<Review> reviews) {
 		this.name = name;

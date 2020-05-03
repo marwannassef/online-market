@@ -26,6 +26,9 @@ public class Item {
 		this.shippingStatus = shippingStatus;
 	}
 
+	public Item() {
+	}
+
 	public long getId() {
 		return id;
 	}

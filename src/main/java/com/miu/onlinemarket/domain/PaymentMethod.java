@@ -22,6 +22,9 @@ public class PaymentMethod {
 
 	private String nameOnCard;
 
+	public PaymentMethod() {
+	}
+
 	public PaymentMethod(String cardNumber, LocalDate expiryDate, String cvv, String nameOnCard) {
 		this.cardNumber = cardNumber;
 		this.expiryDate = expiryDate;

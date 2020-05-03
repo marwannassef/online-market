@@ -17,7 +17,7 @@ public class Buyer extends User {
 	private PaymentMethod paymentMethod;
 
 	@OneToMany
-	@JoinColumn(name = "order_id")
+	@JoinColumn(name = "buyer_id")
 	List<Order> orders;
 
 	public Buyer(User user, Address shippingAddress, PaymentMethod paymentMethod, long credit_card,

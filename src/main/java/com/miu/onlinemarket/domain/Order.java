@@ -2,15 +2,10 @@ package com.miu.onlinemarket.domain;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "orders")
 public class Order {
 
 	@Id
@@ -19,13 +14,16 @@ public class Order {
 
 	private double totalPrice;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "item_id")
+	@OneToMany
+	@JoinColumn(name = "orders_id")
 	private List<Item> items;
 
 	public Order(double totalPrice, Item items) {
 		this.totalPrice = totalPrice;
 		this.items.add(items);
+	}
+
+	public Order() {
 	}
 
 	public long getId() {

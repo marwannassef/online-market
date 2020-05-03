@@ -3,6 +3,7 @@ package com.miu.onlinemarket.domain;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -10,11 +11,15 @@ public class Seller extends User {
 
 	private Boolean approved = false;
 
-	@OneToMany(mappedBy = "products")
+	@OneToMany(mappedBy = "seller")
 	List<Product> products;
 
-	@OneToMany(mappedBy = "items")
+	@OneToMany
+	@JoinColumn(name ="seller_id")
 	List<Item> items;
+
+	public Seller() {
+	}
 
 	public Seller(User user, Boolean approved, List<Product> products, List<Item> items) {
 		super(user);
