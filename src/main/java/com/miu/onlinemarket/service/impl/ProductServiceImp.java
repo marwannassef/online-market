@@ -20,8 +20,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<Product> findByName(String name) {
-        return productRepository.findByName(name);
+    public List<Product> searchByName(String name) {
+        return productRepository.SearchByName(name);
     }
 
 
