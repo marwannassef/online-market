@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
@@ -14,8 +14,29 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+<!--<form ui-jp="parsley" th:action="@{/search)}"  method="get">-->
+<!--	<div class="row m-b">-->
+<!--		<div class="col-sm-6">-->
+<!--			Search by Name:-->
+<!--			<input id="filter" type="text" th:field="*{pName}" class="form-control input-sm w-auto inline m-r"/>-->
+<!--			<button class="md-btn md-fab m-b-sm indigo">-->
+<!--				<i class="material-icons md-24">&#xe8b6;</i>-->
+<!--			</button>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</form>-->
+
 	<div sec:authorize="hasAuthority('ROLE_ADMIN')">Has Authority ADMIN</div>
 	<div sec:authorize="hasAuthority('ROLE_SELLER')">Has Authority SELLER</div>
 	<div sec:authorize="hasAuthority('ROLE_BUYER')">Has Authority BUYER</div>
+
+	<tr th:each="product: ${productList}">
+
+		<span>
+		<td th:text="${product.name}"></td>
+			<br><br>
+		</span>
+	</tr>
 </body>
 </html>

@@ -7,15 +7,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.repository.ProductRepository;
+import com.miu.onlinemarket.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
 import com.miu.onlinemarket.domain.City;
 import com.miu.onlinemarket.domain.Country;
 import com.miu.onlinemarket.domain.Role;
@@ -37,6 +39,12 @@ public class OnApplicationStartUp {
 	@Autowired
 	private RoleRepository roleRepo;
 
+	@Autowired
+	private ProductRepository productRepository;
+
+	@Autowired
+	private SellerService sellerRepository;
+
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent event) throws Exception {
 		List<User> users = userRepo.findAll();
@@ -50,6 +58,7 @@ public class OnApplicationStartUp {
 		loadCountries();
 		loadStates();
 		loadCities();
+		createProduct();
 	}
 
 	private void fillRoleTable() {
@@ -105,6 +114,40 @@ public class OnApplicationStartUp {
 		user.setRoles(roles);
 		userService.save(user);
 	}
+	private void createProduct() {
+		Seller user2 = new Seller();
+		user2.setFirstName("bassem");
+		user2.setLastName("elsawy");
+		user2.setEmail("seller@miu.edu");
+		user2.setPhoneNumber("6418192921");
+		user2.setDateOfBirth(LocalDate.parse("1990-03-22"));
+		user2.setUsername("bassem");
+		user2.setPassword("bassem");
+		List<Role> roles = new ArrayList<>();
+		roles.add(roleRepo.findByName("ROLE_SELLER"));
+		user2.setRoles(roles);
+		sellerRepository.save(user2);
+
+
+		Product product = new Product();
+		product.setName("Mobile");
+		product.setSeller(user2);
+		productRepository.save(product);
+
+		Product product2 = new Product();
+		product2.setName("TV");
+		product2.setSeller(user2);
+		productRepository.save(product2);
+
+		Product product3 = new Product();
+		product3.setName("Cups");
+		productRepository.save(product3);
+
+		Product product4 = new Product();
+		product4.setName("Pepsi");
+		productRepository.save(product4);
+	}
+
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void loadCountries() throws Exception {
@@ -132,7 +175,6 @@ public class OnApplicationStartUp {
 //		System.out.print(countries);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void loadStates() throws Exception {
 		Object obj = new JSONParser().parse(new FileReader("states.json"));
 		JSONObject jo = (JSONObject) obj;
@@ -162,7 +204,6 @@ public class OnApplicationStartUp {
 //		System.out.print(states);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void loadCities() throws Exception {
 		Object obj = new JSONParser().parse(new FileReader("cities.json"));
 		JSONObject jo = (JSONObject) obj;
