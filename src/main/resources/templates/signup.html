@@ -6,65 +6,98 @@
 <head>
 <title>Sign-up</title>
 </head>
-<body>
-
+<body style="text-align: center">
 	<div class="col" layout:fragment="main-content">
-		<h1>Sign-up</h1>
-		<div class="col-md-4">
-			<form th:object="${user}" th:action="@{/addUser}" action="#"
-				method="post" enctype="multipart/form-data">
-				<input type="text" th:field="*{firstName}" class="form-control"
-					placeholder="First Name" />
-				<p th:if="${#fields.hasErrors('firstName')}"
-					th:errors="*{firstName}">Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<h1>Sign-up</h1>
+				<form th:object="${user}" th:action="@{/addUser}" action="#"
+					method="post" enctype="multipart/form-data">
 
-				<input type="text" th:field="*{lastName}" class="form-control"
-					placeholder="Last Name" />
-				<p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="date" th:field="*{dateOfBirth}" class="form-control"
-					placeholder="Date of Birth" />
-				<p th:if="${#fields.hasErrors('dateOfBirth')}"
-					th:errors="*{dateOfBirth}">Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" th:field="*{firstName}" class="form-control"
+								placeholder="First Name" />
+							<p th:if="${#fields.hasErrors('firstName')}"
+								th:errors="*{firstName}">firstName Error</p>
+						</div>
+						<div class="col-md-6">
+							<input type="text" th:field="*{lastName}" class="form-control"
+								placeholder="Last Name" />
+							<p th:if="${#fields.hasErrors('lastName')}"
+								th:errors="*{lastName}">lastName Error</p>
+						</div>
+					</div>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="email" th:field="*{email}" class="form-control"
-					placeholder="Email" />
-				<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<input type="email" th:field="*{email}" class="form-control"
+						placeholder="Email" />
+					<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
+						Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="tel" th:field="*{phoneNumber}" class="form-control"
-					placeholder="Phone Number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"/>
-				<p th:if="${#fields.hasErrors('phoneNumber')}"
-					th:errors="*{phoneNumber}">Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<input type="tel" th:field="*{phoneNumber}" class="form-control"
+						placeholder="Phone Number" />
+					<p th:if="${#fields.hasErrors('phoneNumber')}"
+						th:errors="*{phoneNumber}">PhoneNumber Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="text" th:field="*{username}" class="form-control"
-					placeholder="Username" />
-				<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<input type="date" th:field="*{dateOfBirth}" class="form-control"
+						placeholder="Date Of Birth" />
+					<p th:if="${#fields.hasErrors('dateOfBirth')}"
+						th:errors="*{dateOfBirth}">DateOfBirth Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="password" th:field="*{password}" class="form-control"
-					placeholder="Password" />
-				<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<input type="text" th:field="*{username}" class="form-control"
+						placeholder="Username" />
+					<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username
+						Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="password" th:field="*{passwordCheck}"
-					class="form-control" placeholder="Re-enter Password" />
-				<p th:if="${#fields.hasErrors('passwordCheck')}"
-					th:errors="*{passwordCheck}">Password Match Error</p>
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<input type="password" th:field="*{password}" class="form-control"
+						placeholder="Password" />
+					<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password
+						Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="file" id="file" th:field="*{image}"
-					accept="image/png, image/jpeg" />
-				<div style="clear: both; display: block; height: 10px;"></div>
+					<input type="password" th:field="*{passwordCheck}"
+						class="form-control" placeholder="Re-enter Password" />
+					<p th:if="${#fields.hasErrors('passwordCheck')}"
+						th:errors="*{passwordCheck}">Password Match Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
 
-				<input type="submit" class="btn btn-primary" value="Save"></input>
-			</form>
+					<!-- <div class="row">
+						<div class="col-md-1">
+							<input th:field="*{role}" type="radio" name="role"
+								value="ROLE_BUYER" checked>Buyer
+						</div>
+						<div class="col-md-4">
+							<input th:field="*{role}" type="radio" name="role"
+								value="ROLE_SELLER">Seller
+						</div>
+					</div>
+					<p th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Role
+						Error</p>
+					<div style="clear: both; display: block; height: 20px;"></div> -->
+					<div class="row">
+						<div class="col-md-6">
+							<p style="text-align: left;">Profile Picture</p>
+						</div>
+						<div class="col-md-6">
+							<input type="file" id="file" th:field="*{image}"
+								accept="image/png, image/jpeg" />
+						</div>
+					</div>
+					<div style="clear: both; display: block; height: 10px;"></div>
+
+					<input type="submit" class="btn btn-primary form-control" value="Save">
+				</form>
+
+			</div>
 		</div>
 	</div>
-
 </body>
 </html>
