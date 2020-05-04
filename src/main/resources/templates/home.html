@@ -1,28 +1,24 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	  layout:decorate="~{layouts/dashboard_layout}"
+	  xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<link type="text/css" rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-	th:href="@{css/bootstrap.min.css}" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Role visualization</title>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>HOME</title>
 </head>
 <body>
 
-<form ui-jp="parsley" th:action="@{/search}" th:object="${searchMessage}" method="get">
-	<div class="row m-b">
-		<div class="col-sm-6">
-			Search by Name: <input id="filter" type="text" th:field="*{search}" class="form-control input-sm w-auto inline m-r"/>
-			<button class="md-btn md-fab m-b-sm indigo"><i class="material-icons md-24">&#xe8b6;</i></button>
+<div class="col" layout:fragment="main-content">
+
+	<form ui-jp="parsley" th:action="@{/search}" th:object="${searchMessage}" method="get">
+		<div class="row m-b">
+			<div class="col-sm-6">
+				Search by Name: <input id="filter" type="text" th:field="*{search}" class="form-control input-sm w-auto inline m-r"/>
+				<button class="md-btn md-fab m-b-sm indigo"><i class="material-icons md-24">&#xe8b6;</i></button>
+			</div>
 		</div>
-	</div>
-</form>
+	</form>
 
 	<div sec:authorize="hasAuthority('ROLE_ADMIN')">Has Authority ADMIN</div>
 	<div sec:authorize="hasAuthority('ROLE_SELLER')">Has Authority SELLER</div>
@@ -30,10 +26,15 @@
 
 	<tr th:each="product: ${productList}">
 
-		<span>
+
 		<td th:text="${product.name}"></td>
-			<br><br>
-		</span>
+		<a th:href="@{'/detail'(id=${product.id})}">view</a>
+		<br><br>
 	</tr>
+</div>
+
+
+
 </body>
 </html>
+

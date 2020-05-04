@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 
-    @Query("select p from Product p where p.seller.userId = :id AND (p.name like concat('%',:name,'%') OR p.description like concat('%',:name,'%'))")
+    @Query("select p from Product p where p.seller.userId = :id AND (UPPER(p.name) like UPPER(concat('%',:name,'%'))  OR UPPER(p.description) like UPPER(concat('%',:name,'%')))")
     List<Product> SearchByName(String name , Long id);
     Seller findByUsername(String username);
 }

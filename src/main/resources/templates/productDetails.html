@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Product Details</title>
+</head>
+<body>
+
+<div class="col" layout:fragment="main-content">
+
+
+    <h1>Product Details</h1>
+
+    <table>
+        <tr th:object="${product}">
+            <th>NAME</th>
+            <td th:text="${product.name}"></td>
+        </tr>
+        <tr th:object="${product}">
+            <th>DESCRIPTION</th>
+            <td th:text="${product.getDescription()}"></td>
+        </tr>
+        <tr th:object="${product}">
+            <th>PRICE</th>
+            <td th:text="${product.getPrice()}"></td>
+        </tr>
+
+    </table>
+</div>
+
+</body>
+</html>
