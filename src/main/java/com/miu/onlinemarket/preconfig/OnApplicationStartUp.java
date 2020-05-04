@@ -136,15 +136,15 @@ public class OnApplicationStartUp {
 		productRepository.save(product);
 
 		Product product2 = new Product();
-		product2.setName("TV");
+		product2.setName("Cups");
 		product2.setSeller(user2);
-		product2.setDescription("Best TV");
+		product2.setDescription("Best Cups");
 
 		productRepository.save(product2);
 
 		Product product3 = new Product();
-		product3.setName("Cups");
-		product3.setDescription("Best CUPS");
+		product3.setName("TV");
+		product3.setDescription("Best TV");
 		productRepository.save(product3);
 
 		Product product4 = new Product();

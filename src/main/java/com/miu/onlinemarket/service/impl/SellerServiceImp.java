@@ -1,5 +1,6 @@
 package com.miu.onlinemarket.service.impl;
 
+import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.repository.SellerRepository;
@@ -7,6 +8,8 @@ import com.miu.onlinemarket.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SellerServiceImp implements SellerService {
@@ -20,6 +23,11 @@ public class SellerServiceImp implements SellerService {
     @Override
     public Seller findSeller(String username) {
         return sellerRepository.findByUsername(username);
+    }
+
+    @Override
+    public List<Product> searchByName(String name, long id) {
+        return sellerRepository.SearchByName(name,id);
     }
 
     @Override
