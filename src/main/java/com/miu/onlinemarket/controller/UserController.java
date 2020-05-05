@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.miu.onlinemarket.domain.Address;
 import com.miu.onlinemarket.domain.Buyer;
-import com.miu.onlinemarket.domain.PaymentMethod;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.service.BuyerService;
@@ -36,6 +36,11 @@ public class UserController {
 
 	@RequestMapping(value = { "/login", "/" })
 	public String login(SessionStatus status) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(auth.getPrincipal());
+		if (!auth.getPrincipal().toString().equalsIgnoreCase("anonymousUser")) {
+			return "redirect:/home";
+		}
 		status.setComplete();
 		return "login";
 	}

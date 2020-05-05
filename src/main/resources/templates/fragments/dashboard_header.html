@@ -20,7 +20,7 @@
 				id="dropdownMenuButton" data-toggle="dropdown" class="navbar-brand mr-1"
 				aria-haspopup="true" aria-expanded="false">
 		
-		    <ul class="dropdown-menu dropdown-menu-right">
+		    <ul class="dropdown-menu dropdown-menu-right bg-dark">
 				<li class="dropdown-header">User Name</li>
 				<li><a class="dropdown-item" href="#">Edit Profile</a></li>
 				<li><a class="dropdown-item" href="#"
@@ -31,7 +31,7 @@
 					 sec:authorize="hasAuthority('ROLE_BUYER')">Orders</a></li>
 				<li><a class="dropdown-item" href="#"
 					 sec:authorize="hasAuthority('ROLE_SELLER')">Orders</a></li>
-				<li class="divider"></li>
+				<li class="dropdown-divider"></li>
 				<li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
 		    </ul>
 		</div>
