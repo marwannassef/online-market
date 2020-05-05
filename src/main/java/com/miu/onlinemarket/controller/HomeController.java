@@ -35,11 +35,12 @@ public class HomeController {
 	ModelAndView modelAndView = new ModelAndView();
 		if(userService.hasRole("ROLE_BUYER")){
 			model.addAttribute("productList", productService.findAll());
-			session.setAttribute("sellerId",sellerService.findSeller(principal.getName()));
+			session.setAttribute("buyer",buyerService.findBuyer(principal.getName()));
 
 		}else if(userService.hasRole("ROLE_SELLER")){
 			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
 			session.setAttribute("sellerId",sellerService.findSeller(principal.getName()).getUserId());
+			session.setAttribute("seller",sellerService.findSeller(principal.getName()));
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
 		modelAndView.setViewName("home");
@@ -58,4 +59,11 @@ public class HomeController {
 		}
 		return "home";
 	}
+
+	@RequestMapping(value = { "/addProduct" })
+	public String addProduct(Model model) {
+		model.addAttribute("product", new Product());
+		return "addProduct";
+	}
+
 }

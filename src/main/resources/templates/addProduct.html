@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+
+<div class="col" layout:fragment="main-content">
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1>Add Product</h1>
+            <form th:object="${product}" action="#" th:action="@{/product/addProductProcess}"
+                  method="post" enctype="multipart/form-data">
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+
+                        <input type="text" th:field="*{name}" class="form-control"
+                               placeholder="Product Name" />
+                        <p th:if="${#fields.hasErrors('name')}"
+                           th:errors="*{name}">ProductName Error</p>
+                <div style="clear: both; display: block; height: 10px;"></div>
+
+                        <input type="text" th:field="*{description}" class="form-control"
+                               placeholder="Description" />
+                        <p th:if="${#fields.hasErrors('description')}"
+                           th:errors="*{description}">Description Error</p>
+
+                <input type="text" th:field="*{price}" class="form-control"
+                       placeholder="Enter Price" />
+                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price
+                    Error</p>
+                <div style="clear: both; display: block; height: 10px;"></div>
+
+                <input type="text" th:field="*{quantity}" class="form-control"
+                       placeholder="Add Quantity" />
+                <p th:if="${#fields.hasErrors('quantity')}"
+                   th:errors="*{quantity}">Quantity Error</p>
+                <div style="clear: both; display: block; height: 10px;"></div>
+
+                <input type="submit" class="btn btn-primary form-control" value="Save">
+            </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>
