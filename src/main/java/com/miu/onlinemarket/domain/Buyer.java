@@ -20,9 +20,10 @@ public class Buyer extends User {
 	@JoinColumn(name = "buyer_id")
 	List<Order> orders;
 
-	public Buyer() {}
-	public Buyer(User user, Address shippingAddress, PaymentMethod paymentMethod, long credit_card,
-			List<Order> orders) {
+	public Buyer() {
+	}
+
+	public Buyer(User user, Address shippingAddress, PaymentMethod paymentMethod, List<Order> orders) {
 		super(user);
 		this.shippingAddress = shippingAddress;
 		this.paymentMethod = paymentMethod;

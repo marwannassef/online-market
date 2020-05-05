@@ -2,7 +2,6 @@ package com.miu.onlinemarket.controller;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,32 +9,46 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.miu.onlinemarket.domain.Address;
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.PaymentMethod;
+import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.User;
-import com.miu.onlinemarket.repository.UserRepository;
+import com.miu.onlinemarket.service.BuyerService;
+import com.miu.onlinemarket.service.SellerService;
 
 @Controller
+@SessionAttributes("type")
 public class UserController {
 
 	@Autowired
-	UserRepository userRepository;
+	SellerService sellerService;
+
+	@Autowired
+	BuyerService buyerService;
 
 	@RequestMapping(value = { "/login", "/" })
-	public String login() {
+	public String login(SessionStatus status) {
+		status.setComplete();
 		return "login";
 	}
 
-	@RequestMapping(value = "/signup")
-	public String signUp(Model model) {
+	@RequestMapping(value = "/signup/{type}")
+	public String signUp(@PathVariable String type, Model model) {
 		model.addAttribute("user", new User());
+		model.addAttribute("type", type);
 		return "signup";
 	}
 
 	@RequestMapping(value = "addUser", method = RequestMethod.POST)
-	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/signup";
 		}
@@ -46,6 +59,14 @@ public class UserController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		String type = model.getAttribute("type").toString();
+		if (type.equalsIgnoreCase("buyer")) {
+			Seller seller = new Seller(user, false, null, null);
+			sellerService.save(seller);
+		} else {
+			Buyer buyer = new Buyer(user, new Address(), new PaymentMethod(), null);
+			buyerService.save(buyer);
 		}
 		return "redirect:/login";
 	}

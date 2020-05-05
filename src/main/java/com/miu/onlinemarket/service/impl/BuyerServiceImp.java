@@ -1,22 +1,28 @@
 package com.miu.onlinemarket.service.impl;
 
-import com.miu.onlinemarket.domain.Address;
-import com.miu.onlinemarket.domain.Buyer;
-import com.miu.onlinemarket.domain.PaymentMethod;
-import com.miu.onlinemarket.domain.User;
-import com.miu.onlinemarket.repository.BuyerRepository;
-import com.miu.onlinemarket.service.BuyerService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.miu.onlinemarket.domain.Address;
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.PaymentMethod;
+import com.miu.onlinemarket.domain.Role;
+import com.miu.onlinemarket.repository.BuyerRepository;
+import com.miu.onlinemarket.repository.RoleRepository;
+import com.miu.onlinemarket.service.BuyerService;
 
 @Service
 public class BuyerServiceImp implements BuyerService {
 
     @Autowired
     private BuyerRepository buyerRepository;
+
+	@Autowired
+	private RoleRepository roleRepo;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -28,6 +34,9 @@ public class BuyerServiceImp implements BuyerService {
     @Override
     public Buyer save(Buyer buyer) {
         buyer.setPassword(encodePassword(buyer.getPassword()));
+		List<Role> roles = new ArrayList<>();
+		roles.add(roleRepo.findByName("ROLE_BUYER"));
+		buyer.setRoles(roles);
         return buyerRepository.save(buyer);
     }
 

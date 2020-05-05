@@ -9,6 +9,8 @@
 <body>
 
 	<div class="col" layout:fragment="main-content">
+		<a th:href="@{/signup/buyer}">Buyer Sign Up</a>
+		<a th:href="@{/signup/seller}">Seller Sign Up</a>
 		<div th:if="${param.error}">Invalid Username and Password.</div>
 		<div th:if="${param.logout}">You have been logged out.</div>
 		<form th:action="@{/login}" method="post">
@@ -26,7 +28,6 @@
 				<input type="submit" value="Sign In" />
 			</div>
 		</form>
-		<a th:href="@{/signup}">Sign-up</a>
 	</div>
 
 </body>
