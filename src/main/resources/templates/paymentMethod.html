@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Address</title>
+</head>
+<body style="text-align: center">
+<div class="col" layout:fragment="main-content">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1>Payment</h1>
+
+
+            <!--/*@thymesVar id="paymentMethod" type=""*/-->
+            <form th:object="${paymentMethod}" th:action="@{/addPayment}" action="#"
+                  method="post" enctype="multipart/form-data">
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{cardNumber}"
+                       class="form-control" placeholder="card Number" />
+                <p th:if="${#fields.hasErrors('cardNumber')}"
+                   th:errors="*{cardNumber}">CardNumber error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{expiryDate}"
+                       class="form-control" placeholder="MM/dd/yyyy" />
+                <p th:if="${#fields.hasErrors('expiryDate')}"
+                   th:errors="*{expiryDate}">ExpiryDate error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{cvv}"
+                       class="form-control" placeholder="cvv" />
+                <p th:if="${#fields.hasErrors('cvv')}"
+                   th:errors="*{cvv}">Cvv Error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{nameOnCard}"
+                       class="form-control" placeholder="Name On Card" />
+                <p th:if="${#fields.hasErrors('nameOnCard')}"
+                   th:errors="*{nameOnCard}">Name On Card Error</p>
+
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="submit" class="btn btn-info col-2 form-control" value="Save">
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

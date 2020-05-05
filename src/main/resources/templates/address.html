@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Address</title>
+</head>
+<body style="text-align: center">
+<div class="col" layout:fragment="main-content">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1>Address</h1>
+
+
+
+            <form th:object="${address}" th:action="@{/addAddress}" action="#"
+                  method="POST" enctype="multipart/form-data">
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{street}"
+                       class="form-control" placeholder="Street" />
+                <p th:if="${#fields.hasErrors('street')}"
+                   th:errors="*{street}">Street error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{city}"
+                       class="form-control" placeholder="City" />
+                <p th:if="${#fields.hasErrors('city')}"
+                   th:errors="*{city}">city error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{state}"
+                       class="form-control" placeholder="State" />
+                <p th:if="${#fields.hasErrors('state')}"
+                   th:errors="*{state}">State error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{zipCode}"
+                       class="form-control" placeholder="zipCode" />
+                <p th:if="${#fields.hasErrors('zipCode')}"
+                   th:errors="*{zipCode}">ZipCode Error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="text" th:field="*{country}"
+                       class="form-control" placeholder="Country" />
+                <p th:if="${#fields.hasErrors('country')}"
+                   th:errors="*{country}">Country Error</p>
+
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="submit" class="btn btn-info col-2 form-control" value="Save">
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -10,15 +10,15 @@ public class Order {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
-	private double totalPrice = 0;
+	private Double totalPrice = 0.0;
 
 	@OneToMany
 	@JoinColumn(name = "orders_id")
 	private List<Item> items;
 
-	public Order(double totalPrice, Item items) {
+	public Order(Double totalPrice, Item items) {
 		this.totalPrice = totalPrice;
 		this.items.add(items);
 	}
@@ -26,19 +26,19 @@ public class Order {
 	public Order() {
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public double getTotalPrice() {
+	public Double getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(double totalPrice) {
+	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 

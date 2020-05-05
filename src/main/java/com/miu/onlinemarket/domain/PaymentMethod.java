@@ -10,6 +10,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class PaymentMethod {
@@ -23,6 +24,7 @@ public class PaymentMethod {
 	private String cardNumber;
 
 	@Future
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private LocalDate expiryDate;
 
 	@NotEmpty
