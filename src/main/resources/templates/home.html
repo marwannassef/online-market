@@ -27,8 +27,8 @@
 	<tr th:each="product: ${productList}">
 
 
-		<td th:text="${product.name}"></td>
-		<a th:href="@{'/detail'(id=${product.id})}">view</a>
+
+		<a th:href="@{'/detail'(id=${product.id})}"><td th:text="${product.name}"></td></a>
 		<br><br>
 	</tr>
 
