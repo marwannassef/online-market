@@ -1,30 +1,33 @@
 package com.miu.onlinemarket.preconfig;
 
 import java.io.FileReader;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import com.miu.onlinemarket.domain.Product;
-import com.miu.onlinemarket.domain.Seller;
-import com.miu.onlinemarket.repository.ProductRepository;
-import com.miu.onlinemarket.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
 import com.miu.onlinemarket.domain.City;
 import com.miu.onlinemarket.domain.Country;
+import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Role;
+import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.State;
 import com.miu.onlinemarket.domain.User;
+import com.miu.onlinemarket.repository.ProductRepository;
 import com.miu.onlinemarket.repository.RoleRepository;
 import com.miu.onlinemarket.repository.UserRepository;
+import com.miu.onlinemarket.service.SellerService;
 import com.miu.onlinemarket.service.UserService;
 
 @Component
@@ -70,13 +73,13 @@ public class OnApplicationStartUp {
 		}
 	}
 
-	private void createAdminUser() {
+	private void createAdminUser() throws ParseException {
 		User user = new User();
 		user.setFirstName("admin");
 		user.setLastName("admin");
 		user.setEmail("admin@miu.edu");
 		user.setPhoneNumber("6418192921");
-		user.setDateOfBirth(LocalDate.parse("1990-03-22"));
+		user.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user.setUsername("admin");
 		user.setPassword("admin");
 		List<Role> roles = new ArrayList<>();
@@ -85,13 +88,13 @@ public class OnApplicationStartUp {
 		userService.save(user);
 	}
 
-	private void createSeller() {
+	private void createSeller() throws ParseException {
 		User user = new User();
 		user.setFirstName("seller");
 		user.setLastName("seller");
 		user.setEmail("seller@miu.edu");
 		user.setPhoneNumber("6418192921");
-		user.setDateOfBirth(LocalDate.parse("1990-03-22"));
+		user.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user.setUsername("seller");
 		user.setPassword("seller");
 		List<Role> roles = new ArrayList<>();
@@ -100,13 +103,13 @@ public class OnApplicationStartUp {
 		userService.save(user);
 	}
 
-	private void createBuyer() {
+	private void createBuyer() throws ParseException {
 		User user = new User();
 		user.setFirstName("buyer");
 		user.setLastName("buyer");
 		user.setEmail("buyer@miu.edu");
 		user.setPhoneNumber("6418192921");
-		user.setDateOfBirth(LocalDate.parse("1990-03-22"));
+		user.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user.setUsername("buyer");
 		user.setPassword("buyer");
 		List<Role> roles = new ArrayList<>();
@@ -114,13 +117,13 @@ public class OnApplicationStartUp {
 		user.setRoles(roles);
 		userService.save(user);
 	}
-	private void createProduct() {
+	private void createProduct() throws ParseException {
 		Seller user2 = new Seller();
 		user2.setFirstName("bassem");
 		user2.setLastName("elsawy");
 		user2.setEmail("seller@miu.edu");
 		user2.setPhoneNumber("6418192921");
-		user2.setDateOfBirth(LocalDate.parse("1990-03-22"));
+		user2.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user2.setUsername("bassem");
 		user2.setPassword("bassem");
 		List<Role> roles = new ArrayList<>();
@@ -181,6 +184,7 @@ public class OnApplicationStartUp {
 //		System.out.print(countries);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void loadStates() throws Exception {
 		Object obj = new JSONParser().parse(new FileReader("states.json"));
 		JSONObject jo = (JSONObject) obj;
@@ -210,6 +214,7 @@ public class OnApplicationStartUp {
 //		System.out.print(states);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void loadCities() throws Exception {
 		Object obj = new JSONParser().parse(new FileReader("cities.json"));
 		JSONObject jo = (JSONObject) obj;

@@ -47,10 +47,11 @@ public class UserController {
 		return "signup";
 	}
 
-	@RequestMapping(value = "addUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+		String type = model.getAttribute("type").toString();
 		if (bindingResult.hasErrors()) {
-			return "redirect:/signup";
+			return "redirect:/signup/" + type;
 		}
 		MultipartFile image = user.getImage();
 		if (image != null && !image.isEmpty()) {
@@ -60,12 +61,11 @@ public class UserController {
 				e.printStackTrace();
 			}
 		}
-		String type = model.getAttribute("type").toString();
-		if (type.equalsIgnoreCase("buyer")) {
+		if (type.equalsIgnoreCase("seller")) {
 			Seller seller = new Seller(user, false, null, null);
 			sellerService.save(seller);
 		} else {
-			Buyer buyer = new Buyer(user, new Address(), new PaymentMethod(), null);
+			Buyer buyer = new Buyer(user, null, null, null);
 			buyerService.save(buyer);
 		}
 		return "redirect:/login";

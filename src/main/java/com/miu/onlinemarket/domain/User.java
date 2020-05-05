@@ -1,6 +1,6 @@
 package com.miu.onlinemarket.domain;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,13 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -42,7 +41,7 @@ public class User {
 
     @Column(name = "date_of_birth")
     @DateTimeFormat(pattern = "MM/dd/yyyy")
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
 
     @Column(name = "email")
     @Email(regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,3})$", message = "* please provide a valid email")
@@ -66,13 +65,14 @@ public class User {
     @Transient
     private MultipartFile image;
     
+    @Lob
     @Column(name = "photo", columnDefinition="BLOB")
     private byte[] photo;
 
-    @NotNull(message = "*Please provide role")
+//    @NotNull(message = "*Please provide role")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<@Valid Role> roles;
+    private List<Role> roles;
 
     public User() {
     }
@@ -86,6 +86,7 @@ public class User {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.phoneNumber = user.getPhoneNumber();
+        this.photo = user.getPhoto();
         this.roles = user.getRoles();
     }
 
@@ -137,11 +138,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

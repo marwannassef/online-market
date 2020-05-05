@@ -12,7 +12,7 @@
 			<div class="col-md-4"></div>
 			<div class="col-md-4">
 				<h1>Sign-up</h1>
-				<form th:object="${user}" th:action="@{/addUser}" action="#"
+				<form th:object="${user}" th:action="@{/signup}" action="#"
 					method="post" enctype="multipart/form-data">
 
 					<div style="clear: both; display: block; height: 10px;"></div>
@@ -45,7 +45,7 @@
 						th:errors="*{phoneNumber}">PhoneNumber Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
-					<input type="date" th:field="*{dateOfBirth}" class="form-control"
+					<input type="text" th:field="*{dateOfBirth}" class="form-control"
 						placeholder="Date Of Birth" />
 					<p th:if="${#fields.hasErrors('dateOfBirth')}"
 						th:errors="*{dateOfBirth}">DateOfBirth Error</p>
