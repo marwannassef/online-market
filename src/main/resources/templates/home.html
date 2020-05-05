@@ -25,11 +25,14 @@
 	<div sec:authorize="hasAuthority('ROLE_BUYER')">Has Authority BUYER</div>
 
 	<tr th:each="product: ${productList}">
-
-
-
-		<a th:href="@{'/detail'(id=${product.id})}"><td th:text="${product.name}"></td></a>
+		<a th:href="@{'/product/detail'(id=${product.id})}"><td th:text="${product.name}"></td></a>
 		<br><br>
+		<div sec:authorize="hasAuthority('ROLE_BUYER')">
+			<a th:href="@{/buyer/addProduct}"
+			   class="btn btn-primary btn-sm mb-3">
+				Add To Cart
+			</a>
+		</div>
 	</tr>
 
 	<div sec:authorize="hasAuthority('ROLE_SELLER')">
