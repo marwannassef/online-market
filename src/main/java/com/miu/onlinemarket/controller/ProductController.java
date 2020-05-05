@@ -29,6 +29,12 @@ public class ProductController {
         return "productDetails";
     }
 
+    @GetMapping("/addProduct")
+    public String addProduct(Model model) {
+        model.addAttribute("product", new Product());
+        return "addProduct";
+    }
+
     @PreAuthorize("hasRole('ROLE_SELLER')")
     @RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
@@ -37,7 +43,6 @@ public class ProductController {
         if(bindingResult.hasErrors()) {
             return "addProduct";
         }
-
 
         Seller seller =(Seller) session.getAttribute("seller");
         product.setSeller(seller);

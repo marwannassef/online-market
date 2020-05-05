@@ -60,10 +60,5 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = { "/addProduct" })
-	public String addProduct(Model model) {
-		model.addAttribute("product", new Product());
-		return "addProduct";
-	}
 
 }

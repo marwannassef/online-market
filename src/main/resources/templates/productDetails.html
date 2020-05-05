@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.w3.org/1999/xhtml"
       layout:decorate="~{layouts/dashboard_layout}"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
     <title>Product Details</title>
@@ -28,6 +29,13 @@
         </tr>
 
     </table>
+
+    <div sec:authorize="hasAuthority('ROLE_BUYER')">
+        <a th:href="@{/buyer/addProduct}"
+           class="btn btn-primary btn-sm mb-3">
+            Add To Cart
+        </a>
+    </div>
 </div>
 
 </body>

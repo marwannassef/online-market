@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
-
+@RequestMapping("/buyer")
 public class BuyerController {
 
     @Autowired
