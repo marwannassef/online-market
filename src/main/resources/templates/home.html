@@ -20,10 +20,6 @@
 		</div>
 	</form>
 
-	<div sec:authorize="hasAuthority('ROLE_ADMIN')">Has Authority ADMIN</div>
-	<div sec:authorize="hasAuthority('ROLE_SELLER')">Has Authority SELLER</div>
-	<div sec:authorize="hasAuthority('ROLE_BUYER')">Has Authority BUYER</div>
-
 	<tr th:each="product: ${productList}">
 		<a th:href="@{'/product/detail'(id=${product.id})}"><td th:text="${product.name}"></td></a>
 		<br><br>
