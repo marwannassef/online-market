@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<meta charset="UTF-8">
+<title>Title</title>
 </head>
 <body>
-<nav th:fragment="header" class="navbar navbar-expand navbar-dark bg-dark static-top">
+	<nav th:fragment="header"
+		class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="home.html" th:href="@{/home}">
-        <div class="nav-header">
-            <div class="logo"> Zeppy Nayek</span></div>
-        </div>
-    </a>
+		<a class="navbar-brand mr-1" href="home.html" th:href="@{/home}">
+			<div class="nav-header">
 
-</nav>
+				<div class="logo">
+				<img th:src="@{/img/logo.png}" style="width: 50px">
+					<span>Zeppy Nayek</span>
+				</div>
+			</div>
+		</a>
+
+	</nav>
 </body>
 </html>

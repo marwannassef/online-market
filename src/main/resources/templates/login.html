@@ -9,6 +9,7 @@
 <body>
 
 	<div class="col" layout:fragment="main-content">
+	
 		<a th:href="@{/signup/buyer}">Buyer Sign Up</a>
 		<a th:href="@{/signup/seller}">Seller Sign Up</a>
 		<div th:if="${param.error}">Invalid Username and Password.</div>
