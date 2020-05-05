@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 
@@ -55,7 +56,7 @@ public class BuyerController {
     @GetMapping({"/addProduct"})
     public String addProduct(@RequestParam("productID")Long productId, Model model,HttpSession session) {
 
-        Product product = productService.findById(productId);
+        Product product = (Product)productService.findById(productId).orElse(new Product());
         product.setQuantity(product.getQuantity()-1);
         productService.save(product);
         // create new item
