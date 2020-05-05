@@ -3,6 +3,7 @@ package com.miu.onlinemarket.domain;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -12,14 +13,16 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotEmpty
+	@NotEmpty(message = "Product name required")
 	private String name;
 
-	@NotEmpty
+	@NotEmpty(message = "Product description required")
 	private String description;
 
+	@Min(value = 0, message = "Price must be greater than 0")
 	private long price = 0;
 
+	@Min(value = 0, message = "Quantity must be greater than 0")
 	private long quantity = 0;
 
 	@ManyToOne

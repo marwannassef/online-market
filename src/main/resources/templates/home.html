@@ -15,7 +15,7 @@
 		<div class="row m-b">
 			<div class="col-sm-6">
 				Search by Name: <input id="filter" type="text" th:field="*{search}" class="form-control input-sm w-auto inline m-r"/>
-				<button class="md-btn md-fab m-b-sm indigo"><i class="material-icons md-24">&#xe8b6;</i></button>
+				<button class="md-btn md-fab m-b-sm indigo"><i class="material-icons md-24">&#xe8b6;</i>Search</button>
 			</div>
 		</div>
 	</form>
@@ -31,6 +31,13 @@
 		<a th:href="@{'/detail'(id=${product.id})}">view</a>
 		<br><br>
 	</tr>
+
+	<div sec:authorize="hasAuthority('ROLE_SELLER')">
+		<a th:href="@{/addProduct}"
+		   class="btn btn-primary btn-sm mb-3">
+			Add Product
+		</a>
+	</div>
 </div>
 
 
