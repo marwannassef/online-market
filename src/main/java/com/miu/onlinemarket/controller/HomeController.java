@@ -35,7 +35,7 @@ public class HomeController {
 	ModelAndView modelAndView = new ModelAndView();
 		if(userService.hasRole("ROLE_BUYER")){
 			model.addAttribute("productList", productService.findAll());
-			session.setAttribute("buyer",buyerService.findBuyer(principal.getName()));
+			session.setAttribute("buyer",buyerService.findByUsername(principal.getName()));
 
 		}else if(userService.hasRole("ROLE_SELLER")){
 			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
