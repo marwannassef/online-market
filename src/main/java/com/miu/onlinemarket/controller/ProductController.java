@@ -38,7 +38,6 @@ public class ProductController {
             return "addProduct";
         }
 
-
         Seller seller =(Seller) session.getAttribute("seller");
         product.setSeller(seller);
         productService.save(product);

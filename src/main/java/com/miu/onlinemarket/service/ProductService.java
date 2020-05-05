@@ -9,7 +9,7 @@ public interface ProductService {
 
     List<Product> findAll();
     List<Product> searchByName(String name);
-    Optional<Product> findById(long id);
+    Optional<Product> findById(Long id);
     Product save(Product product);
     void delete(long id);
 }
