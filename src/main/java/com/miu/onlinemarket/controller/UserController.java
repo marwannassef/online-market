@@ -41,6 +41,7 @@ public class UserController {
 		if (!auth.getPrincipal().toString().equalsIgnoreCase("anonymousUser")) {
 			return "redirect:/home";
 		}
+
 		status.setComplete();
 		return "login";
 	}

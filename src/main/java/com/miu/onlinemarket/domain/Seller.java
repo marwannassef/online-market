@@ -1,5 +1,6 @@
 package com.miu.onlinemarket.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ public class Seller extends User {
 
 	@OneToMany
 	@JoinColumn(name ="seller_id")
-	List<Item> items;
+	List<Item> items ;
 
 	public Seller() {
 	}

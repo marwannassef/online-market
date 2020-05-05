@@ -1,11 +1,9 @@
 package com.miu.onlinemarket.controller;
 
 import com.miu.onlinemarket.domain.*;
-import com.miu.onlinemarket.service.BuyerService;
-import com.miu.onlinemarket.service.OrderService;
-import com.miu.onlinemarket.service.ProductService;
-import com.miu.onlinemarket.service.SellerService;
+import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
-@RequestMapping("/buyer")
+
 public class BuyerController {
 
     @Autowired
@@ -29,6 +27,9 @@ public class BuyerController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ItemService itemService;
 
     @GetMapping("/addAddress")
     public String addAddress(@ModelAttribute("address") Address address, Model model) {
@@ -53,44 +54,69 @@ public class BuyerController {
 
         return "redirect:/home";
     }
-    @GetMapping({"/addProduct"})
-    public String addProduct(@RequestParam("productID")Long productId, Model model,HttpSession session) {
 
-        Product product = (Product)productService.findById(productId).orElse(new Product());
+    @PreAuthorize("hasRole('ROLE_BUYER')")
+    @GetMapping({"/addItem"})
+    public String addItem(@RequestParam("id")Long id, Model model,HttpSession session) {
+
+
+        Product product = (Product)productService.findById(id).orElse(new Product());
         product.setQuantity(product.getQuantity()-1);
         productService.save(product);
+
         // create new item
         Item item = new Item(product,1,"prepared");
+        itemService.save(item);
 
         // add item to order
-        Order order = new Order();
+        Order order;
         try {
-             Long orderId = (Long) session.getAttribute("orderId");
-             order = orderService.findById(orderId);
-             order.getItems().add(item);
-             order.setTotalPrice(order.getTotalPrice()+ product.getPrice());
-             orderService.save(order);
-
+             order = (Order) orderService.findById((Long) session.getAttribute("orderId"))
+                    .orElse(new Order());
         } catch (Exception e){
-            order.getItems().add(item);
-            order.setTotalPrice(order.getTotalPrice()+ product.getPrice());
-            orderService.save(order);
-            session.setAttribute("orderId",order.getId());
+            order = new Order();
         }
+        order.getItems().add(item);
+        long total = order.getTotalPrice() + product.getPrice();
+        order.setTotalPrice(total);
+        orderService.save(order);
+        session.setAttribute("orderId",order.getId());
+
+
         // add order to user
-        Long userId = (Long) session.getAttribute("userId");
-        Buyer buyer = buyerService.findBuyerById(userId);
-        buyer.getOrders().add(order);
+        Buyer buyer = (Buyer) session.getAttribute("buyer");
+
+        try{
+            buyer.getOrders().add(order);
+        } catch (Exception e){
+            buyer.setOrders(new HashSet<>());
+            buyer.getOrders().add(order);
+        }
         buyerService.save(buyer);
+
 
         // add item to seller for shipping
         Seller seller = product.getSeller();
-        seller.getItems().add(item);
+
+        try {seller.getItems().add(item);
+        } catch (Exception e){
+            seller.setItems(new ArrayList<>());
+        }
         sellerService.save(seller);
+
 
 
         return "redirect:/home";
 
+    }
+
+    @GetMapping("/order")
+    public String displayOrder(Model model,HttpSession session){
+        Buyer buyer = (Buyer)session.getAttribute("buyer");
+        Set<Order> orders = buyer.getOrders();
+        model.addAttribute("orders", orders);
+        System.out.println("before page");
+        return "order";
     }
 
 }

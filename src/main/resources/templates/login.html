@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.w3.org/1999/xhtml"
-	layout:decorate="~{layouts/dashboard_layout}"
-	xmlns:th="http://www.thymeleaf.org">
+	  layout:decorate="~{layouts/dashboard_layout}"
+	  xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Login</title>
+	<title>Login</title>
 </head>
 <body>
 
-	<div class="col" layout:fragment="main-content">
-		<div class="card text-white bg-dark mb-3" style="margin: auto; width: 40%; top: 60px">
-			<div class="card-header" style="margin: auto">Login</div>
-			<div class="card-body">
-				<div th:if="${param.error}">Invalid Username and Password.</div>
-				<div th:if="${param.logout}">You have been logged out.</div>
-				<form th:action="@{/login}" method="post">
-					<div>
-						<input type="text" name="username" class="form-control"
-							placeholder="Username" />
-					</div>
-					<div style="clear: both; display: block; height: 10px;"></div>
-					<div>
-						<input type="password" name="password" class="form-control"
-							placeholder="Password" />
-					</div>
-					<div style="clear: both; display: block; height: 10px;"></div>
-					<div>
-						<input type="submit" class="btn btn-primary form-control" value="Sign In" />
-					</div>
-				</form>
-				<div style="clear: both; display: block; height: 10px;"></div>
-				<div class="dropdown-divider"></div>
-				<div style="clear: both; display: block; height: 10px;"></div>
+<div class="col" layout:fragment="main-content">
+	<div class="card text-white bg-dark mb-3" style="margin: auto; width: 40%; top: 60px">
+		<div class="card-header" style="margin: auto">Login</div>
+		<div class="card-body">
+			<div th:if="${param.error}">Invalid Username and Password.</div>
+			<div th:if="${param.logout}">You have been logged out.</div>
+			<form th:action="@{/login}" method="post">
 				<div>
-					<a th:href="@{/signup/buyer}" class="dropdown-item" style="color: white;">New Buyer</a>
+					<input type="text" name="username" class="form-control"
+						   placeholder="Username" />
 				</div>
 				<div style="clear: both; display: block; height: 10px;"></div>
 				<div>
-					<a th:href="@{/signup/seller}" class="dropdown-item">New Seller</a>
+					<input type="password" name="password" class="form-control"
+						   placeholder="Password" />
 				</div>
+				<div style="clear: both; display: block; height: 10px;"></div>
+				<input type ="checkbox" name="keepMe"/> Remember Me?
+				<div style="clear: both; display: block; height: 10px;"></div>
+				<div>
+					<input type="submit" class="btn btn-primary form-control" value="Sign In" />
+				</div>
+			</form>
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<div class="dropdown-divider"></div>
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<div>
+				<a th:href="@{/signup/buyer}" class="dropdown-item" style="color: white;">New Buyer</a>
+			</div>
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<div>
+				<a th:href="@{/signup/seller}" class="dropdown-item">New Seller</a>
 			</div>
 		</div>
-
 	</div>
+
+</div>
 
 </body>
 </html>
