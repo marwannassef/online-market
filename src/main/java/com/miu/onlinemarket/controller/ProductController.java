@@ -35,16 +35,16 @@ public class ProductController {
         return "addProduct";
     }
 
-    @PreAuthorize("hasRole('ROLE_SELLER')")
+
     @RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-            HttpSession session){
+            Model model){
 
         if(bindingResult.hasErrors()) {
             return "addProduct";
         }
 
-        Seller seller =(Seller) session.getAttribute("seller");
+        Seller seller =(Seller) model.asMap().get("seller");
         product.setSeller(seller);
         productService.save(product);
 

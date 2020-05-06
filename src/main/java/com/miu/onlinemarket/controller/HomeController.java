@@ -2,7 +2,7 @@ package com.miu.onlinemarket.controller;
 
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.SearchMessage;
-import com.miu.onlinemarket.service.BuyerService;
+import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.service.ProductService;
 import com.miu.onlinemarket.service.SellerService;
 import com.miu.onlinemarket.service.UserService;
@@ -18,15 +18,12 @@ import java.util.List;
 
 
 @Controller
-@SessionAttributes("user")
 public class HomeController {
 
 	@Autowired
 	private ProductService productService;
 	@Autowired
 	private SellerService sellerService;
-	@Autowired
-	private BuyerService buyerService;
 	@Autowired
 	private UserService userService;
 
@@ -35,14 +32,14 @@ public class HomeController {
 	ModelAndView modelAndView = new ModelAndView();
 		if(userService.hasRole("ROLE_BUYER")){
 			model.addAttribute("productList", productService.findAll());
-			session.setAttribute("buyer",buyerService.findByUsername(principal.getName()));
-
+			session.setAttribute("buyer",userService.findUser(principal.getName()));
 		}else if(userService.hasRole("ROLE_SELLER")){
 			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
-			session.setAttribute("sellerId",sellerService.findSeller(principal.getName()).getUserId());
-			session.setAttribute("seller",sellerService.findSeller(principal.getName()));
+			session.setAttribute("seller",userService.findUser(principal.getName()));
+
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
+
 		modelAndView.setViewName("home");
 		return modelAndView;
 	}
@@ -53,8 +50,8 @@ public class HomeController {
 		if(userService.hasRole("ROLE_BUYER")){
 			model.addAttribute("productList", productService.searchByName(searchMessage.getSearch()));
 		}else if(userService.hasRole("ROLE_SELLER")){
-			long id = (long) session.getAttribute("sellerId");
-			List<Product> productList = sellerService.searchByName(searchMessage.getSearch(), id);
+			Seller seller = (Seller)session.getAttribute("seller");
+			List<Product> productList = sellerService.searchByName(searchMessage.getSearch(), seller.getUserId());
 			model.addAttribute("productList", productList);
 		}
 		return "home";
