@@ -14,4 +14,14 @@ public class ItemServiceImp implements ItemService {
     public Item save(Item item) {
         return itemRepository.save(item);
     }
+
+    @Override
+    public Item findItem(Long id) {
+       return itemRepository.findItemById(id);
+    }
+
+    @Override
+    public void delete(Item item) {
+        itemRepository.delete(item);
+    }
 }
