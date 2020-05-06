@@ -5,42 +5,13 @@
 	<title>Title</title>
 </head>
 <body>
-	<nav th:fragment="header"
-		class="navbar navbar-expand navbar-dark bg-dark static-top">
-		
-		<div class="nav-header" style="width: 100%">
-			<div class="logo">
-				<a class="navbar-brand mr-1" href="home.html" th:href="@{/home}">
-					<img th:src="@{/img/logo.png}" style="width: 50px"> <span>Pharaohs</span>
-				</a>
-			</div>
-		</div>
-		<div class="dropdown" sec:authorize="isAuthenticated()">
-			<img th:src="@{/img/user.png}" style="width: 30px; cursor: pointer;"
-				id="dropdownMenuButton" data-toggle="dropdown" class="navbar-brand mr-1"
-				aria-haspopup="true" aria-expanded="false">
-		
-		    <ul class="dropdown-menu dropdown-menu-right bg-dark">
-				<li class="dropdown-header">User Name</li>
-				<li><a class="dropdown-item" href="#">Edit Profile</a></li>
-				<li><a class="dropdown-item" th:href="@{/buyer/addAddress}"
-					sec:authorize="hasAuthority('ROLE_BUYER')">Edit Address</a></li>
-				<li><a class="dropdown-item" th:href="@{/buyer/addPayment}"
-					sec:authorize="hasAuthority('ROLE_BUYER')">Edit Payment Method</a></li>
-				<li><a class="dropdown-item" href="#"
-					 sec:authorize="hasAuthority('ROLE_BUYER')">Orders</a></li>
-				<li><a class="dropdown-item" href="#"
-					 sec:authorize="hasAuthority('ROLE_SELLER')">Orders</a></li>
-				<li class="dropdown-divider"></li>
-				<li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-		    </ul>
-		</div>
-		
-		<div class="logo" sec:authorize="hasAuthority('ROLE_BUYER')">
-			<a class="navbar-brand mr-1" href="home.html" th:href="@{/home}"
-				style="float: right;">
-				<img th:src="@{/img/cart.png}" style="width: 30px">
-				<span>0</span>
+<nav th:fragment="header"
+	 class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+	<div class="nav-header" style="width: 100%">
+		<div class="logo">
+			<a class="navbar-brand mr-1" href="home.html" th:href="@{/home}">
+				<img th:src="@{/img/logo.png}" style="width: 50px"> <span>Pharaohs</span>
 			</a>
 		</div>
 	</div>
