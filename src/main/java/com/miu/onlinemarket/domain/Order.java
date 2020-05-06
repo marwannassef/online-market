@@ -1,5 +1,6 @@
 package com.miu.onlinemarket.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -12,18 +13,20 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Double totalPrice = 0.0;
+	private long totalPrice = 0;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "orders_id")
 	private List<Item> items;
 
-	public Order(Double totalPrice, Item items) {
+	public Order(long totalPrice, Item items) {
 		this.totalPrice = totalPrice;
 		this.items.add(items);
 	}
 
 	public Order() {
+		items = new ArrayList<>();
+
 	}
 
 	public Long getId() {
@@ -34,11 +37,11 @@ public class Order {
 		this.id = id;
 	}
 
-	public Double getTotalPrice() {
+	public long getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(Double totalPrice) {
+	public void setTotalPrice(long totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 

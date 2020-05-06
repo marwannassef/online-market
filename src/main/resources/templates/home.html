@@ -1,44 +1,77 @@
 <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 <!DOCTYPE html>
-<html xmlns:layout="http://www.w3.org/1999/xhtml"
-	  layout:decorate="~{layouts/dashboard_layout}"
-	  xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>HOME</title>
+    <title>HOME</title>
 </head>
 <body>
 
 <div class="col" layout:fragment="main-content">
-
-	<form ui-jp="parsley" th:action="@{/search}" th:object="${searchMessage}" method="get">
-		<div class="row m-b">
-			<div class="col-sm-6">
-				Search by Name: <input id="filter" type="text" th:field="*{search}" class="form-control input-sm w-auto inline m-r"/>
-				<button class="md-btn md-fab m-b-sm indigo"><i class="material-icons md-24">&#xe8b6;</i>Search</button>
+    <div class="container">
+        <form method="get" th:action="@{/search}" th:object="${searchMessage}" ui-jp="parsley">
+            <div class="row" style="padding: 10px; padding-left: 0px">
+                <div class="col-sm-4">
+                    <input class="form-control " id="filter" th:field="*{search}"
+						   type="text" placeholder="Search"/>
+            	</div>
 			</div>
-		</div>
-	</form>
+        </form>
 
-	<tr th:each="product: ${productList}">
-		<a th:href="@{'/product/detail'(id=${product.id})}"><td th:text="${product.name}"></td></a>
-		<br><br>
-		<div sec:authorize="hasAuthority('ROLE_BUYER')">
-			<a th:href="@{/buyer/addProduct}"
-			   class="btn btn-primary btn-sm mb-3">
-				Add To Cart
-			</a>
-		</div>
-	</tr>
+<!--        <div sec:authorize="hasAuthority('ROLE_ADMIN')">Has Authority ADMIN</div>-->
+<!--        <div sec:authorize="hasAuthority('ROLE_SELLER')">Has Authority SELLER</div>-->
+<!--        <div sec:authorize="hasAuthority('ROLE_BUYER')">Has Authority BUYER</div>-->
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Product Name</th>
+                <th>Available</th>
+                <th>Add Product</th>
+            </tr>
+            </thead>
 
-	<div sec:authorize="hasAuthority('ROLE_SELLER')">
-		<a th:href="@{/product/addProduct}"
-		   class="btn btn-primary btn-sm mb-3">
-			Add Product
-		</a>
-	</div>
+            <tbody>
+            <tr th:each="product: ${productList}">
+
+                <td><a th:href="@{'/product/detail'(id=${product.id})}"> <span th:text="${product.name}"></span></a>
+                </td>
+                <td>
+                    <span th:if="${product.getQuantity() > 0}">In stock</span>
+                    <span th:if="${product.getQuantity() <= 0}">Out of stock</span>
+                </td>
+                <td>
+                    <div sec:authorize="hasAuthority('ROLE_BUYER')">
+
+                        <span th:if="${product.getQuantity() > 0}">
+                            <a class="btn btn-primary btn-sm mb-3"
+                               th:href="@{'/addItem'(id=${product.id})}">
+                                Add To Cart
+                            </a>
+                        </span>
+                        <span th:if="${product.getQuantity() <= 0}">
+                            <a class="btn btn-secondary btn-sm mb-3 disabled"
+                               th:href="@{'/addItem'(id=${product.id})}">
+                                Add To Cart
+                            </a>
+                        </span>
+                    </div>
+                    <div sec:authorize="hasAuthority('ROLE_SELLER')">
+                        <a class="btn btn-primary btn-sm mb-3"
+                           th:href="@{/product/addProduct}">
+                            Add Product
+                        </a>
+                    </div>
+
+                </td>
+
+            </tr>
+            </tbody>
+            </table>
+
+    </div>
 </div>
-
 
 
 </body>

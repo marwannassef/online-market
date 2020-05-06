@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.miu.onlinemarket.domain.*;
+import com.miu.onlinemarket.service.BuyerService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,13 +19,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import com.miu.onlinemarket.domain.City;
-import com.miu.onlinemarket.domain.Country;
-import com.miu.onlinemarket.domain.Product;
-import com.miu.onlinemarket.domain.Role;
-import com.miu.onlinemarket.domain.Seller;
-import com.miu.onlinemarket.domain.State;
-import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.repository.ProductRepository;
 import com.miu.onlinemarket.repository.RoleRepository;
 import com.miu.onlinemarket.repository.UserRepository;
@@ -47,6 +42,11 @@ public class OnApplicationStartUp {
 
 	@Autowired
 	private SellerService sellerRepository;
+	@Autowired
+	private BuyerService buyerService;
+
+	@Autowired
+	private SellerService sellerService;
 
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent event) throws Exception {
@@ -89,7 +89,7 @@ public class OnApplicationStartUp {
 	}
 
 	private void createSeller() throws ParseException {
-		User user = new User();
+		Seller user = new Seller();
 		user.setFirstName("seller");
 		user.setLastName("seller");
 		user.setEmail("seller@miu.edu");
@@ -100,11 +100,19 @@ public class OnApplicationStartUp {
 		List<Role> roles = new ArrayList<>();
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		user.setRoles(roles);
-		userService.save(user);
+		sellerService.save(user);
+
+		Product product4 = new Product();
+		product4.setName("Pepsi");
+		product4.setSeller(user);
+		product4.setDescription("Best Pepsi");
+		product4.setQuantity(2);
+		product4.setPrice(9);
+		productRepository.save(product4);
 	}
 
 	private void createBuyer() throws ParseException {
-		User user = new User();
+		Buyer user = new Buyer();
 		user.setFirstName("buyer");
 		user.setLastName("buyer");
 		user.setEmail("buyer@miu.edu");
@@ -115,7 +123,10 @@ public class OnApplicationStartUp {
 		List<Role> roles = new ArrayList<>();
 		roles.add(roleRepo.findByName("ROLE_BUYER"));
 		user.setRoles(roles);
-		userService.save(user);
+		user.setOrders(null);
+		user.setPaymentMethod(null);
+		user.setShippingAddress(null);
+		buyerService.save(user);
 	}
 	private void createProduct() throws ParseException {
 		Seller user2 = new Seller();
@@ -136,25 +147,27 @@ public class OnApplicationStartUp {
 		product.setName("Mobile");
 		product.setSeller(user2);
 		product.setDescription("Best Mobile");
+		product.setQuantity(10);
+		product.setPrice(10);
 		productRepository.save(product);
 
 		Product product2 = new Product();
 		product2.setName("Cups");
 		product2.setSeller(user2);
 		product2.setDescription("Best Cups");
-
+		product2.setQuantity(0);
+		product2.setPrice(30);
 		productRepository.save(product2);
 
 		Product product3 = new Product();
 		product3.setName("TV");
+		product3.setSeller(user2);
 		product3.setDescription("Best TV");
+		product3.setQuantity(5);
+		product3.setPrice(30);
 		productRepository.save(product3);
 
-		Product product4 = new Product();
-		product4.setName("Pepsi");
-		product4.setDescription("Best Pepsi");
 
-		productRepository.save(product4);
 	}
 
 
