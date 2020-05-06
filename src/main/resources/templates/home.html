@@ -46,13 +46,13 @@
 
                         <span th:if="${product.getQuantity() > 0}">
                             <a class="btn btn-primary btn-sm mb-3"
-                               th:href="@{'/addItem'(id=${product.id})}">
+                               th:href="@{'/buyer/addItem'(id=${product.id})}">
                                 Add To Cart
                             </a>
                         </span>
                         <span th:if="${product.getQuantity() <= 0}">
                             <a class="btn btn-secondary btn-sm mb-3 disabled"
-                               th:href="@{'/addItem'(id=${product.id})}">
+                               th:href="@{'/buyer/addItem'(id=${product.id})}">
                                 Add To Cart
                             </a>
                         </span>
