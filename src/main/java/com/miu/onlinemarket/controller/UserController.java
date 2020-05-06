@@ -47,7 +47,10 @@ public class UserController {
 	@RequestMapping(value = { "/login", "/" })
 	public String login(SessionStatus status) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!auth.getPrincipal().toString().equalsIgnoreCase("anonymousUser")) {
+		if(userService.hasRole("ROLE_ADMIN")){
+			return "admin";
+		}
+		else if (!auth.getPrincipal().toString().equalsIgnoreCase("anonymousUser")) {
 			return "redirect:/home";
 		}
 		status.setComplete();

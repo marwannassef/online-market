@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.miu.onlinemarket.domain.*;
 import com.miu.onlinemarket.service.BuyerService;
+import com.miu.onlinemarket.service.ReviewService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -48,6 +49,9 @@ public class OnApplicationStartUp {
 	@Autowired
 	private SellerService sellerService;
 
+	@Autowired
+	private ReviewService reviewService;
+
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent event) throws Exception {
 		List<User> users = userRepo.findAll();
@@ -62,6 +66,7 @@ public class OnApplicationStartUp {
 		loadStates();
 		loadCities();
 		createProduct();
+
 	}
 
 	private void fillRoleTable() {
@@ -127,6 +132,10 @@ public class OnApplicationStartUp {
 		user.setPaymentMethod(null);
 		user.setShippingAddress(null);
 		buyerService.save(user);
+		Review review = new Review();
+		review.setReview("nice one");
+		review.setBuyer(user);
+		reviewService.save(review);
 	}
 	private void createProduct() throws ParseException {
 		Seller user2 = new Seller();

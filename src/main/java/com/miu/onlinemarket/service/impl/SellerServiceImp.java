@@ -3,6 +3,7 @@ package com.miu.onlinemarket.service.impl;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -59,6 +60,17 @@ public class SellerServiceImp implements SellerService {
     	seller.setItems(oldSeller.getItems());
         return sellerRepository.save(seller);
     }
+
+    @Override
+    public List<Seller> findUnApprovedSeller() {
+        return sellerRepository.findUnApproved();
+    }
+
+    @Override
+    public Optional<Seller> findSellerById(Long id) {
+        return sellerRepository.findById(id);
+    }
+
 
     private String encodePassword(String password) {
         return bCryptPasswordEncoder.encode(password);

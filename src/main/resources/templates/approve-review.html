@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Approve Review</title>
+</head>
+<body>
+<div class="col" layout:fragment="main-content">
+    <div class="container">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Buyer First Name</th>
+                <th>Buyer Last Name</th>
+                <th>Buyer Review</th>
+                <th>Approving</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <br>
+            <tr th:each="review: ${reviewList}">
+
+                <td><span th:text="${review.buyer.firstName}"></span></td>
+                <td><span th:text="${review.buyer.lastName}"></span></td>
+                <td><span th:text="${review.review}"></span></td>
+                <td>
+                    <a class="btn btn-primary btn-sm mb-3"
+                       th:href="@{'/admin/approveReview'(id=${review.id})}">
+                        Approve
+                    </a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+</body>
+</html>

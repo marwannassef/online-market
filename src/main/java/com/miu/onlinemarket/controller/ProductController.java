@@ -41,7 +41,7 @@ public class ProductController {
             Model model){
 
         if(bindingResult.hasErrors()) {
-            return "addProduct";
+            return "redirect:/product/addProduct";
         }
 
         Seller seller =(Seller) model.asMap().get("seller");
