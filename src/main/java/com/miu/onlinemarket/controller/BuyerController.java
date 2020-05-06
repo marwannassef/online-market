@@ -31,6 +31,8 @@ public class BuyerController {
     @Autowired
     private ItemService itemService;
 
+
+
     @GetMapping("/addAddress")
     public String addAddress(@ModelAttribute("address") Address address, Model model) {
         model.addAttribute("address", address);
@@ -115,8 +117,35 @@ public class BuyerController {
         Buyer buyer = (Buyer)session.getAttribute("buyer");
         Set<Order> orders = buyer.getOrders();
         model.addAttribute("orders", orders);
-        System.out.println("before page");
         return "order";
     }
+    @GetMapping("/removeItem")
+    public String removeItem(@RequestParam("id") Long id, HttpSession session) {
+        Buyer buyer = (Buyer)session.getAttribute("buyer");
+        Order order = (Order) orderService.findById((Long) session.getAttribute("orderId")).orElse(new Order());
+        Item item = itemService.findItem(id);
+        Seller seller = item.getProduct().getSeller();
+        Product product = item.getProduct();
+
+        order.getItems().remove(item);
+        seller.getItems().remove(item);
+        if(order.getItems().size() == 0) {
+            buyer.getOrders().remove(order);
+            buyerService.save(buyer);
+        }
+        long total = order.getTotalPrice()- item.getQuantity() * item.getProduct().getPrice();
+        order.setTotalPrice(total);
+        product.setQuantity(product.getQuantity() +1);
+        itemService.delete(item);
+        orderService.save(order);
+        sellerService.save(seller);
+        productService.save(product);
+        session.setAttribute("buyer", buyerService.findByUsername(buyer.getUsername()));
+        session.setAttribute("orderId", id);
+
+
+        return "redirect:/buyer/order";
+    }
+
 
 }
