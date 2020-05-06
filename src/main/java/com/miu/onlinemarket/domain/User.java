@@ -65,6 +65,9 @@ public class User {
     @Transient
     private MultipartFile image;
     
+    @Transient
+    private String photoBase64;
+    
     @Lob
     @Column(name = "photo", columnDefinition="BLOB")
     private byte[] photo;
@@ -184,6 +187,14 @@ public class User {
 
 	public void setPhoto(byte[] photo) {
 		this.photo = photo;
+	}
+
+	public String getPhotoBase64() {
+		return photoBase64;
+	}
+
+	public void setPhotoBase64(String photoBase64) {
+		this.photoBase64 = photoBase64;
 	}
 
 }

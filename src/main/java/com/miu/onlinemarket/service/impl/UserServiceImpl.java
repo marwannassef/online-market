@@ -1,5 +1,7 @@
 package com.miu.onlinemarket.service.impl;
 
+import java.util.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.repository.UserRepository;
 import com.miu.onlinemarket.service.UserService;
@@ -30,6 +34,22 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         user.setPassword(encodePassword(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public User update(User user) {
+    	User oldUser = userRepository.findByUsername(user.getUsername());
+    	user.setRoles(oldUser.getRoles());
+        return userRepository.save(user);
+    }
+
+
+    @Override
+    public User findByUsername(String username) {
+    	User user = userRepository.findByUsername(username);
+    	if (user.getPhoto() != null && user.getPhoto().length != 0)
+    		user.setPhotoBase64(Base64.getEncoder().encodeToString(user.getPhoto()));
+        return user;
     }
 
     private String encodePassword(String password) {

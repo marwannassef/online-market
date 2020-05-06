@@ -23,6 +23,10 @@ public class Buyer extends User {
 	public Buyer() {
 	}
 
+	public Buyer(User user) {
+		super(user);
+	}
+
 	public Buyer(User user, Address shippingAddress, PaymentMethod paymentMethod, Set<Order> orders) {
 		super(user);
 		this.shippingAddress = shippingAddress;

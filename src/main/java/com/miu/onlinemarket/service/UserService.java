@@ -9,5 +9,9 @@ public interface UserService {
     User save(User user);
 
     public boolean hasRole(String role);
+    
+    public User findByUsername(String username);
+    
+    public User update(User user);
 
 }

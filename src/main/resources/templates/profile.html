@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{layouts/dashboard_layout}"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Profile</title>
+</head>
+<body style="text-align: center">
+	<div class="col" layout:fragment="main-content">
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<h1>Edit Profile</h1>
+				<form th:object="${user}" th:action="@{/profile}" action="#"
+					method="post" enctype="multipart/form-data">
+					
+					<img class="rounded-circle" th:src="'data:image/png;base64,' + *{photoBase64}" style="width: 200px">
+
+					<div style="clear: both; display: block; height: 10px;"></div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" th:field="*{firstName}" class="form-control"
+								placeholder="First Name" />
+							<p th:if="${#fields.hasErrors('firstName')}"
+								th:errors="*{firstName}">firstName Error</p>
+						</div>
+						<div class="col-md-6">
+							<input type="text" th:field="*{lastName}" class="form-control"
+								placeholder="Last Name" />
+							<p th:if="${#fields.hasErrors('lastName')}"
+								th:errors="*{lastName}">lastName Error</p>
+						</div>
+					</div>
+					<div style="clear: both; display: block; height: 10px;"></div>
+
+					<input type="email" th:field="*{email}" class="form-control"
+						placeholder="Email" />
+					<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
+						Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
+
+					<input type="tel" th:field="*{phoneNumber}" class="form-control"
+						placeholder="Phone Number" />
+					<p th:if="${#fields.hasErrors('phoneNumber')}"
+						th:errors="*{phoneNumber}">PhoneNumber Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
+
+					<input type="text" th:field="*{dateOfBirth}" class="form-control"
+						placeholder="Date Of Birth" />
+					<p th:if="${#fields.hasErrors('dateOfBirth')}"
+						th:errors="*{dateOfBirth}">DateOfBirth Error</p>
+					<div style="clear: both; display: block; height: 10px;"></div>
+					
+					<input type="text" th:field="*{username}" hidden="true"/>
+					<input type="text" th:field="*{password}" hidden="true"/>
+					<input type="text" th:field="*{userId}" hidden="true"/>
+					<input type="text" th:field="*{photo}" hidden="true"/>
+
+					<div class="row">
+						<div class="col-md-6">
+							<p style="text-align: left;">Profile Picture</p>
+						</div>
+						<div class="col-md-6">
+							<input type="file" id="file" th:field="*{image}"
+								accept="image/png, image/jpeg" />
+						</div>
+					</div>
+					<div style="clear: both; display: block; height: 10px;"></div>
+
+					<input type="submit" class="btn btn-primary form-control" value="Save">
+				</form>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>

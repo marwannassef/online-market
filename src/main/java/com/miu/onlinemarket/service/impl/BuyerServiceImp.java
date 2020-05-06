@@ -1,6 +1,7 @@
 package com.miu.onlinemarket.service.impl;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,10 @@ public class BuyerServiceImp implements BuyerService {
 
     @Override
     public Buyer findByUsername(String username) {
-        return buyerRepository.findBuyerByUsername(username);
+    	Buyer buyer = buyerRepository.findBuyerByUsername(username);
+    	if (buyer.getPhoto() != null && buyer.getPhoto().length != 0)
+    		buyer.setPhotoBase64(Base64.getEncoder().encodeToString(buyer.getPhoto()));
+        return buyer;
     }
 
 
@@ -56,24 +60,13 @@ public class BuyerServiceImp implements BuyerService {
     }
 
     @Override
-    public Buyer updateBuyer(Buyer buyer) {
-        // note username constant can not change like most of websites
-        String username = buyer.getUsername();
-        Buyer oldBuyer = buyerRepository.findBuyerByUsername(username);
-        oldBuyer.setPassword(buyer.getPassword());
-        oldBuyer.setDateOfBirth(buyer.getDateOfBirth());
-        oldBuyer.setEmail(buyer.getEmail());
-        oldBuyer.setFirstName(buyer.getFirstName());
-        oldBuyer.setLastName(buyer.getLastName());
-        oldBuyer.setPhoneNumber(buyer.getPhoneNumber());
-        oldBuyer.setShippingAddress(buyer.getShippingAddress());
-        oldBuyer.setPaymentMethod(buyer.getPaymentMethod());
-
-        oldBuyer.setOrders(buyer.getOrders());
-        oldBuyer.setShippingAddress(buyer.getShippingAddress());
-        oldBuyer.setPaymentMethod(buyer.getPaymentMethod());
-
-        return save(oldBuyer);
+    public Buyer update(Buyer buyer) {
+		Buyer oldBuyer = buyerRepository.findBuyerByUsername(buyer.getUsername());
+		buyer.setRoles(oldBuyer.getRoles());
+		buyer.setPaymentMethod(oldBuyer.getPaymentMethod());
+		buyer.setShippingAddress(oldBuyer.getShippingAddress());
+		buyer.setOrders(oldBuyer.getOrders());
+        return buyerRepository.save(buyer);
     }
 
 

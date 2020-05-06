@@ -22,6 +22,10 @@ public class Seller extends User {
 	public Seller() {
 	}
 
+	public Seller(User user) {
+		super(user);
+	}
+
 	public Seller(User user, Boolean approved, List<Product> products, List<Item> items) {
 		super(user);
 		this.approved = approved;
