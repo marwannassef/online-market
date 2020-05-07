@@ -3,6 +3,7 @@ package com.miu.onlinemarket.controller;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.SearchMessage;
 import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.service.BuyerService;
 import com.miu.onlinemarket.service.ProductService;
 import com.miu.onlinemarket.service.SellerService;
 import com.miu.onlinemarket.service.UserService;
@@ -25,6 +26,8 @@ public class HomeController {
 	@Autowired
 	private SellerService sellerService;
 	@Autowired
+	private BuyerService buyerService;
+	@Autowired
 	private UserService userService;
 
 	@GetMapping("/home")
@@ -32,10 +35,10 @@ public class HomeController {
 	ModelAndView modelAndView = new ModelAndView();
 		if(userService.hasRole("ROLE_BUYER")){
 			model.addAttribute("productList", productService.findAll());
-			session.setAttribute("buyer",userService.findUser(principal.getName()));
+			session.setAttribute("buyer", buyerService.findByUsername(principal.getName()));
 		}else if(userService.hasRole("ROLE_SELLER")){
 			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
-			session.setAttribute("seller",userService.findUser(principal.getName()));
+			session.setAttribute("seller",sellerService.findSeller(principal.getName()));
 
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());

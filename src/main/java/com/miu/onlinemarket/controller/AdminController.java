@@ -5,17 +5,11 @@ import com.miu.onlinemarket.domain.Review;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.service.ReviewService;
 import com.miu.onlinemarket.service.SellerService;
-import com.miu.onlinemarket.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -39,7 +33,7 @@ public class AdminController {
 
       Seller seller = sellerService.findSellerById(id).orElse(null);
       seller.setApproved(true);
-      sellerService.save(seller);
+      sellerService.update(seller);
         return new RedirectView("seller");
     }
 

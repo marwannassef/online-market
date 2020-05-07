@@ -102,6 +102,7 @@ public class OnApplicationStartUp {
 		user.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user.setUsername("seller");
 		user.setPassword("seller");
+		user.setApproved(true);
 		List<Role> roles = new ArrayList<>();
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		user.setRoles(roles);
@@ -158,6 +159,7 @@ public class OnApplicationStartUp {
 		product.setDescription("Best Mobile");
 		product.setQuantity(10);
 		product.setPrice(10);
+		product.setPurchasedStatus(true);
 		productRepository.save(product);
 
 		Product product2 = new Product();

@@ -25,6 +25,7 @@ public class Product {
 	@Min(value = 0, message = "Quantity must be greater than 0")
 	private long quantity = 0;
 
+	private boolean purchasedStatus = false;
 	@ManyToOne
 	@JoinColumn(name = "seller_id")
 	Seller seller;
@@ -43,6 +44,14 @@ public class Product {
 		this.quantity = quantity;
 		this.seller = seller;
 		this.reviews = reviews;
+	}
+
+	public boolean isPurchasedStatus() {
+		return purchasedStatus;
+	}
+
+	public void setPurchasedStatus(boolean purchasedSatatus) {
+		this.purchasedStatus = purchasedSatatus;
 	}
 
 	public Long getId() {

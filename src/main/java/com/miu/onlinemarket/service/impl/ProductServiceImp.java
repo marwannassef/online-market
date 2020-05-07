@@ -1,5 +1,6 @@
 package com.miu.onlinemarket.service.impl;
 
+import com.miu.onlinemarket.domain.Buyer;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.repository.ProductRepository;
 import com.miu.onlinemarket.service.ProductService;
@@ -37,8 +38,19 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Product product) {
 
-        productRepository.deleteById(id);
+        productRepository.delete(product);
+    }
+
+    @Override
+    public Product update(Product product,  Long id) {
+        Product oldProduct = productRepository.findById(id).orElse(new Product());
+        oldProduct.setName(product.getName());
+        oldProduct.setDescription(product.getDescription());
+        oldProduct.setQuantity(product.getQuantity());
+        oldProduct.setPrice(product.getPrice());
+        oldProduct.setSeller(product.getSeller());
+        return productRepository.save(oldProduct);
     }
 }

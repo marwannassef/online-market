@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layouts/dashboard_layout}"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Product Details</title>
@@ -11,32 +11,62 @@
 
 <div class="col" layout:fragment="main-content">
 
+    <div class="container">
+        <h1>Product Details</h1>
 
-    <h1>Product Details</h1>
+        <table>
+            <tr th:object="${product}">
+                <th>NAME</th>
+                <td th:text="${product.name}"></td>
+            </tr>
+            <tr th:object="${product}">
+                <th>DESCRIPTION</th>
+                <td th:text="${product.getDescription()}"></td>
+            </tr>
+            <tr th:object="${product}">
+                <th>PRICE</th>
+                <td th:text="${product.getPrice()}"></td>
+            </tr>
 
-    <table>
-        <tr th:object="${product}">
-            <th>NAME</th>
-            <td th:text="${product.name}"></td>
-        </tr>
-        <tr th:object="${product}">
-            <th>DESCRIPTION</th>
-            <td th:text="${product.getDescription()}"></td>
-        </tr>
-        <tr th:object="${product}">
-            <th>PRICE</th>
-            <td th:text="${product.getPrice()}"></td>
-        </tr>
+        </table>
 
-    </table>
+        <div sec:authorize="hasAuthority('ROLE_BUYER')">
+            <a class="btn btn-primary btn-sm mb-3"
+               th:href="@{/buyer/addProduct}">
+                Add To Cart
+            </a>
+        </div>
+        <br style="margin-top: 20px"><br>
+        <div class="row">
+            <div class="col-2">
+                <div sec:authorize="hasAuthority('ROLE_SELLER')">
+                    <a class="btn btn-primary btn-sm mb-3"
+                       th:href="@{/product/updateProduct (id=${product.id})}">
+                        Update Product
+                    </a>
+                </div>
+            </div>
+            <div class="col-15">
+                <div sec:authorize="hasAuthority('ROLE_SELLER')">
+                     <span th:if="!${status}">
+                       <a class="btn btn-primary btn-sm mb-3"
+                          th:href="@{/product/removeProduct (id=${product.id})}"
+                          onclick="if (!(confirm('Are you sure you want to remove this product'))) return false">
+                        Remove Product
+                    </a>
+                </span>
+                     <span th:if="${status}">
+                     <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="THIS PRODUCT IS ALREADY PURCHASED YOU CAN NOT REMOVE IT">
+                    <button class="btn btn-primary btn-sm mb-3" disabled
+                            style="pointer-events: none;" type="button">Remove Product
+                    </button>
+                     </span>
+                </span>
 
-    <div sec:authorize="hasAuthority('ROLE_BUYER')">
-        <a th:href="@{/buyer/addProduct}"
-           class="btn btn-primary btn-sm mb-3">
-            Add To Cart
-        </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
 </body>
 </html>

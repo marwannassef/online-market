@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layouts/dashboard_layout}"
+<html layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -14,35 +14,46 @@
         <div class="col-md-4"></div>
         <div class="col-md-4">
             <h1>Add Product</h1>
-            <form th:object="${product}" action="#" th:action="@{/product/addProductProcess}"
-                  method="post" enctype="multipart/form-data">
+            <form action="#" enctype="multipart/form-data" method="post"
+                  th:action="@{/product/addProductProcess}" th:object="${product}">
 
                 <div style="clear: both; display: block; height: 10px;"></div>
 
-                        <input type="text" th:field="*{name}" class="form-control"
-                               placeholder="Product Name" />
-                        <p th:if="${#fields.hasErrors('name')}"
-                           th:errors="*{name}">ProductName Error</p>
+                <input class="form-control" placeholder="Product Name" th:field="*{name}"
+                       type="text"/>
+                <p th:errors="*{name}"
+                   th:if="${#fields.hasErrors('name')}">ProductName Error</p>
                 <div style="clear: both; display: block; height: 10px;"></div>
 
-                        <input type="text" th:field="*{description}" class="form-control"
-                               placeholder="Description" />
-                        <p th:if="${#fields.hasErrors('description')}"
-                           th:errors="*{description}">Description Error</p>
+                <input class="form-control" placeholder="Description" th:field="*{description}"
+                       type="text"/>
+                <p th:errors="*{description}"
+                   th:if="${#fields.hasErrors('description')}">Description Error</p>
 
-                <input type="text" th:field="*{price}" class="form-control"
-                       placeholder="Enter Price" />
-                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price
+                <input class="form-control" placeholder="Enter Price" th:field="*{price}"
+                       type="text"/>
+                <p th:errors="*{price}" th:if="${#fields.hasErrors('price')}">Price
                     Error</p>
                 <div style="clear: both; display: block; height: 10px;"></div>
 
-                <input type="text" th:field="*{quantity}" class="form-control"
-                       placeholder="Add Quantity" />
-                <p th:if="${#fields.hasErrors('quantity')}"
-                   th:errors="*{quantity}">Quantity Error</p>
+                <input class="form-control" placeholder="Add Quantity" th:field="*{quantity}"
+                       type="text"/>
+                <p th:errors="*{quantity}"
+                   th:if="${#fields.hasErrors('quantity')}">Quantity Error</p>
                 <div style="clear: both; display: block; height: 10px;"></div>
 
-                <input type="submit" class="btn btn-primary form-control" value="Save">
+                <span th:if="${approved}">
+                       <input class="btn btn-primary form-control" type="submit" value="Save Product">
+                </span>
+                 <span th:if="!${approved}">
+                     <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="ADMIN MUST APPROVE YOU FIRST">
+                    <button class="btn btn-primary form-control" disabled
+                            style="pointer-events: none;" type="button">Save Product
+                    </button>
+                     </span>
+                </span>
+
+
             </form>
 
         </div>
