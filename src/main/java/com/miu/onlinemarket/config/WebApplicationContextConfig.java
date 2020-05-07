@@ -10,8 +10,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@EnableWebMvc
 @Configuration
+@EnableWebMvc
 public class WebApplicationContextConfig implements WebMvcConfigurer {
 
 	@Bean
@@ -42,11 +42,13 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         registry.addResourceHandler(
                 "/img/**",
                 "/css/**",
-                "/js/**")
+                "/js/**",
+                "/webjars/**")
                 .addResourceLocations(
                         "classpath:/static/img/",
                         "classpath:/static/css/",
-                        "classpath:/static/js/");
+                        "classpath:/static/js/",
+                        "/webjars/").resourceChain(false);
     }
 
 }

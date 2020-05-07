@@ -1,21 +1,26 @@
 package com.miu.onlinemarket.controller;
 
+import java.security.Principal;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.SearchMessage;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.service.BuyerService;
 import com.miu.onlinemarket.service.ProductService;
+import com.miu.onlinemarket.service.ReviewService;
 import com.miu.onlinemarket.service.SellerService;
 import com.miu.onlinemarket.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
-import java.util.List;
 
 
 @Controller
@@ -29,6 +34,9 @@ public class HomeController {
 	private BuyerService buyerService;
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+    private ReviewService reviewService;
 
 	@GetMapping("/home")
 	public ModelAndView getAllProducts(Model model, Principal principal, HttpSession session) {
@@ -46,6 +54,16 @@ public class HomeController {
 		modelAndView.setViewName("home");
 		return modelAndView;
 	}
+	
+	@GetMapping("{tab}")
+    public String tab(@PathVariable String tab, Model model) {
+        if (tab.equalsIgnoreCase("approve-review")) {
+            model.addAttribute("reviewList", reviewService.findUnApprovedReview());
+        } else {
+            model.addAttribute("sellerList", sellerService.findUnApprovedSeller());
+        }
+        return tab;
+    }
 
 	@GetMapping("/search")
 	public String getProductByName(@ModelAttribute SearchMessage searchMessage

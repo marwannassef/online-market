@@ -4280,12 +4280,15 @@ input[type=submit].btn-block {
 
 .nav-link {
 	display: block;
-	padding: .5rem 1rem
+	padding: .5rem 1rem;
+	background-color: #343a40;
+	color: #ffffff;
 }
 
 .nav-link:focus,
 .nav-link:hover {
-	text-decoration: none
+	text-decoration: none;
+	color: #e78200;
 }
 
 .nav-link.disabled {
@@ -4295,7 +4298,7 @@ input[type=submit].btn-block {
 }
 
 .nav-tabs {
-	border-bottom: 1px solid #dee2e6
+	border-bottom: 1px solid #e78200
 }
 
 .nav-tabs .nav-item {
@@ -4310,7 +4313,7 @@ input[type=submit].btn-block {
 
 .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover {
-	border-color: #e9ecef #e9ecef #dee2e6
+	border-color: #e78200
 }
 
 .nav-tabs .nav-link.disabled {
@@ -4321,8 +4324,8 @@ input[type=submit].btn-block {
 
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
-	color: #495057;
-	background-color: #fff;
+	color: #ffffff;
+	background-color: #e78200;
 	border-color: #dee2e6 #dee2e6 #fff
 }
 

@@ -8,9 +8,19 @@
     <title>HOME</title>
 </head>
 <body>
-
 <div class="col" layout:fragment="main-content">
-    <div class="container">
+	<div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')">
+		<br>
+		<ul class="nav nav-tabs nav-justified" id="adminTabs">
+		    <li class="nav-item"><a href="#approve-review" data-url="/approve-review" class="nav-link active">Approve Review</a></li>
+		    <li class="nav-item"><a href="#approve-seller" data-url="/approve-seller" class="nav-link">Approve Seller</a></li>
+		</ul>
+		<div class="tab-content">
+		    <div class="tab-pane container active" id="approve-review">Active panel</div>
+		    <div class="tab-pane container fade" id="approve-seller"></div>
+		</div>
+	</div>
+    <div class="container" sec:authorize="!hasAuthority('ROLE_ADMIN')">
         <form method="get" th:action="@{/search}" th:object="${searchMessage}" ui-jp="parsley">
             <div class="row" style="padding: 10px; padding-left: 0px">
                 <div class="col-sm-4">
@@ -20,9 +30,6 @@
             </div>
         </form>
 
-        <!--        <div sec:authorize="hasAuthority('ROLE_ADMIN')">Has Authority ADMIN</div>-->
-        <!--        <div sec:authorize="hasAuthority('ROLE_SELLER')">Has Authority SELLER</div>-->
-        <!--        <div sec:authorize="hasAuthority('ROLE_BUYER')">Has Authority BUYER</div>-->
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
             <tr>
