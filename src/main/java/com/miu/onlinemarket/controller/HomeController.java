@@ -52,6 +52,9 @@ public class HomeController {
 		modelAndView.addObject("searchMessage", new SearchMessage());
 
 		modelAndView.setViewName("home");
+		
+		String tab = (String) model.asMap().get("tab");
+		model.addAttribute("tab", tab);
 		return modelAndView;
 	}
 	

@@ -9,11 +9,12 @@
 </head>
 <body>
 <div class="col" layout:fragment="main-content">
+	<input type="hidden" th:value="${tab}" id="tab"/>
 	<div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')">
 		<br>
 		<ul class="nav nav-tabs nav-justified" id="adminTabs">
 		    <li class="nav-item"><a href="#approve-review" data-url="/approve-review" class="nav-link active">Approve Review</a></li>
-		    <li class="nav-item"><a href="#approve-seller" data-url="/approve-seller" class="nav-link">Approve Seller</a></li>
+		    <li class="nav-item"><a href="#approve-seller" data-url="/approve-seller" class="nav-link" id="tab2">Approve Seller</a></li>
 		</ul>
 		<div class="tab-content">
 		    <div class="tab-pane container active" id="approve-review">Active panel</div>

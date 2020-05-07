@@ -1,3 +1,14 @@
+var tab = '#approve-review';
+$( document ).ready(function() {
+    if ($('#tab').val() === '2') {
+    	tab = '#approve-seller';
+    	$('#tab2').click();
+    } else {
+        $('#approve-review').load($('.nav-link.active').attr("data-url"), function (result) {
+        });
+    }
+});
+
 $('#adminTabs a').click(function (e) {
     e.preventDefault();
 
@@ -9,8 +20,4 @@ $('#adminTabs a').click(function (e) {
     $(href).load(url, function (result) {
         pane.tab('show');
     });
-});
-
-// load first tab content
-$('#approve-review').load($('.nav-link.active').attr("data-url"), function (result) {
 });
