@@ -19,10 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
-    	http.csrf().disable()
-    	.authorizeRequests().antMatchers("/css/**", "/signup/**", "/js/**", "/img/**", "/webjars/**").permitAll()
-    			.and()
-            .authorizeRequests()
+    	http.authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -31,7 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
             	.and()
             .logout()
-            	.permitAll();
+            	.invalidateHttpSession(true)
+            	.permitAll()
+            	.and()
+	        .rememberMe()
+	        	.key("uniqueAndSecret")
+	        	.tokenValiditySeconds(15)
+	    		.and()
+        	.csrf()
+	    		.disable();
     }
 
     @Autowired
@@ -41,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity webSecurity) {
-		webSecurity.ignoring().antMatchers(HttpMethod.OPTIONS, "/**").and().ignoring().antMatchers("/console/**/**");																																															// Production!;
+		webSecurity.ignoring().antMatchers(HttpMethod.OPTIONS, "/**").and().ignoring().antMatchers("/console/**/**", "/css/**", "/signup/**", "/js/**", "/img/**", "/webjars/**");
 	}
 
 }
