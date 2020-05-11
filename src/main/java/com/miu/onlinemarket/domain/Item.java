@@ -20,9 +20,9 @@ public class Item {
 	private long quantity = 0;
 
 	@NotEmpty
-	private String shippingStatus;
+	private Status shippingStatus;
 
-	public Item(Product product, long quantity, String shippingStatus) {
+	public Item(Product product, long quantity, Status shippingStatus) {
 		this.product = product;
 		this.quantity = quantity;
 		this.shippingStatus = shippingStatus;
@@ -55,11 +55,11 @@ public class Item {
 		this.quantity = quantity;
 	}
 
-	public String getShippingStatus() {
+	public Status getShippingStatus() {
 		return shippingStatus;
 	}
 
-	public void setShippingStatus(String shippingStatus) {
+	public void setShippingStatus(Status shippingStatus) {
 		this.shippingStatus = shippingStatus;
 	}
 

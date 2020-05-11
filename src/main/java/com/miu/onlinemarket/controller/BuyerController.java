@@ -67,7 +67,7 @@ public class BuyerController {
         productService.save(product);
 
         // create new item
-        Item item = new Item(product,1,"prepared");
+        Item item = new Item(product,1,Status.PREPARED);
         itemService.save(item);
 
         // add item to order
