@@ -1,5 +1,6 @@
 package com.miu.onlinemarket.controller;
 
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,17 +25,17 @@ public class AdminController {
 	private ReviewService reviewService;
 
 	@GetMapping("/approveSeller")
-	public String approveSeller(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+	public String approveSeller(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		redirectAttributes.addFlashAttribute("tab", "2");
-		Seller seller = sellerService.findSellerById(id).orElse(null);
+		Seller seller = sellerService.findSellerById(id);
 		seller.setApproved(true);
 		sellerService.update(seller);
 		return "redirect:/home";
 	}
 
 	@GetMapping("/approveReview")
-	public String approveReview(@RequestParam("id") Long id, Model model) {
-		Review review = reviewService.findReviewById(id).orElse(null);
+	public String approveReview(@RequestParam("id") Long id, Model model) throws ResourceNotFoundException {
+		Review review = reviewService.findReviewById(id);
 		review.setReviewStatus(true);
 		reviewService.save(review);
 		return "redirect:/home";

@@ -2,6 +2,7 @@ package com.miu.onlinemarket.service;
 
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.User;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 
 public interface UserService {
 
@@ -11,9 +12,9 @@ public interface UserService {
 
     public boolean hasRole(String role);
     
-    public User findByUsername(String username);
+    public User findByUsername(String username) throws ResourceNotFoundException;
     
-    public User update(User user);
+    public User update(User user) throws ResourceNotFoundException;
 
     User findUser(String username);
 

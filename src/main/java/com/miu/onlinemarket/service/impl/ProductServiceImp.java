@@ -1,14 +1,13 @@
 package com.miu.onlinemarket.service.impl;
 
-import com.miu.onlinemarket.domain.Buyer;
 import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.repository.ProductRepository;
 import com.miu.onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImp implements ProductService {
@@ -27,8 +26,10 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Product findById(Long id) throws ResourceNotFoundException {
+        return productRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Product with id " + id +" not found")
+        );
     }
 
 
@@ -44,8 +45,11 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Product update(Product product,  Long id) {
+    public Product update(Product product,  Long id) throws ResourceNotFoundException {
         Product oldProduct = productRepository.findById(id).orElse(new Product());
+        if(oldProduct == null) {
+            throw new ResourceNotFoundException("Product with username " + oldProduct.getName() + " is not found");
+        }
         oldProduct.setName(product.getName());
         oldProduct.setDescription(product.getDescription());
         oldProduct.setQuantity(product.getQuantity());

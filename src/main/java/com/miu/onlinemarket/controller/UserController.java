@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -96,7 +97,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/profile")
-	public String profile(Model model, HttpSession session, Principal principal) {
+	public String profile(Model model, HttpSession session, Principal principal) throws ResourceNotFoundException {
 		if(userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("user", buyerService.findByUsername(principal.getName()));
 		} else if(userService.hasRole("ROLE_SELLER")) {
@@ -108,7 +109,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/profile", method = RequestMethod.POST)
-	public String profile(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, Principal principal) throws IOException {
+	public String profile(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, Principal principal) throws IOException, ResourceNotFoundException {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/profile";
 		}

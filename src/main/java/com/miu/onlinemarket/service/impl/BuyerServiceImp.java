@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,11 @@ public class BuyerServiceImp implements BuyerService {
 
 
     @Override
-    public Buyer findByUsername(String username) {
+    public Buyer findByUsername(String username) throws ResourceNotFoundException {
     	Buyer buyer = buyerRepository.findBuyerByUsername(username);
+    	if(buyer == null) {
+            throw new ResourceNotFoundException("Buyer with username " + username + " is not found");
+        }
     	if (buyer.getPhoto() != null && buyer.getPhoto().length != 0)
     		buyer.setPhotoBase64(Base64.getEncoder().encodeToString(buyer.getPhoto()));
         return buyer;
@@ -60,8 +64,11 @@ public class BuyerServiceImp implements BuyerService {
     }
 
     @Override
-    public Buyer update(Buyer buyer) {
+    public Buyer update(Buyer buyer) throws ResourceNotFoundException {
 		Buyer oldBuyer = buyerRepository.findBuyerByUsername(buyer.getUsername());
+        if(buyer == null) {
+            throw new ResourceNotFoundException("Buyer with username " + buyer.getUsername() + " is not found");
+        }
 		buyer.setRoles(oldBuyer.getRoles());
 		buyer.setPaymentMethod(oldBuyer.getPaymentMethod());
 		buyer.setShippingAddress(oldBuyer.getShippingAddress());
@@ -72,20 +79,26 @@ public class BuyerServiceImp implements BuyerService {
 
 
     @Override
-    public Buyer findBuyerById(Long userId) {
-        return buyerRepository.findById(userId).get();
+    public Buyer findBuyerById(Long userId) throws ResourceNotFoundException {
+        return buyerRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Seller with id " + userId +" not found")
+        );
     }
 
     @Override
-    public void updateAddress(Long userId, Address address) {
-        Buyer buyer = buyerRepository.findById(userId).get();
+    public void updateAddress(Long userId, Address address) throws ResourceNotFoundException {
+        Buyer buyer = buyerRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Seller with id " + userId +" not found")
+        );
         buyer.setShippingAddress(address);
         buyerRepository.save(buyer);
     }
 
     @Override
-    public void updatePayment(Long userId, PaymentMethod paymentMethod) {
-        Buyer buyer = buyerRepository.findById(userId).get();
+    public void updatePayment(Long userId, PaymentMethod paymentMethod) throws ResourceNotFoundException {
+        Buyer buyer = buyerRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Seller with id " + userId +" not found")
+        );
         buyer.setPaymentMethod(paymentMethod);
         buyerRepository.save(buyer);
     }

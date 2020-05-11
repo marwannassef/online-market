@@ -1,6 +1,7 @@
 package com.miu.onlinemarket.controller;
 
 import com.miu.onlinemarket.domain.*;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,7 @@ public class BuyerController {
         return "address";
     }
     @PostMapping({"/addAddress"})
-    public String addAddress(@Valid @ModelAttribute("address") Address address, BindingResult bindingResult, HttpSession session) {
+    public String addAddress(@Valid @ModelAttribute("address") Address address, BindingResult bindingResult, HttpSession session) throws ResourceNotFoundException {
         Long userId = (Long) session.getAttribute("userId");
         buyerService.updateAddress(userId ,address);
         System.out.println(address.getCity());
@@ -50,7 +51,7 @@ public class BuyerController {
         return "paymentMethod";
     }
     @PostMapping("/addPayment")
-    public  String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, HttpSession session) {
+    public  String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, HttpSession session) throws ResourceNotFoundException {
         Long userId = (Long) session.getAttribute("userId");
         buyerService.updatePayment(userId, paymentMethod );
 
@@ -59,10 +60,10 @@ public class BuyerController {
 
     @PreAuthorize("hasRole('ROLE_BUYER')")
     @GetMapping({"/addItem"})
-    public String addItem(@RequestParam("id")Long id, Model model,HttpSession session) {
+    public String addItem(@RequestParam("id")Long id, Model model,HttpSession session) throws ResourceNotFoundException {
 
 
-        Product product = (Product)productService.findById(id).orElse(new Product());
+        Product product = productService.findById(id);
         product.setQuantity(product.getQuantity()-1);
         productService.save(product);
 
@@ -120,7 +121,7 @@ public class BuyerController {
         return "order";
     }
     @GetMapping("/removeItem")
-    public String removeItem(@RequestParam("id") Long id, HttpSession session) {
+    public String removeItem(@RequestParam("id") Long id, HttpSession session) throws ResourceNotFoundException {
         Buyer buyer = (Buyer)session.getAttribute("buyer");
         Order order = (Order) orderService.findById((Long) session.getAttribute("orderId")).orElse(new Order());
         Item item = itemService.findItem(id);

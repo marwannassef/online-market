@@ -3,6 +3,7 @@ package com.miu.onlinemarket.controller;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
 
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,8 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/detail")
-    public String displayProductDetails(@RequestParam("id") long id, Model model){
-        Product product = productService.findById(id).orElse(null);
+    public String displayProductDetails(@RequestParam("id") long id, Model model) throws ResourceNotFoundException {
+        Product product = productService.findById(id);
         boolean status = product.isPurchasedStatus();
         model.addAttribute("status",status);
          model.addAttribute("product",product);
@@ -54,18 +55,18 @@ public class ProductController {
     }
 
     @GetMapping("/removeProduct")
-    public String removeProduct(@RequestParam("id") Long id){
+    public String removeProduct(@RequestParam("id") Long id) throws ResourceNotFoundException {
 
-        Product product =productService.findById(id).orElse(null);
+        Product product =productService.findById(id);
         productService.delete(product);
 
         return "redirect:/home";
     }
 
     @GetMapping("/updateProduct")
-    public String updateProduct(@RequestParam("id") Long id,Model model){
+    public String updateProduct(@RequestParam("id") Long id,Model model) throws ResourceNotFoundException {
 
-        Product product =productService.findById(id).orElse(null);
+        Product product =productService.findById(id);
         model.addAttribute("updateProduct",product);
 
         return "update-product";
@@ -73,7 +74,7 @@ public class ProductController {
 
     @RequestMapping(value = "/updateProductProcess", method = RequestMethod.POST)
     public String updateProductProcess(@Valid @ModelAttribute("product") Product product,@RequestParam("id") Long id, BindingResult bindingResult,
-                             HttpSession session){
+                             HttpSession session) throws ResourceNotFoundException {
 
         if(bindingResult.hasErrors()) {
             return "redirect:/product/updateProduct";
