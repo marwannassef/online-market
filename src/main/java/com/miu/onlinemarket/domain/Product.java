@@ -1,8 +1,14 @@
 package com.miu.onlinemarket.domain;
 
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
@@ -32,12 +38,12 @@ public class Product {
 
 	@OneToMany
 	@JoinColumn(name = "product_id")
-	List<Review> reviews;
+	Set<Review> reviews;
 
 	public Product() {
 	}
 
-	public Product(String name, String description, long price, long quantity, Seller seller, List<Review> reviews) {
+	public Product(String name, String description, long price, long quantity, Seller seller, Set<Review> reviews) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
@@ -102,11 +108,11 @@ public class Product {
 		this.seller = seller;
 	}
 
-	public List<Review> getReviews() {
+	public Set<Review> getReviews() {
 		return reviews;
 	}
 
-	public void setReviews(List<Review> reviews) {
+	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
 

@@ -1,7 +1,7 @@
 package com.miu.onlinemarket.domain;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -72,10 +72,9 @@ public class User {
     @Column(name = "photo", columnDefinition="BLOB")
     private byte[] photo;
 
-//    @NotNull(message = "*Please provide role")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public User() {
     }
@@ -93,11 +92,11 @@ public class User {
         this.roles = user.getRoles();
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

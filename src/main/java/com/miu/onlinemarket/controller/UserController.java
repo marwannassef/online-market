@@ -16,13 +16,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miu.onlinemarket.domain.Buyer;
 import com.miu.onlinemarket.domain.Seller;
@@ -127,6 +130,15 @@ public class UserController {
 		} else {
 			userService.update(user);
 		}
+		return "redirect:/home";
+	}
+
+	@GetMapping("/approveSeller")
+	public String approveSeller(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("tab", "2");
+		Seller seller = sellerService.findSellerById(id).orElse(null);
+		seller.setApproved(true);
+		sellerService.update(seller);
 		return "redirect:/home";
 	}
 

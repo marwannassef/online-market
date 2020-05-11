@@ -1,8 +1,9 @@
 package com.miu.onlinemarket.service.impl;
 
-import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.miu.onlinemarket.domain.Address;
 import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.Item;
+import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.PaymentMethod;
 import com.miu.onlinemarket.domain.Role;
+import com.miu.onlinemarket.domain.Status;
 import com.miu.onlinemarket.repository.BuyerRepository;
 import com.miu.onlinemarket.repository.RoleRepository;
 import com.miu.onlinemarket.service.BuyerService;
@@ -35,9 +39,13 @@ public class BuyerServiceImp implements BuyerService {
     @Override
     public Buyer save(Buyer buyer) {
         buyer.setPassword(encodePassword(buyer.getPassword()));
-		List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_BUYER"));
 		buyer.setRoles(roles);
+		Order order = new Order(0, Status.PREPARED, new HashSet<Item>());
+		Set<Order> orders = new HashSet<Order>();
+		orders.add(order);
+		buyer.setOrders(orders);
         return buyerRepository.save(buyer);
     }
 

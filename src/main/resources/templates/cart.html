@@ -5,7 +5,7 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Order</title>
+    <title>Shopping Cart</title>
 </head>
 <body>
 
@@ -39,7 +39,7 @@
                         <td>
                     <span th:if="${item.getShippingStatus() == 'prepared' }">
                             <a class="btn btn-danger btn-sm mb-3"
-                               th:href="@{/removeItem'(id= ${item.getId()})}">
+                               th:href="@{'/removeItem'(id= ${item.getId()})}">
                                 Remove
                             </a>
                         </span>

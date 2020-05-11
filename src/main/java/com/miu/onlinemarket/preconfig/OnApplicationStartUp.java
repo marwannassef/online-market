@@ -5,13 +5,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import com.miu.onlinemarket.domain.*;
-import com.miu.onlinemarket.service.BuyerService;
-import com.miu.onlinemarket.service.ReviewService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,9 +19,20 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.City;
+import com.miu.onlinemarket.domain.Country;
+import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.domain.Review;
+import com.miu.onlinemarket.domain.Role;
+import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.domain.State;
+import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.repository.ProductRepository;
 import com.miu.onlinemarket.repository.RoleRepository;
 import com.miu.onlinemarket.repository.UserRepository;
+import com.miu.onlinemarket.service.BuyerService;
+import com.miu.onlinemarket.service.ReviewService;
 import com.miu.onlinemarket.service.SellerService;
 import com.miu.onlinemarket.service.UserService;
 
@@ -87,7 +97,7 @@ public class OnApplicationStartUp {
 		user.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user.setUsername("admin");
 		user.setPassword("admin");
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_ADMIN"));
 		user.setRoles(roles);
 		userService.save(user);
@@ -103,7 +113,7 @@ public class OnApplicationStartUp {
 		user.setUsername("seller");
 		user.setPassword("seller");
 		user.setApproved(true);
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		user.setRoles(roles);
 		sellerService.save(user);
@@ -126,7 +136,7 @@ public class OnApplicationStartUp {
 		user.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user.setUsername("buyer");
 		user.setPassword("buyer");
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_BUYER"));
 		user.setRoles(roles);
 		user.setOrders(null);
@@ -147,7 +157,7 @@ public class OnApplicationStartUp {
 		user2.setDateOfBirth(new SimpleDateFormat("MM/dd/yyyy").parse("03/22/1990"));
 		user2.setUsername("bassem");
 		user2.setPassword("bassem");
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		user2.setRoles(roles);
 		sellerRepository.save(user2);

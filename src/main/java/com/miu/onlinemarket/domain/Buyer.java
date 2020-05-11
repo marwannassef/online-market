@@ -1,11 +1,13 @@
 package com.miu.onlinemarket.domain;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Buyer extends User {
@@ -16,9 +18,9 @@ public class Buyer extends User {
 	@OneToOne
 	private PaymentMethod paymentMethod;
 
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "buyer_id")
-	Set<Order> orders =  new HashSet<>();
+	Set<Order> orders;
 
 	public Buyer() {
 	}

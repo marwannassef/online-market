@@ -23,11 +23,11 @@
 		<ul class="dropdown-menu dropdown-menu-right bg-dark">
 			<li class="dropdown-header">User Name</li>
 			<li><a class="dropdown-item" th:href="@{/profile}">Edit Profile</a></li>
-			<li><a class="dropdown-item" th:href="@{/buyer/addAddress}"
+			<li><a class="dropdown-item" th:href="@{/addAddress}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Edit Address</a></li>
-			<li><a class="dropdown-item" th:href="@{/buyer/addPayment}"
+			<li><a class="dropdown-item" th:href="@{/addPayment}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Edit Payment Method</a></li>
-			<li><a class="dropdown-item" th:href="@{/buyer/order}"
+			<li><a class="dropdown-item" th:href="@{/order}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Orders</a></li>
 			<li><a class="dropdown-item" href="#"
 				   sec:authorize="hasAuthority('ROLE_SELLER')">Orders</a></li>

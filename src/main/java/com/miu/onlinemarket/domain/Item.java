@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Item {
@@ -19,13 +18,12 @@ public class Item {
 
 	private long quantity = 0;
 
-	@NotEmpty
-	private Status shippingStatus;
+	private Status status;
 
-	public Item(Product product, long quantity, Status shippingStatus) {
+	public Item(Product product, long quantity, Status status) {
 		this.product = product;
 		this.quantity = quantity;
-		this.shippingStatus = shippingStatus;
+		this.status = status;
 	}
 
 	public Item() {
@@ -55,12 +53,12 @@ public class Item {
 		this.quantity = quantity;
 	}
 
-	public Status getShippingStatus() {
-		return shippingStatus;
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setShippingStatus(Status shippingStatus) {
-		this.shippingStatus = shippingStatus;
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 }

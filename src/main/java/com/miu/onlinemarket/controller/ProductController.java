@@ -1,17 +1,23 @@
 package com.miu.onlinemarket.controller;
 
-import com.miu.onlinemarket.domain.Product;
-import com.miu.onlinemarket.domain.Seller;
+import java.security.Principal;
 
-import com.miu.onlinemarket.service.ProductService;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.service.ProductService;
+import com.miu.onlinemarket.service.SellerService;
 
 @Controller
 @RequestMapping("/product")
@@ -19,6 +25,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+	@Autowired
+	private SellerService sellerService;
 
     @GetMapping("/detail")
     public String displayProductDetails(@RequestParam("id") long id, Model model){
@@ -30,9 +39,9 @@ public class ProductController {
     }
 
     @GetMapping("/addProduct")
-    public String addProduct(Model model,HttpSession session) {
+    public String addProduct(Model model, Principal principal) {
         model.addAttribute("product", new Product());
-        Seller seller = (Seller)session.getAttribute("seller");
+        Seller seller = sellerService.findSeller(principal.getName());
         boolean approved = seller.getApproved();
         model.addAttribute("approved",approved);
         return "addProduct";
@@ -41,12 +50,12 @@ public class ProductController {
 
     @RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-                              HttpSession session){
+    		Principal principal){
         if(bindingResult.hasErrors()) {
             return "redirect:/product/addProduct";
         }
 
-        Seller seller =(Seller) session.getAttribute("seller");
+        Seller seller = sellerService.findSeller(principal.getName());
         product.setSeller(seller);
         productService.save(product);
 
@@ -73,12 +82,12 @@ public class ProductController {
 
     @RequestMapping(value = "/updateProductProcess", method = RequestMethod.POST)
     public String updateProductProcess(@Valid @ModelAttribute("product") Product product,@RequestParam("id") Long id, BindingResult bindingResult,
-                             HttpSession session){
+    		Principal principal){
 
         if(bindingResult.hasErrors()) {
             return "redirect:/product/updateProduct";
         }
-        Seller seller =(Seller) session.getAttribute("seller");
+        Seller seller = sellerService.findSeller(principal.getName());
         product.setSeller(seller);
         productService.update(product,id);
         return "redirect:/home";

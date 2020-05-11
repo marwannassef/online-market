@@ -1,9 +1,10 @@
 package com.miu.onlinemarket.service.impl;
 
-import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -45,7 +46,7 @@ public class SellerServiceImp implements SellerService {
     @Override
     public User save(Seller seller) {
         seller.setPassword(encodePassword(seller.getPassword()));
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		seller.setRoles(roles);
         return sellerRepository.save(seller);

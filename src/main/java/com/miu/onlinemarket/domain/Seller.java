@@ -1,7 +1,7 @@
 package com.miu.onlinemarket.domain;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -17,7 +17,7 @@ public class Seller extends User {
 
 	@OneToMany
 	@JoinColumn(name ="seller_id")
-	List<Item> items ;
+	Set<Item> items;
 
 	public Seller() {
 	}
@@ -26,7 +26,7 @@ public class Seller extends User {
 		super(user);
 	}
 
-	public Seller(User user, Boolean approved, List<Product> products, List<Item> items) {
+	public Seller(User user, Boolean approved, List<Product> products, Set<Item> items) {
 		super(user);
 		this.approved = approved;
 		this.products = products;
@@ -49,11 +49,11 @@ public class Seller extends User {
 		this.products = products;
 	}
 
-	public List<Item> getItems() {
+	public Set<Item> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(Set<Item> items) {
 		this.items = items;
 	}
 
