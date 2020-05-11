@@ -44,6 +44,7 @@ public class HomeController {
 			model.addAttribute("productList", productService.findAll());
 		} else if (userService.hasRole("ROLE_SELLER")) {
 			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
+			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
 

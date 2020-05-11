@@ -102,10 +102,7 @@ public class OrderController {
 
 		order.getItems().remove(item);
 		seller.getItems().remove(item);
-		if (order.getItems().size() == 0) {
-			buyer.getOrders().remove(order);
-			buyerService.save(buyer);
-		}
+
 		double total = order.getTotalPrice() - item.getQuantity() * item.getProduct().getPrice();
 		order.setTotalPrice(total);
 		product.setQuantity(product.getQuantity() + 1);
@@ -116,6 +113,10 @@ public class OrderController {
 		session.setAttribute("buyer", buyerService.findByUsername(buyer.getUsername()));
 		session.setAttribute("orderId", id);
 
+		if (order.getItems().size() == 0) {
+			buyer.getOrders().remove(order);
+			buyerService.save(buyer);
+		}
 		return "redirect:/cart";
 	}
 
