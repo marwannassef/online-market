@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +38,7 @@ public class HomeController {
 	private ReviewService reviewService;
 
 	@GetMapping("/home")
-	public ModelAndView getAllProducts(Model model, Principal principal) {
+	public ModelAndView getAllProducts(Model model, Principal principal) throws ResourceNotFoundException {
 		ModelAndView modelAndView = new ModelAndView();
 		if (userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("productList", productService.findAll());
@@ -65,7 +66,7 @@ public class HomeController {
 
 	@GetMapping("/search")
 	public String getProductByName(@ModelAttribute SearchMessage searchMessage, Principal principal, Model model,
-			HttpSession session) {
+			HttpSession session) throws ResourceNotFoundException {
 		if (userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("productList", productService.searchByName(searchMessage.getSearch()));
 		} else if (userService.hasRole("ROLE_SELLER")) {

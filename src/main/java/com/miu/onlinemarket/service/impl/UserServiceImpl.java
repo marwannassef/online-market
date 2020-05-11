@@ -2,6 +2,7 @@ package com.miu.onlinemarket.service.impl;
 
 import java.util.Base64;
 
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,16 +38,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user) throws ResourceNotFoundException {
     	User oldUser = userRepository.findByUsername(user.getUsername());
+        if(oldUser == null) {
+            throw new ResourceNotFoundException("User with username " + oldUser.getUsername() + " is not found");
+        }
     	user.setRoles(oldUser.getRoles());
         return userRepository.save(user);
     }
 
 
     @Override
-    public User findByUsername(String username) {
+    public User findByUsername(String username) throws ResourceNotFoundException {
     	User user = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new ResourceNotFoundException("User with username " + user.getUsername() + " is not found");
+        }
     	if (user.getPhoto() != null && user.getPhoto().length != 0)
     		user.setPhotoBase64(Base64.getEncoder().encodeToString(user.getPhoto()));
         return user;

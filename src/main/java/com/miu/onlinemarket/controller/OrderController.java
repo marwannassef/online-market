@@ -19,6 +19,7 @@ import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.Status;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.BuyerService;
 import com.miu.onlinemarket.service.ItemService;
 import com.miu.onlinemarket.service.OrderService;
@@ -43,8 +44,8 @@ public class OrderController {
 	private ItemService itemService;
 
 	@GetMapping({ "/addToCart" })
-	public String addItem(@RequestParam("id") Long id, Model model, HttpSession session, Principal principal) {
-		Product product = (Product) productService.findById(id).orElse(new Product());
+	public String addItem(@RequestParam("id") Long id, Model model, HttpSession session, Principal principal) throws ResourceNotFoundException {
+		Product product = (Product) productService.findById(id);
 		product.setQuantity(product.getQuantity() - 1);
 		productService.save(product);
 
@@ -92,7 +93,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/removeItem")
-	public String removeItem(@RequestParam("id") Long id, HttpSession session) {
+	public String removeItem(@RequestParam("id") Long id, HttpSession session) throws ResourceNotFoundException {
 		Buyer buyer = (Buyer) session.getAttribute("buyer");
 		Order order = (Order) orderService.findById((Long) session.getAttribute("orderId")).orElse(new Order());
 		Item item = itemService.findItem(id);
@@ -119,7 +120,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/orders")
-	public String displayOrder(Model model, Principal principal) {
+	public String displayOrder(Model model, Principal principal) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Set<Order> orders = buyer.getOrders();
 		model.addAttribute("orders", orders);

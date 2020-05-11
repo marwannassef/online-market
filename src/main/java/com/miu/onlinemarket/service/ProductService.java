@@ -1,17 +1,16 @@
 package com.miu.onlinemarket.service;
 
-import com.miu.onlinemarket.domain.Buyer;
 import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
 
     List<Product> findAll();
     List<Product> searchByName(String name);
-    Optional<Product> findById(Long id);
+    Product findById(Long id) throws ResourceNotFoundException;
     Product save(Product product);
     void delete(Product product);
-    public Product update(Product product,Long id);
+    public Product update(Product product,Long id) throws ResourceNotFoundException;
 }

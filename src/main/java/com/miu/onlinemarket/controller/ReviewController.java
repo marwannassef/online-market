@@ -1,5 +1,6 @@
 package com.miu.onlinemarket.controller;
 
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +17,8 @@ public class ReviewController {
 	private ReviewService reviewService;
 
 	@GetMapping("/approveReview")
-	public String approveReview(@RequestParam("id") Long id, Model model) {
-		Review review = reviewService.findReviewById(id).orElse(null);
+	public String approveReview(@RequestParam("id") Long id, Model model) throws ResourceNotFoundException {
+		Review review = reviewService.findReviewById(id);
 		review.setReviewStatus(true);
 		reviewService.save(review);
 		return "redirect:/home";

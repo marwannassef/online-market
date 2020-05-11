@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.ProductService;
 import com.miu.onlinemarket.service.SellerService;
 
@@ -30,8 +31,8 @@ public class ProductController {
 	private SellerService sellerService;
 
     @GetMapping("/detail")
-    public String displayProductDetails(@RequestParam("id") long id, Model model){
-        Product product = productService.findById(id).orElse(null);
+    public String displayProductDetails(@RequestParam("id") long id, Model model) throws ResourceNotFoundException {
+        Product product = productService.findById(id);
         boolean status = product.isPurchasedStatus();
         model.addAttribute("status",status);
          model.addAttribute("product",product);
@@ -39,7 +40,7 @@ public class ProductController {
     }
 
     @GetMapping("/addProduct")
-    public String addProduct(Model model, Principal principal) {
+    public String addProduct(Model model, Principal principal) throws ResourceNotFoundException {
         model.addAttribute("product", new Product());
         Seller seller = sellerService.findSeller(principal.getName());
         boolean approved = seller.getApproved();
@@ -50,7 +51,7 @@ public class ProductController {
 
     @RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-    		Principal principal){
+    		Principal principal) throws ResourceNotFoundException{
         if(bindingResult.hasErrors()) {
             return "redirect:/product/addProduct";
         }
@@ -63,18 +64,18 @@ public class ProductController {
     }
 
     @GetMapping("/removeProduct")
-    public String removeProduct(@RequestParam("id") Long id){
+    public String removeProduct(@RequestParam("id") Long id) throws ResourceNotFoundException {
 
-        Product product =productService.findById(id).orElse(null);
+        Product product =productService.findById(id);
         productService.delete(product);
 
         return "redirect:/home";
     }
 
     @GetMapping("/updateProduct")
-    public String updateProduct(@RequestParam("id") Long id,Model model){
+    public String updateProduct(@RequestParam("id") Long id,Model model) throws ResourceNotFoundException {
 
-        Product product =productService.findById(id).orElse(null);
+        Product product =productService.findById(id);
         model.addAttribute("updateProduct",product);
 
         return "update-product";
@@ -82,8 +83,7 @@ public class ProductController {
 
     @RequestMapping(value = "/updateProductProcess", method = RequestMethod.POST)
     public String updateProductProcess(@Valid @ModelAttribute("product") Product product,@RequestParam("id") Long id, BindingResult bindingResult,
-    		Principal principal){
-
+    		Principal principal) throws ResourceNotFoundException{
         if(bindingResult.hasErrors()) {
             return "redirect:/product/updateProduct";
         }

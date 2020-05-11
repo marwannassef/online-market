@@ -2,13 +2,13 @@ package com.miu.onlinemarket.service.impl;
 
 
 import com.miu.onlinemarket.domain.Review;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.repository.ReviewRepository;
 import com.miu.onlinemarket.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReviewServiceImp implements ReviewService {
@@ -26,7 +26,9 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public Optional<Review> findReviewById(Long id) {
-        return reviewRepository.findById(id);
+    public Review findReviewById(Long id) throws ResourceNotFoundException {
+        return reviewRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Review with id " + id +" is not found")
+        );
     }
 }

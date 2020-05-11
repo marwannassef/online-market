@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.miu.onlinemarket.domain.PaymentMethod;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.BuyerService;
 
 @Controller
@@ -25,7 +26,7 @@ public class PaymentController {
 	}
 
 	@PostMapping("/addPayment")
-	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, HttpSession session) {
+	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, HttpSession session) throws ResourceNotFoundException {
 		Long userId = (Long) session.getAttribute("userId");
 		buyerService.updatePayment(userId, paymentMethod);
 

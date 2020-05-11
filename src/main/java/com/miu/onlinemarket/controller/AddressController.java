@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.miu.onlinemarket.domain.Address;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.BuyerService;
 
 @Controller
@@ -29,7 +30,7 @@ public class AddressController {
 
 	@PostMapping({ "/addAddress" })
 	public String addAddress(@Valid @ModelAttribute("address") Address address, BindingResult bindingResult,
-			HttpSession session) {
+			HttpSession session) throws ResourceNotFoundException {
 		Long userId = (Long) session.getAttribute("userId");
 		buyerService.updateAddress(userId, address);
 		System.out.println(address.getCity());
