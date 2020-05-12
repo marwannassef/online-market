@@ -66,7 +66,9 @@ public class HomeController {
 		modelAndView.setViewName("home");
 
 		String tab = (String) model.asMap().get("tab");
+		String status = (String) model.asMap().get("status");
 		model.addAttribute("tab", tab);
+		model.addAttribute("status", status);
 		return modelAndView;
 	}
 

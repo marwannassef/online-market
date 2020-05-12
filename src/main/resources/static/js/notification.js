@@ -12,6 +12,10 @@ $(document).ready(function() {
 	};
 	var toast = new Toasty(options);
 	toast.configure(options);
+	var status = $('#status').val();
+	if (status == 'success') {
+		toast.success("Operation succeeded...");
+	}
 	$('#addToCart').click(function() {
 		toast.success("This toast notification with sound");
 	});

@@ -10,6 +10,7 @@
 <body>
 <div class="col" layout:fragment="main-content">
     <input type="hidden" th:value="${tab}" id="tab"/>
+    <input type="hidden" th:value="${status}" id="status"/>
     <div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')">
         <br>
         <ul class="nav nav-tabs nav-justified" id="adminTabs">
