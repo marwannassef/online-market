@@ -1,6 +1,7 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,11 +13,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.Item;
+import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.SearchMessage;
 import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.domain.Status;
 import com.miu.onlinemarket.service.ProductService;
 import com.miu.onlinemarket.service.ReviewService;
 import com.miu.onlinemarket.service.SellerService;
@@ -44,12 +51,16 @@ public class HomeController {
 			model.addAttribute("productList", productService.findAll());
 		} else if (userService.hasRole("ROLE_SELLER")) {
 			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
-			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
+			model.addAttribute("seller", sellerService.findSeller(principal.getName()));
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
 
 		modelAndView.setViewName("home");
-
+		
+		String sellerName = (String) model.asMap().get("sellerName");
+		if (sellerName != null)
+			model.addAttribute("sellerName", sellerName);
+//		String sellerName = (String) model.asMap().get("products");
 		String tab = (String) model.asMap().get("tab");
 		model.addAttribute("tab", tab);
 		return modelAndView;
@@ -76,6 +87,14 @@ public class HomeController {
 			model.addAttribute("productList", productList);
 		}
 		return "home";
+	}
+
+	@GetMapping({ "/searchBySeller" })
+	public String searchBySeller(@RequestParam("id") Long id, Model model, HttpSession session,
+			RedirectAttributes redirectAttributes, Principal principal) throws ResourceNotFoundException {
+		redirectAttributes.addFlashAttribute("sellerName", "A7A");
+		redirectAttributes.addFlashAttribute("products", "A7A");
+		return "redirect:/home";
 	}
 
 }

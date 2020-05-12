@@ -32,6 +32,17 @@
                 </div>
             </div>
         </form>
+        
+        <div class="dropdown">
+			<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" id="sellerMenu" th:text="${sellerName}">Select a Seller <span class="caret"></span></a>
+			<ul class="dropdown-menu bg-dark">
+				<li th:each="product : ${productList}">
+					<a class="dropdown-item" th:href="@{'/searchBySeller'(id= ${product.getId()})}" th:text="${product.name}">
+						Item I
+					</a>
+				</li>
+			</ul>
+		</div>
 
         <!--BUYER-->
 
