@@ -110,6 +110,7 @@ public class HomeController {
 			Seller seller = sellerService.findSeller(principal.getName());
 			List<Product> productList = sellerService.searchByName(searchMessage.getSearch(), seller.getUserId());
 			model.addAttribute("productList", productList);
+			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
 		}
 		return "home";
 	}
