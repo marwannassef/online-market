@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Selled Items</title>
+</head>
+<body>
+<div class="col" layout:fragment="main-content">
+    <div class="container" style="text-align: center">
+        <h1>Selled Items</h1>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Shipping Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item: ${items}">
+                    <td th:text="${item.getProduct().getName()}">Name</td>
+                    <td th:text="${item.getQuantity()}">Quantity</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               <span th:text="${item.getStatus()}">status</span>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div th:if="${item.status == item.getStatus().PREPARED}"><a class="btn btn-outline-danger" th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().CANCELLED})}">CANCELLED</a></div>
+                                <div th:if="${item.status == item.getStatus().PREPARED}"><a  class="btn btn-outline-primary" th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().SHIPPED})}">SHIPPED</a></div>
+                                <div th:if="${item.status == item.getStatus().SHIPPED}"><a  class="btn btn-outline-info"th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().ON_THE_WAY})}">ON_THE_WAY</a></div>
+                                <div th:if="${item.status == item.getStatus().ON_THE_WAY}"><a  class="btn btn-outline-success"th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().DELIVERED})}">DELIVERED</a>
+                            </div>
+                        </div>
+
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    </div>
+</div>
+</body>
+</html>
