@@ -1,15 +1,14 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.PreRemove;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ import com.miu.onlinemarket.domain.Buyer;
 import com.miu.onlinemarket.domain.Item;
 import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.Product;
-import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.Status;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.BuyerService;
@@ -90,6 +88,18 @@ public class OrderController {
 		itemService.delete(id);
 		session.setAttribute("cartCount", Integer.parseInt(session.getAttribute("cartCount").toString()) - 1);
 		return "redirect:/cart";
+	}
+
+	@GetMapping("/placeOrder")
+	public String placeOrder(Principal principal) throws ResourceNotFoundException {
+		Buyer buyer = buyerService.findByUsername(principal.getName());
+		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
+				.findFirst();
+		order.orElse(new Order()).setStatus(Status.PAYMENT_CONFIRMED);
+		Order newOrder = new Order(0, Status.PREPARED, new HashSet<Item>());
+		buyerService.updateUserOrder(newOrder, principal.getName());
+		orderService.save(order.orElse(new Order()));
+		return "redirect:/home";
 	}
 
 	@GetMapping("/orders")

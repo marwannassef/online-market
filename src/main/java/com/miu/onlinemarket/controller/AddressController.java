@@ -1,5 +1,7 @@
 package com.miu.onlinemarket.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -23,18 +25,18 @@ public class AddressController {
 	private BuyerService buyerService;
 
 	@GetMapping("/addAddress")
-	public String addAddress(@ModelAttribute("address") Address address, Model model) {
-		model.addAttribute("address", address);
+	public String showAddress(Model model, Principal principal) throws ResourceNotFoundException {
+		Address address = buyerService.findByUsername(principal.getName()).getAddress();
+		model.addAttribute("address", address == null ? new Address() : address);
 		return "address";
 	}
 
 	@PostMapping({ "/addAddress" })
 	public String addAddress(@Valid @ModelAttribute("address") Address address, BindingResult bindingResult,
-			HttpSession session) throws ResourceNotFoundException {
-		Long userId = (Long) session.getAttribute("userId");
+			Principal principal) throws ResourceNotFoundException {
+		Long userId = buyerService.findByUsername(principal.getName()).getUserId();
 		buyerService.updateAddress(userId, address);
-		System.out.println(address.getCity());
-		return "redirect:/home";
+		return "redirect:/addAddress";
 	}
 
 }

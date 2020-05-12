@@ -5,12 +5,12 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Shopping Cart</title>
+<title>Checkout</title>
 </head>
 <body>
 	<div class="col" layout:fragment="main-content">
 		<div class="container">
-			<h1>Shopping Cart</h1>
+			<h1>Checkout</h1>
 			<div th:if="${order.getItems().size() > 0 }">
 				<table class="table table-bordered table-striped">
 					<thead class="thead-dark">
@@ -19,7 +19,6 @@
 							<th>Seller</th>
 							<th>Price</th>
 							<th>Quantity</th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -27,15 +26,7 @@
 							<td th:text="${item.getProduct().getName()}">name</td>
 							<td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
 							<td th:text="${item.getProduct().getPrice()}">Price</td>
-							<td>
-								<div class="input-group number-spinner">
-									<input type="number"
-										th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}" step="1"/>
-								</div>
-							</td>
-							<td><a class="btn btn-danger btn-sm mb-3"
-									th:href="@{'/removeCartItem'(id= ${item.getId()})}"> Remove </a>
-							</td>
+							<td th:text="${item.getProduct().getQuantity()}">Quantity</td>
 						</tr>
 					</tbody>
 				</table>
@@ -46,7 +37,8 @@
 						</a>
 					</div>
 					<div class="col-15">
-						<a class="btn btn-success btn-sm mb-3" th:href="@{/checkout}"> Check Out </a>
+						<a class="btn btn-success btn-sm mb-3"
+							th:href="@{/placeOrder}"> Place Order </a>
 					</div>
 				</div>
 			</div>
