@@ -149,7 +149,7 @@ public class OnApplicationStartUp {
 		user.setRoles(roles);
 		user.setOrders(null);
 		user.setPaymentMethod(null);
-		user.setShippingAddress(null);
+		user.setAddress(null);
 		buyerService.save(user);
 		Review review = new Review();
 		review.setReview("nice one");

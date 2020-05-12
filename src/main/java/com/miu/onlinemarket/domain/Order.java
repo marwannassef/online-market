@@ -3,12 +3,12 @@ package com.miu.onlinemarket.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,8 +24,7 @@ public class Order {
 
 	private Status status;
 
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "orders_id")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.PERSIST)
 	private Set<Item> items;
 
 	public Order(double totalPrice, Status status, Set<Item> items) {

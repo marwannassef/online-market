@@ -73,12 +73,17 @@ public class BuyerServiceImp implements BuyerService {
         }
 		buyer.setRoles(oldBuyer.getRoles());
 		buyer.setPaymentMethod(oldBuyer.getPaymentMethod());
-		buyer.setShippingAddress(oldBuyer.getShippingAddress());
+		buyer.setAddress(oldBuyer.getAddress());
 		buyer.setOrders(oldBuyer.getOrders());
         return buyerRepository.save(buyer);
     }
 
-
+    @Override
+    public void updateUserOrder(Order order, String username) throws ResourceNotFoundException {
+		Buyer buyer = buyerRepository.findBuyerByUsername(username);
+        buyer.getOrders().add(order);
+        buyerRepository.save(buyer);
+    }
 
     @Override
     public Buyer findBuyerById(Long userId) throws ResourceNotFoundException {
@@ -92,7 +97,7 @@ public class BuyerServiceImp implements BuyerService {
         Buyer buyer = buyerRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("Seller with id " + userId +" not found")
         );
-        buyer.setShippingAddress(address);
+        buyer.setAddress(address);
         buyerRepository.save(buyer);
     }
 

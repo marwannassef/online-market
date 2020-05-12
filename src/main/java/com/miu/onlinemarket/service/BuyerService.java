@@ -12,6 +12,7 @@ public interface BuyerService {
     public List<Buyer> listBuyer();
     public void deleteBuyer(Buyer buyer);
     public Buyer update(Buyer buyer) throws ResourceNotFoundException;
+    public void updateUserOrder(Order order, String username) throws ResourceNotFoundException;
     public Buyer findBuyerById(Long userId) throws ResourceNotFoundException;
     public void updateAddress(Long userId, Address address) throws ResourceNotFoundException;
     public void updatePayment(Long userId, PaymentMethod paymentMethod ) throws ResourceNotFoundException;

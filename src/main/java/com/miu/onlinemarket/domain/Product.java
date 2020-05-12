@@ -20,7 +20,7 @@ public class Product {
 	private String description;
 
 	@Min(value = 0, message = "Price must be greater than 0")
-	private long price = 0;
+	private double price = 0;
 
 	@Min(value = 0, message = "Quantity must be greater than 0")
 	private long quantity = 0;
@@ -37,7 +37,7 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(String name, String description, long price, long quantity, Seller seller, Set<Review> reviews) {
+	public Product(String name, String description, double price, long quantity, Seller seller, Set<Review> reviews) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
@@ -78,11 +78,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public long getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(long price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 

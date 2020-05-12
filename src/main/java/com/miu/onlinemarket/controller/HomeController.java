@@ -3,6 +3,7 @@ package com.miu.onlinemarket.controller;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,18 +16,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miu.onlinemarket.domain.Buyer;
-import com.miu.onlinemarket.domain.Item;
 import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.SearchMessage;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.Status;
+import com.miu.onlinemarket.service.BuyerService;
+import com.miu.onlinemarket.service.ProductService;
+import com.miu.onlinemarket.service.ReviewService;
+import com.miu.onlinemarket.service.SellerService;
+import com.miu.onlinemarket.service.UserService;
+
 
 @Controller
+@SessionAttributes("cartCount")
 public class HomeController {
 
 	@Autowired
@@ -36,25 +44,33 @@ public class HomeController {
 	private SellerService sellerService;
 
 	@Autowired
+	private BuyerService buyerService;
+
+	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private ReviewService reviewService;
 
-	@Autowired
-	private BuyerService buyerService;
 
 	@GetMapping("/home")
-	public ModelAndView getAllProducts(Model model, Principal principal) throws ResourceNotFoundException {
+	public ModelAndView getAllProducts(Model model, Principal principal, HttpSession session) throws ResourceNotFoundException {
 		ModelAndView modelAndView = new ModelAndView();
+		session.setAttribute("username", "Admin");
 		if (userService.hasRole("ROLE_BUYER")) {
-			model.addAttribute("productList", productService.findAll());
 			Buyer buyer = buyerService.findByUsername(principal.getName());
-			List<Seller> sellerList = sellerService.findSellersByBuyerId(buyer.getUserId());
-			model.addAttribute("sellerList",sellerList);
+			Optional<Order> order = buyer.getOrders().stream()
+										   .filter(ord -> ord.getStatus() == Status.PREPARED)
+										   .findFirst();
+			model.addAttribute("cartCount", order.orElse(new Order()).getItems().size());
+			model.addAttribute("productList", productService.findAll());
+
+			session.setAttribute("username", buyer.getFirstName() + " " + buyer.getLastName());
 		} else if (userService.hasRole("ROLE_SELLER")) {
-			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
-			model.addAttribute("seller", sellerService.findSeller(principal.getName()));
+			Seller seller = sellerService.findSeller(principal.getName());
+			model.addAttribute("productList", seller.getProducts());
+			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
+			session.setAttribute("username", seller.getFirstName() + " " + seller.getLastName());
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
 
@@ -72,7 +88,9 @@ public class HomeController {
 		}
 
 		String tab = (String) model.asMap().get("tab");
+		String status = (String) model.asMap().get("status");
 		model.addAttribute("tab", tab);
+		model.addAttribute("status", status);
 		return modelAndView;
 	}
 
@@ -87,8 +105,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/search")
-	public String getProductByName(@ModelAttribute SearchMessage searchMessage, Principal principal, Model model,
-			HttpSession session) throws ResourceNotFoundException {
+	public String getProductByName(@ModelAttribute SearchMessage searchMessage, Principal principal, Model model) throws ResourceNotFoundException {
 		if (userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("productList", productService.searchByName(searchMessage.getSearch()));
 		} else if (userService.hasRole("ROLE_SELLER")) {

@@ -9,13 +9,13 @@ import javax.persistence.*;
 @Entity
 public class Buyer extends User {
 
-	@OneToOne
-	private Address shippingAddress;
+	@OneToOne(cascade = {CascadeType.ALL})
+	private Address address;
 
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	private PaymentMethod paymentMethod;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	@JoinColumn(name = "buyer_id")
 	Set<Order> orders;
 
@@ -30,9 +30,9 @@ public class Buyer extends User {
 		super(user);
 	}
 
-	public Buyer(User user, Address shippingAddress, PaymentMethod paymentMethod, Set<Order> orders) {
+	public Buyer(User user, Address address, PaymentMethod paymentMethod, Set<Order> orders) {
 		super(user);
-		this.shippingAddress = shippingAddress;
+		this.address = address;
 		this.paymentMethod = paymentMethod;
 		this.orders = orders;
 	}
@@ -45,12 +45,12 @@ public class Buyer extends User {
 		this.seller = seller;
 	}
 
-	public Address getShippingAddress() {
-		return shippingAddress;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setShippingAddress(Address shippingAddress) {
-		this.shippingAddress = shippingAddress;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public PaymentMethod getPaymentMethod() {

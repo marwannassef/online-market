@@ -17,9 +17,12 @@
 	crossorigin="anonymous">
 <link  rel="stylesheet" type="text/css"
 	href="/css/bootstrap.min.css">
+<link  rel="stylesheet" type="text/css"
+	href="/css/notification.css">
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -30,7 +33,10 @@
 	</div>
 	<footer th:replace="fragments/dashboard_footer :: footer"></footer>
 <script th:src="@{/js/tab.js}"></script>
+<script th:src="@{/js/number-spinner.js}"></script>
+<script th:src="@{/js/notification.js}"></script>
 
+<script src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.js"></script>
 </body>
 
 </html>

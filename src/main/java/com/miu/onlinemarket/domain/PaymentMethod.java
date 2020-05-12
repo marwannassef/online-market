@@ -20,7 +20,7 @@ public class PaymentMethod {
 	private long id;
 
 	@NotEmpty
-	@CreditCardNumber
+//	@CreditCardNumber
 	private String cardNumber;
 
 	@Future

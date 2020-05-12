@@ -10,7 +10,8 @@
 <body>
 <div class="col" layout:fragment="main-content">
     <input type="hidden" th:value="${tab}" id="tab"/>
-    <div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')">
+    <input type="hidden" th:value="${status}" id="status"/>
+    <div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')" style="margin-top: 10px;">
         <br>
         <ul class="nav nav-tabs nav-justified" id="adminTabs">
             <li class="nav-item"><a href="#approve-review" data-url="/approve-review" class="nav-link active">Approve
@@ -23,7 +24,7 @@
             <div class="tab-pane container fade" id="approve-seller"></div>
         </div>
     </div>
-    <div class="container" sec:authorize="!hasAuthority('ROLE_ADMIN')">
+    <div class="container" sec:authorize="!hasAuthority('ROLE_ADMIN')" style="margin-top: 10px;">
         <form method="get" th:action="@{/search}" th:object="${searchMessage}" ui-jp="parsley">
             <div class="row" style="padding: 10px; padding-left: 0px">
                 <div class="col-sm-4">
@@ -73,7 +74,7 @@
                         <span>
                         <a class="btn btn-outline-info btn-sm mb-3 "
                            th:href="@{'/product/detail'(id=${product.id})}">
-                            !Details
+                            Details
                         </a>
                     </span>
                     </div>

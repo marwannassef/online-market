@@ -21,7 +21,7 @@
 			 aria-haspopup="true" aria-expanded="false">
 
 		<ul class="dropdown-menu dropdown-menu-right bg-dark">
-			<li class="dropdown-header">User Name</li>
+			<li class="dropdown-header" th:text="${session.username}">User Name</li>
 			<li><a class="dropdown-item" th:href="@{/profile}">Edit Profile</a></li>
 			<li><a class="dropdown-item" th:href="@{/addAddress}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Edit Address</a></li>
@@ -31,9 +31,9 @@
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Following</a></li>
 			<li><a class="dropdown-item" th:href="@{/viewFollower}"
 				   sec:authorize="hasAuthority('ROLE_SELLER')">Follower</a></li>
-			<li><a class="dropdown-item" th:href="@{/order}"
+			<li><a class="dropdown-item" th:href="@{/orders}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Orders</a></li>
-			<li><a class="dropdown-item" href="#"
+			<li><a class="dropdown-item" th:href="@{/orders}"
 				   sec:authorize="hasAuthority('ROLE_SELLER')">Orders</a></li>
 			<li class="dropdown-divider"></li>
 			<li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -41,10 +41,10 @@
 	</div>
 
 	<div class="logo" sec:authorize="hasAuthority('ROLE_BUYER')">
-		<a class="navbar-brand mr-1" href="home.html" th:href="@{/home}"
+		<a class="navbar-brand mr-1" th:href="@{/cart}"
 		   style="float: right;">
 			<img th:src="@{/img/cart.png}" style="width: 30px">
-			<span>0</span>
+			<span th:text="${session.cartCount}">0</span>
 		</a>
 	</div>
 </nav>

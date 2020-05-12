@@ -1,0 +1,24 @@
+.toast {
+    transition: 0.32s all ease-in-out
+}
+
+.toast-container--fade {
+    right: 0;
+    bottom: 0
+}
+
+.toast-container--fade .toast-wrapper {
+    display: inline-block
+}
+
+.toast.fade-init {
+    opacity: 0
+}
+
+.toast.fade-show {
+    opacity: 1
+}
+
+.toast.fade-hide {
+    opacity: 0
+}
