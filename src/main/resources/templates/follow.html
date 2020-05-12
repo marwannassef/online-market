@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Following</title>
+</head>
+<body>
+
+<div class="col" layout:fragment="main-content">
+
+    <div class="container" sec:authorize="hasAuthority('ROLE_BUYER')">
+        <h1>Following Sellers</h1>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="seller: ${sellers}">
+
+                <td>
+                    <span th:text="${seller.firstName}">First Name</span>
+                </td>
+                <td>
+                    <span th:text="${seller.lastName}">Last Name</span>
+                </td>
+                <td>
+                    <span th:text="${seller.email}">Email</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container" sec:authorize="hasAuthority('ROLE_SELLER')">
+        <h1>Follower Buyers</h1>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="buyer: ${buyers}">
+
+                <td>
+                    <span th:text="${buyer.firstName}">First Name</span>
+                </td>
+                <td>
+                    <span th:text="${buyer.lastName}">Last Name</span>
+                </td>
+                <td>
+                    <span th:text="${buyer.email}">Email</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+  </div>
+</body>
+</html>

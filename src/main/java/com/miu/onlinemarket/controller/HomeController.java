@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
+import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,10 +25,6 @@ import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.SearchMessage;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.Status;
-import com.miu.onlinemarket.service.ProductService;
-import com.miu.onlinemarket.service.ReviewService;
-import com.miu.onlinemarket.service.SellerService;
-import com.miu.onlinemarket.service.UserService;
 
 @Controller
 public class HomeController {
@@ -44,11 +41,17 @@ public class HomeController {
 	@Autowired
 	private ReviewService reviewService;
 
+	@Autowired
+	private BuyerService buyerService;
+
 	@GetMapping("/home")
 	public ModelAndView getAllProducts(Model model, Principal principal) throws ResourceNotFoundException {
 		ModelAndView modelAndView = new ModelAndView();
 		if (userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("productList", productService.findAll());
+			Buyer buyer = buyerService.findByUsername(principal.getName());
+			List<Seller> sellerList = sellerService.findSellersByBuyerId(buyer.getUserId());
+			model.addAttribute("sellerList",sellerList);
 		} else if (userService.hasRole("ROLE_SELLER")) {
 			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
 			model.addAttribute("seller", sellerService.findSeller(principal.getName()));
@@ -58,9 +61,16 @@ public class HomeController {
 		modelAndView.setViewName("home");
 		
 		String sellerName = (String) model.asMap().get("sellerName");
-		if (sellerName != null)
+		if (sellerName != null) {
 			model.addAttribute("sellerName", sellerName);
-//		String sellerName = (String) model.asMap().get("products");
+		}else{
+			model.addAttribute("sellerName","Select seller");
+		}
+		List<Product> products = (List<Product>)model.getAttribute("products");
+		if(products != null){
+			model.addAttribute("productList",products);
+		}
+
 		String tab = (String) model.asMap().get("tab");
 		model.addAttribute("tab", tab);
 		return modelAndView;
@@ -92,8 +102,11 @@ public class HomeController {
 	@GetMapping({ "/searchBySeller" })
 	public String searchBySeller(@RequestParam("id") Long id, Model model, HttpSession session,
 			RedirectAttributes redirectAttributes, Principal principal) throws ResourceNotFoundException {
-		redirectAttributes.addFlashAttribute("sellerName", "A7A");
-		redirectAttributes.addFlashAttribute("products", "A7A");
+
+		Seller seller = sellerService.findSellerById(id);
+		List<Product> productList = sellerService.findSellerById(id).getProducts();
+		redirectAttributes.addFlashAttribute("sellerName", seller.getFirstName() + " " + seller.getLastName());
+		redirectAttributes.addFlashAttribute("products", productList);
 		return "redirect:/home";
 	}
 

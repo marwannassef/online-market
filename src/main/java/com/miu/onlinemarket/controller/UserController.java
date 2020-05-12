@@ -155,7 +155,7 @@ public class UserController {
 		Long id2 = productService.findById(idVal).getSeller().getUserId();
 		Seller seller = sellerService.findSellerById(id2);
 		Buyer buyer = buyerService.findByUsername(principal.getName());
-		Buyer tempBuyer = buyerService.listTheSeller(seller.getUserId());
+		Buyer tempBuyer = buyerService.findBuyerBySellerId(seller.getUserId());
 		if(tempBuyer == null){
 		buyer.addSeller(seller);
 		buyerService.update(buyer);
@@ -170,7 +170,17 @@ public class UserController {
 		List<Seller> sellers = sellerService.findSellersByBuyerId(buyer.getUserId());
 		model.addAttribute("sellers",sellers);
 
-			return "following";
+			return "follow";
+	}
+
+	@GetMapping("/viewFollower")
+	public String SellerViewFollowers(Model model, Principal principal) throws ResourceNotFoundException {
+
+		Seller seller = sellerService.findSeller(principal.getName());
+		List<Buyer> buyers = buyerService.findBuyersBySellerId(seller.getUserId());
+		model.addAttribute("buyers",buyers);
+
+		return "follow";
 	}
 
 

@@ -10,14 +10,14 @@ public class Seller extends User {
 
 	private Boolean approved = false;
 
-	@OneToMany(mappedBy = "seller")
+	@OneToMany(mappedBy = "seller",fetch = FetchType.EAGER)
 	List<Product> products;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name ="seller_id")
 	Set<Item> items;
 
-	@ManyToMany(mappedBy = "seller")
+	@ManyToMany(mappedBy = "seller",fetch = FetchType.EAGER)
 	List<Buyer> buyers;
 
 	public Seller() {

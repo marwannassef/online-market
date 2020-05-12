@@ -106,7 +106,14 @@ public class BuyerServiceImp implements BuyerService {
     }
 
     @Override
-    public Buyer listTheSeller(Long id) {
-        return buyerRepository.findSeller(id);
+    public Buyer findBuyerBySellerId(Long id) {
+        return buyerRepository.findFirstByBuyerBySellerId(id);
     }
+
+    @Override
+    public List<Buyer> findBuyersBySellerId(Long id) {
+        return buyerRepository.findBuyersBySellerId(id);
+    }
+
+
 }
