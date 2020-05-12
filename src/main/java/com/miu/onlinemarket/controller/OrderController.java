@@ -52,6 +52,9 @@ public class OrderController {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
 				.findFirst();
+		Order orderItem = order.orElse(new Order());
+		orderItem.setTotalPrice(orderItem.getTotalPrice() + product.getPrice());
+		orderService.save(orderItem);
 		Optional<Item> tempItem = order.orElse(new Order()).getItems().stream()
 				.filter(itm -> itm.getProduct().getId() == id).findFirst();
 		if (!tempItem.isPresent()) {

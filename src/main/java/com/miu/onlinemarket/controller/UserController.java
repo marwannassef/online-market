@@ -66,7 +66,8 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) throws IOException {
+	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model)
+			throws IOException {
 		String type = model.getAttribute("type").toString();
 		if (bindingResult.hasErrors()) {
 			return "redirect:/signup/" + type;
@@ -79,12 +80,12 @@ public class UserController {
 				e.printStackTrace();
 			}
 		} else {
-	        String fileName = "static/img/user.png";
-	        ClassLoader classLoader = new UserController().getClass().getClassLoader();
-	        File file = new File(classLoader.getResource(fileName).getFile());
+			String fileName = "static/img/user.png";
+			ClassLoader classLoader = new UserController().getClass().getClassLoader();
+			File file = new File(classLoader.getResource(fileName).getFile());
 			BufferedImage originalImage = ImageIO.read(file);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write( originalImage, "png", baos );
+			ImageIO.write(originalImage, "png", baos);
 			baos.flush();
 			user.setPhoto(baos.toByteArray());
 			baos.close();
@@ -101,18 +102,21 @@ public class UserController {
 
 	@RequestMapping(value = "/profile")
 	public String profile(Model model, Principal principal) throws ResourceNotFoundException {
-		if(userService.hasRole("ROLE_BUYER")) {
+		if (userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("user", buyerService.findByUsername(principal.getName()));
-		} else if(userService.hasRole("ROLE_SELLER")) {
+		} else if (userService.hasRole("ROLE_SELLER")) {
 			model.addAttribute("user", sellerService.findSeller(principal.getName()));
 		} else {
 			model.addAttribute("user", userService.findByUsername(principal.getName()));
 		}
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "profile";
 	}
 
 	@RequestMapping(value = "/profile", method = RequestMethod.POST)
-	public String profile(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, Principal principal) throws IOException, ResourceNotFoundException {
+	public String profile(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,
+			Principal principal, RedirectAttributes redirectAttributes) throws IOException, ResourceNotFoundException {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/profile";
 		}
@@ -124,18 +128,20 @@ public class UserController {
 				e.printStackTrace();
 			}
 		}
-		if(userService.hasRole("ROLE_BUYER")) {
+		if (userService.hasRole("ROLE_BUYER")) {
 			buyerService.update(new Buyer(user));
-		} else if(userService.hasRole("ROLE_SELLER")) {
+		} else if (userService.hasRole("ROLE_SELLER")) {
 			sellerService.update(new Seller(user));
 		} else {
 			userService.update(user);
 		}
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
 
 	@GetMapping("/approveSeller")
-	public String approveSeller(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+	public String approveSeller(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes)
+			throws ResourceNotFoundException {
 		redirectAttributes.addFlashAttribute("tab", "2");
 		Seller seller = sellerService.findSellerById(id);
 		seller.setApproved(true);

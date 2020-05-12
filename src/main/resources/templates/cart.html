@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div class="col" layout:fragment="main-content">
-		<div class="container">
+		<div class="container" style="text-align: center">
 			<h1>Shopping Cart</h1>
 			<div th:if="${order.getItems().size() > 0 }">
 				<table class="table table-bordered table-striped">
@@ -26,29 +26,39 @@
 						<tr th:each="item: ${order.items}">
 							<td th:text="${item.getProduct().getName()}">name</td>
 							<td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
-							<td th:text="${item.getProduct().getPrice()}">Price</td>
+							<td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
 							<td>
-								<div class="input-group number-spinner">
+								<div class="input-group number-spinner" 
+									style="align-content: center; align-items: center; display: block;">
 									<input type="number"
 										th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}" step="1"/>
 								</div>
 							</td>
-							<td><a class="btn btn-danger btn-sm mb-3"
-									th:href="@{'/removeCartItem'(id= ${item.getId()})}"> Remove </a>
+							<td>
+								<a class="navbar-brand mr-1" th:href="@{'/removeCartItem'(id= ${item.getId()})}">
+									<img th:src="@{/img/delete.png}" style="width: 30px">
+								</a>
 							</td>
 						</tr>
 					</tbody>
+					<tfoot class="thead-dark">
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<th><h6 style="margin: 0">Sum</h6></th>
+							<th><h6 style="margin: 0" th:text="${order.getTotalPrice()} + ' $'"></h6></th>
+						</tr>
+					</tfoot>
 				</table>
-				<div class="row">
-					<div class="col-4">
-						<a class="btn btn-info btn-sm mb-3"> Total Price = <span
-							th:text="${order.getTotalPrice()}"></span>
-						</a>
-					</div>
-					<div class="col-15">
-						<a class="btn btn-success btn-sm mb-3" th:href="@{/checkout}"> Check Out </a>
-					</div>
+				<div class="row" style="align-content: center; align-items: center; display: block;">
+					<a class="btn btn-primary" th:href="@{/checkout}"> Check Out </a>
 				</div>
+			</div>
+			<div th:if="${order.getItems().size() == 0 }">
+				<img th:src="@{/img/no-product-found.png}">
+				<br>
+				<h4>You cart is empty!!!</h4>
 			</div>
 		</div>
 	</div>

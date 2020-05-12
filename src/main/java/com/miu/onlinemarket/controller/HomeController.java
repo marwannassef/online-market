@@ -50,6 +50,7 @@ public class HomeController {
 	@GetMapping("/home")
 	public ModelAndView getAllProducts(Model model, Principal principal, HttpSession session) throws ResourceNotFoundException {
 		ModelAndView modelAndView = new ModelAndView();
+		session.setAttribute("username", "Admin");
 		if (userService.hasRole("ROLE_BUYER")) {
 			Buyer buyer = buyerService.findByUsername(principal.getName());
 			Optional<Order> order = buyer.getOrders().stream()
@@ -57,9 +58,12 @@ public class HomeController {
 										   .findFirst();
 			model.addAttribute("cartCount", order.orElse(new Order()).getItems().size());
 			model.addAttribute("productList", productService.findAll());
+			session.setAttribute("username", buyer.getFirstName() + " " + buyer.getLastName());
 		} else if (userService.hasRole("ROLE_SELLER")) {
-			model.addAttribute("productList", sellerService.findSeller(principal.getName()).getProducts());
+			Seller seller = sellerService.findSeller(principal.getName());
+			model.addAttribute("productList", seller.getProducts());
 			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
+			session.setAttribute("username", seller.getFirstName() + " " + seller.getLastName());
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
 

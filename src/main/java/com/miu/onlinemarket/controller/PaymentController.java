@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miu.onlinemarket.domain.Address;
 import com.miu.onlinemarket.domain.Buyer;
@@ -33,17 +34,21 @@ public class PaymentController {
 	public String showPayment(Model model, Principal principal) throws ResourceNotFoundException {
 		PaymentMethod paymentMethod = buyerService.findByUsername(principal.getName()).getPaymentMethod();
 		model.addAttribute("paymentMethod", paymentMethod == null ? new PaymentMethod() : paymentMethod);
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "paymentMethod";
 	}
 
 	@PostMapping("/addPayment")
-	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, Principal principal) throws ResourceNotFoundException {
+	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, Principal principal,
+			RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Long userId = buyerService.findByUsername(principal.getName()).getUserId();
 		buyerService.updatePayment(userId, paymentMethod);
-		return "redirect:/addPayment";
+		redirectAttributes.addFlashAttribute("status", "success");
+		return "redirect:/home";
 	}
 
-	@GetMapping("/checkout") 
+	@GetMapping("/checkout")
 	public String checkout(Model model, Principal principal) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)

@@ -9,38 +9,37 @@
 </head>
 <body>
 	<div class="col" layout:fragment="main-content">
-		<div class="container">
+		<div class="container" style="text-align: center">
 			<h1>Checkout</h1>
-			<div th:if="${order.getItems().size() > 0 }">
-				<table class="table table-bordered table-striped">
-					<thead class="thead-dark">
-						<tr>
-							<th>Product Name</th>
-							<th>Seller</th>
-							<th>Price</th>
-							<th>Quantity</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="item: ${order.items}">
-							<td th:text="${item.getProduct().getName()}">name</td>
-							<td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
-							<td th:text="${item.getProduct().getPrice()}">Price</td>
-							<td th:text="${item.getProduct().getQuantity()}">Quantity</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="row">
-					<div class="col-4">
-						<a class="btn btn-info btn-sm mb-3"> Total Price = <span
-							th:text="${order.getTotalPrice()}"></span>
-						</a>
-					</div>
-					<div class="col-15">
-						<a class="btn btn-success btn-sm mb-3"
-							th:href="@{/placeOrder}"> Place Order </a>
-					</div>
-				</div>
+			<table class="table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th>Product Name</th>
+						<th>Seller</th>
+						<th>Price</th>
+						<th>Quantity</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item: ${order.items}">
+						<td th:text="${item.getProduct().getName()}">name</td>
+						<td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
+						<td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
+						<td th:text="${item.getQuantity()}">Quantity</td>
+					</tr>
+				</tbody>
+				<tfoot class="thead-dark">
+					<tr>
+						<td></td>
+						<td></td>
+						<th><h6 style="margin: 0">Sum</h6></th>
+						<th><h6 style="margin: 0" th:text="${order.getTotalPrice()} + ' $'"></h6></th>
+					</tr>
+				</tfoot>
+			</table>
+			<div class="row" style="align-content: center; align-items: center; display: block;">
+				<a class="btn btn-primary"
+					th:href="@{/placeOrder}"> Place Order </a>
 			</div>
 		</div>
 	</div>

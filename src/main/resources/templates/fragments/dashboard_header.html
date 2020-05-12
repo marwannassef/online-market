@@ -21,7 +21,7 @@
 			 aria-haspopup="true" aria-expanded="false">
 
 		<ul class="dropdown-menu dropdown-menu-right bg-dark">
-			<li class="dropdown-header">User Name</li>
+			<li class="dropdown-header" th:text="${session.username}">User Name</li>
 			<li><a class="dropdown-item" th:href="@{/profile}">Edit Profile</a></li>
 			<li><a class="dropdown-item" th:href="@{/addAddress}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Edit Address</a></li>
