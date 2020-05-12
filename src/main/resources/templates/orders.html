@@ -14,61 +14,36 @@
 
     <div class="container">
         <h1>Order List</h1>
-        <div th:each="order: ${orders}">
-            <div th:if="${order.getItems().size() > 0 }">
-                <table class="table table-bordered table-striped">
-                    <thead class="thead-light">
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Seller</th>
-                        <th>Shipping Status</th>
-                        <th>Action</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="item: ${order.items}">
-
-                        <td th:text="${item.getProduct().getName()}">name</td>
-                        <td th:text="${item.getQuantity()}">Quantity</td>
-                        <td th:text="${item.getProduct().getPrice()}">Price</td>
-                        <td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
-                        <td th:text="${item.getShippingStatus()}">Shipping Status</td>
-                        <td>
-                    <span th:if="${item.getShippingStatus() == 'prepared' }">
-                            <a class="btn btn-danger btn-sm mb-3"
-                               th:href="@{/removeItem'(id= ${item.getId()})}">
-                                Remove
+        <div>
+            <table class="table table-bordered table-striped" style="width: 75%;">
+                <colgroup>
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 40%;">
+                    <col span="1" style="width: 40%;">
+                </colgroup>
+                <thead class="thead-light">
+                <tr>
+                    <th># Number</th>
+                    <th>Total Price</th>
+                    <th>View</th>
+                </tr>
+                </thead>
+                <tbody th:each="order, iter: ${orders}">
+                <tr>
+                    <td th:text="${iter.index+1}">#</td>
+                    <td style="font-weight: bold">$(<span th:text="${order.getTotalPrice()}"></span>)</td>
+                    <td>
+                        <span>
+                            <a class="btn btn-outline-primary btn-sm mb-3"
+                               th:href="@{'/items'(id=${order.id})}">
+                                Details
                             </a>
                         </span>
-                            <span th:if="${item.getShippingStatus() != 'prepared' }">
-                            <a class="btn btn-dangerAa btn-sm mb-3 disabled"
-                               href="#">
-                                Remove
-                            </a>
-                    </span>
-                        </td>
+                    </td>
 
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="row">
-                    <div class="col-4">
-
-                        <a class="btn btn-info btn-sm mb-3">
-                            Total Price = <span th:text="${order.getTotalPrice()}"></span>
-                        </a>
-                    </div>
-                    <div class="col-15">
-                        <a class="btn btn-success btn-sm mb-3"
-                           href="#">
-                            Check Out
-                        </a>
-                    </div>
-                </div>
-            </div>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

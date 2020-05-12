@@ -36,6 +36,13 @@
                 Add To Cart
             </a>
         </div>
+
+        <div sec:authorize="hasAuthority('ROLE_BUYER')">
+            <a class="btn btn-primary btn-sm mb-3"
+               th:href="@{/follow (id=${product.id})}">
+                Follow Seller
+            </a>
+        </div>
         <br style="margin-top: 20px"><br>
         <div class="row">
             <div class="col-2">

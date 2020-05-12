@@ -19,6 +19,7 @@
 							<th>Seller</th>
 							<th>Price</th>
 							<th>Quantity</th>
+							<th th:if="${order.status != order.getStatus().PREPARED}">Shipping Status</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -28,16 +29,30 @@
 							<td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
 							<td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
 							<td>
-								<div class="input-group number-spinner" 
-									style="align-content: center; align-items: center; display: block;">
+								<div class="input-group number-spinner" th:if="${order.status == order.getStatus().PREPARED}">
 									<input type="number"
-										th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}" step="1"/>
+										   th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}"
+										   step="1"/>
+								</div>
+								<div class="input-group number-spinner" th:if="${order.status != order.getStatus().PREPARED}">
+									<input type="number" disabled
+										   th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}"
+										   step="1"/>
 								</div>
 							</td>
+							<td th:if="${order.status != order.getStatus().PREPARED}">
+								<span th:text="${item.getStatus()}">Shipping Status</span>
+							</td>
 							<td>
+								<span th:if="${order.status == order.getStatus().PREPARED}">
 								<a class="navbar-brand mr-1" th:href="@{'/removeCartItem'(id= ${item.getId()})}">
 									<img th:src="@{/img/delete.png}" style="width: 30px">
 								</a>
+								</span>
+								<span th:if="${item.status == item.getStatus().DELIVERED}">
+								<a class="btn btn-danger btn-sm mb-3"
+								   href="#">Review </a>
+                        		</span>
 							</td>
 						</tr>
 					</tbody>
@@ -51,7 +66,7 @@
 						</tr>
 					</tfoot>
 				</table>
-				<div class="row" style="align-content: center; align-items: center; display: block;">
+				<div class="row" style="align-content: center; align-items: center; display: block;" th:if="${order.status == order.getStatus().PREPARED}">
 					<a class="btn btn-primary" th:href="@{/checkout}"> Check Out </a>
 				</div>
 			</div>

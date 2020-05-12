@@ -5,12 +5,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
+import com.miu.onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miu.onlinemarket.domain.Buyer;
@@ -34,6 +37,7 @@ import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.service.BuyerService;
 import com.miu.onlinemarket.service.SellerService;
 import com.miu.onlinemarket.service.UserService;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @SessionAttributes("type")
@@ -47,6 +51,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private ProductService productService;
 
 	@RequestMapping(value = { "/login", "/" })
 	public String login(SessionStatus status) {
@@ -148,5 +155,39 @@ public class UserController {
 		sellerService.update(seller);
 		return "redirect:/home";
 	}
+
+	@GetMapping("/follow")
+	public RedirectView FollowSeller(@RequestParam("id") Long idVal, Principal principal) throws ResourceNotFoundException {
+		Long id2 = productService.findById(idVal).getSeller().getUserId();
+		Seller seller = sellerService.findSellerById(id2);
+		Buyer buyer = buyerService.findByUsername(principal.getName());
+		Buyer tempBuyer = buyerService.findBuyerBySellerId(seller.getUserId());
+		if(tempBuyer == null){
+		buyer.addSeller(seller);
+		buyerService.update(buyer);
+		}
+		return new RedirectView("/product/detail?id="+idVal);
+	}
+
+	@GetMapping("/viewFollowing")
+	public String BuyerViewFollowing(Model model, Principal principal) throws ResourceNotFoundException {
+
+		Buyer buyer = buyerService.findByUsername(principal.getName());
+		List<Seller> sellers = sellerService.findSellersByBuyerId(buyer.getUserId());
+		model.addAttribute("sellers",sellers);
+
+			return "follow";
+	}
+
+	@GetMapping("/viewFollower")
+	public String SellerViewFollowers(Model model, Principal principal) throws ResourceNotFoundException {
+
+		Seller seller = sellerService.findSeller(principal.getName());
+		List<Buyer> buyers = buyerService.findBuyersBySellerId(seller.getUserId());
+		model.addAttribute("buyers",buyers);
+
+		return "follow";
+	}
+
 
 }

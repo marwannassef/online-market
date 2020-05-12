@@ -65,6 +65,7 @@ public class SellerServiceImp implements SellerService {
     	seller.setRoles(oldSeller.getRoles());
     	seller.setApproved(oldSeller.getApproved());
     	seller.setProducts(oldSeller.getProducts());
+
     	seller.setItems(oldSeller.getItems());
         return sellerRepository.save(seller);
     }
@@ -79,6 +80,11 @@ public class SellerServiceImp implements SellerService {
         return sellerRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Seller with id " + id +" not found")
         );
+    }
+
+    @Override
+    public List<Seller> findSellersByBuyerId(Long id) {
+        return sellerRepository.findSellersByBuyerId(id);
     }
 
 

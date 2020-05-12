@@ -5,18 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.miu.onlinemarket.domain.*;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.miu.onlinemarket.domain.Address;
-import com.miu.onlinemarket.domain.Buyer;
-import com.miu.onlinemarket.domain.Item;
-import com.miu.onlinemarket.domain.Order;
-import com.miu.onlinemarket.domain.PaymentMethod;
-import com.miu.onlinemarket.domain.Role;
-import com.miu.onlinemarket.domain.Status;
 import com.miu.onlinemarket.repository.BuyerRepository;
 import com.miu.onlinemarket.repository.RoleRepository;
 import com.miu.onlinemarket.service.BuyerService;
@@ -115,4 +109,16 @@ public class BuyerServiceImp implements BuyerService {
         buyer.setPaymentMethod(paymentMethod);
         buyerRepository.save(buyer);
     }
+
+    @Override
+    public Buyer findBuyerBySellerId(Long id) {
+        return buyerRepository.findFirstByBuyerBySellerId(id);
+    }
+
+    @Override
+    public List<Buyer> findBuyersBySellerId(Long id) {
+        return buyerRepository.findBuyersBySellerId(id);
+    }
+
+
 }

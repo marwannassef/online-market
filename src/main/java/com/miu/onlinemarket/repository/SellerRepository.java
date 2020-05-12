@@ -18,4 +18,7 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     Seller findByUsername(String username);
 
+    @Query("select s from Seller s join s.buyers b where b.userId=:id")
+    List<Seller> findSellersByBuyerId(Long id);
+
 }

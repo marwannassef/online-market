@@ -1,13 +1,10 @@
 package com.miu.onlinemarket.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 public class Buyer extends User {
@@ -22,6 +19,10 @@ public class Buyer extends User {
 	@JoinColumn(name = "buyer_id")
 	Set<Order> orders;
 
+	@ManyToMany
+	@JoinTable(name = "buyer_seller")
+	List<Seller> seller;
+
 	public Buyer() {
 	}
 
@@ -34,6 +35,14 @@ public class Buyer extends User {
 		this.address = address;
 		this.paymentMethod = paymentMethod;
 		this.orders = orders;
+	}
+
+	public List<Seller> getSeller() {
+		return seller;
+	}
+
+	public void setSeller(List<Seller> seller) {
+		this.seller = seller;
 	}
 
 	public Address getAddress() {
@@ -60,4 +69,10 @@ public class Buyer extends User {
 		this.orders = orders;
 	}
 
+	public void addSeller(Seller newSeller){
+		if(seller == null){
+			seller = new ArrayList<>();
+		}
+		seller.add(newSeller);
+	}
 }

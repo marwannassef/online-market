@@ -15,7 +15,7 @@ public class Review {
 
 	private boolean reviewStatus = false;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "buyer_id")
 	private Buyer buyer;
 

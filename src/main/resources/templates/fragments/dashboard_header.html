@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="UTF-8">
 	<title>Title</title>
@@ -27,9 +27,13 @@
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Edit Address</a></li>
 			<li><a class="dropdown-item" th:href="@{/addPayment}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Edit Payment Method</a></li>
+			<li><a class="dropdown-item" th:href="@{/viewFollowing}"
+				   sec:authorize="hasAuthority('ROLE_BUYER')">Following</a></li>
+			<li><a class="dropdown-item" th:href="@{/viewFollower}"
+				   sec:authorize="hasAuthority('ROLE_SELLER')">Follower</a></li>
 			<li><a class="dropdown-item" th:href="@{/orders}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Orders</a></li>
-			<li><a class="dropdown-item" th:href="@{/orders}"
+			<li><a class="dropdown-item" th:href="@{/selledItems}"
 				   sec:authorize="hasAuthority('ROLE_SELLER')">Orders</a></li>
 			<li class="dropdown-divider"></li>
 			<li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>

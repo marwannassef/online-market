@@ -33,18 +33,30 @@
                 </div>
             </div>
         </form>
+        
+        <div class="dropdown">
+			<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" id="sellerMenu" th:text="${sellerName}">Select a Seller <span class="caret"></span></a>
+			<ul class="dropdown-menu bg-dark">
+				<li th:each="seller : ${sellerList}">
+					<a class="dropdown-item" th:href="@{'/searchBySeller'(id= ${seller.userId})}" th:text="${seller.firstName}">
+						Item I
+					</a>
+				</li>
+			</ul>
+		</div>
 
         <!--BUYER-->
 
         <div class="row" style="margin-right: 0px;padding-right: 0px; margin-bottom: 100px"
              sec:authorize="hasAuthority('ROLE_BUYER')">
-            <div class="card-deck col-md-3 " style="padding: 10px" th:each="product,iter: ${productList}">
-                <div class="card">
+            <div class="card-deck col-md-3 " style="padding: 10px; height: 500px" th:each="product,iter: ${productList}">
+                <div class="card" >
                     <img src="https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
                          class="card-img-top" alt="image" style="width:100%; height: 50%;">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${product.name}">Card title</h5>
                         <p class="card-text" style="height: 48px;" th:text="${product.description}"></p>
+                        <strong> $(<span th:text="${product.price}"></span>)</strong>
                         <p class="card-text" th:if="${product.quantity > 0}"><small class="text-muted">In
                             Stock</small></p>
                         <p class="card-text" th:if="${product.quantity <= 0}"><small class="text-muted">Out Of
@@ -72,9 +84,12 @@
         </div>
 
         <!--seller-->
-        <div sec:authorize="hasAuthority('ROLE_SELLER')">
+        <div sec:authorize="hasAuthority('ROLE_SELLER')" style="padding: 10px;padding-left: 0px;">
             <div th:if="${seller.getApproved() == false}">
-                <p>You have to wait until get the approval to sell products</p>
+              <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="YOU NEED TO WAIT UNTIL ADMIN APPROVE YOU">
+                    <button class="btn btn-info btn-sm mb-3" disabled
+                            style="pointer-events: none;" type="button">Add Product
+                    </button>
             </div>
         </div>
 
