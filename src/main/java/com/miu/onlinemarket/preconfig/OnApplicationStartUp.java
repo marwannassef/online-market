@@ -125,6 +125,14 @@ public class OnApplicationStartUp {
 		product4.setQuantity(2);
 		product4.setPrice(9);
 		productRepository.save(product4);
+
+		Product product5 = new Product();
+		product5.setName("Instant Pot");
+		product5.setSeller(user);
+		product5.setDescription("great healthy one-pot meals");
+		product5.setQuantity(7);
+		product5.setPrice(50);
+		productRepository.save(product5);
 	}
 
 	private void createBuyer() throws ParseException {
