@@ -100,7 +100,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/profile")
-	public String profile(Model model, HttpSession session, Principal principal) throws ResourceNotFoundException {
+	public String profile(Model model, Principal principal) throws ResourceNotFoundException {
 		if(userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("user", buyerService.findByUsername(principal.getName()));
 		} else if(userService.hasRole("ROLE_SELLER")) {
