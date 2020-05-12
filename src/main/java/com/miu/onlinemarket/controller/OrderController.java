@@ -1,12 +1,12 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
+import com.miu.onlinemarket.domain.*;
+import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,17 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.miu.onlinemarket.domain.Buyer;
-import com.miu.onlinemarket.domain.Item;
-import com.miu.onlinemarket.domain.Order;
-import com.miu.onlinemarket.domain.Product;
-import com.miu.onlinemarket.domain.Status;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
-import com.miu.onlinemarket.service.BuyerService;
-import com.miu.onlinemarket.service.ItemService;
-import com.miu.onlinemarket.service.OrderService;
-import com.miu.onlinemarket.service.ProductService;
-import com.miu.onlinemarket.service.SellerService;
 
 @Controller
 public class OrderController {
@@ -36,6 +26,9 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private ProductService productService;
@@ -101,12 +94,32 @@ public class OrderController {
 		return "redirect:/home";
 	}
 
+
 	@GetMapping("/orders")
 	public String displayOrder(Model model, Principal principal) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
-		Set<Order> orders = buyer.getOrders();
+		Set<Order> ord = buyer.getOrders();
+		List<Order> orders = new ArrayList<>();
+		for (Order order: ord) {
+			if(order.getStatus() != Status.PREPARED)
+				orders.add(order);
+		}
 		model.addAttribute("orders", orders);
 		return "orders";
+	}
+
+	@GetMapping("/items")
+	public String displayItems(@RequestParam("id") Long id, Model model, Principal principal) throws ResourceNotFoundException {
+		if (userService.hasRole("ROLE_BUYER")) {
+			Order order = orderService.findById(id).orElse(new Order());
+			model.addAttribute("order" ,order);
+
+		} else if (userService.hasRole("ROLE_SELLER")) {
+			Seller seller = sellerService.findSeller(principal.getName());
+			Set<Item> items = seller.getItems();
+			model.addAttribute("order",items);
+		}
+		return "cart";
 	}
 
 }
