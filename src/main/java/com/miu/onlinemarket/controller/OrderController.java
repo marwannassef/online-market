@@ -5,6 +5,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
+import com.lowagie.text.pdf.AcroFields;
 import com.miu.onlinemarket.domain.*;
 import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,18 +109,45 @@ public class OrderController {
 		return "orders";
 	}
 
+
 	@GetMapping("/items")
 	public String displayItems(@RequestParam("id") Long id, Model model, Principal principal) throws ResourceNotFoundException {
-		if (userService.hasRole("ROLE_BUYER")) {
-			Order order = orderService.findById(id).orElse(new Order());
-			model.addAttribute("order" ,order);
 
-		} else if (userService.hasRole("ROLE_SELLER")) {
-			Seller seller = sellerService.findSeller(principal.getName());
-			Set<Item> items = seller.getItems();
-			model.addAttribute("order",items);
-		}
+		Order order = orderService.findById(id).orElse(new Order());
+		model.addAttribute("order", order);
+
 		return "cart";
+	}
+
+	@GetMapping("/selledItems")
+	public String selledItems(Principal principal,Model model) throws ResourceNotFoundException{
+		Seller seller = sellerService.findSeller(principal.getName());
+		Set<Item> items =  seller.getItems();
+		List<Item> items1 = new ArrayList<>();
+		for(Item item: items) {
+			items1.add(item);
+		}
+		model.addAttribute("items", items1);
+		return "selledItems";
+	}
+	@GetMapping("/changeStatus")
+	public String changeStatus(@RequestParam("id") Long id,@RequestParam("status") Status status, Model model, Principal principal) throws ResourceNotFoundException {
+
+
+		Item item = itemService.findItem(id);
+		item.setStatus(status);
+		if(status == Status.CANCELLED)
+		{
+			Order order = item.getOrder();
+			order.setTotalPrice(order.getTotalPrice()-(item.getQuantity()*item.getProduct().getPrice()));
+			orderService.save(order);
+
+			Product product = item.getProduct();
+			product.setQuantity(product.getQuantity() + item.getQuantity());
+			productService.save(product);
+		}
+		itemService.save(item);
+		return "redirect:/selledItems";
 	}
 
 }

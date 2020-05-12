@@ -33,7 +33,7 @@
 				   sec:authorize="hasAuthority('ROLE_SELLER')">Follower</a></li>
 			<li><a class="dropdown-item" th:href="@{/orders}"
 				   sec:authorize="hasAuthority('ROLE_BUYER')">Orders</a></li>
-			<li><a class="dropdown-item" th:href="@{/orders}"
+			<li><a class="dropdown-item" th:href="@{/selledItems}"
 				   sec:authorize="hasAuthority('ROLE_SELLER')">Orders</a></li>
 			<li class="dropdown-divider"></li>
 			<li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
