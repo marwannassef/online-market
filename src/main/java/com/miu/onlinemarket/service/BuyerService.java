@@ -15,5 +15,6 @@ public interface BuyerService {
     public Buyer findBuyerById(Long userId) throws ResourceNotFoundException;
     public void updateAddress(Long userId, Address address) throws ResourceNotFoundException;
     public void updatePayment(Long userId, PaymentMethod paymentMethod ) throws ResourceNotFoundException;
+    Buyer listTheSeller(Long id );
 
 }

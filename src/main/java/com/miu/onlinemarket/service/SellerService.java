@@ -16,4 +16,5 @@ public interface SellerService {
     public Seller update(Seller seller) throws ResourceNotFoundException;
     List<Seller> findUnApprovedSeller();
     Seller findSellerById(Long id) throws ResourceNotFoundException;
+    List<Seller> findSellersByBuyerId(Long id);
 }

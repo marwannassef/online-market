@@ -71,9 +71,12 @@
         </div>
 
         <!--seller-->
-        <div sec:authorize="hasAuthority('ROLE_SELLER')">
+        <div sec:authorize="hasAuthority('ROLE_SELLER')" style="padding: 10px;padding-left: 0px;">
             <div th:if="${seller.getApproved() == false}">
-                <p>You have to wait until get the approval to sell products</p>
+              <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="YOU NEED TO WAIT UNTIL ADMIN APPROVE YOU">
+                    <button class="btn btn-info btn-sm mb-3" disabled
+                            style="pointer-events: none;" type="button">Add Product
+                    </button>
             </div>
         </div>
 
