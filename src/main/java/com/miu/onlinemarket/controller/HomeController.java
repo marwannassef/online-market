@@ -1,14 +1,10 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.HttpSession;
-
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
-import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,7 +60,8 @@ public class HomeController {
 										   .findFirst();
 			model.addAttribute("cartCount", order.orElse(new Order()).getItems().size());
 			model.addAttribute("productList", productService.findAll());
-
+			List<Seller> sellers = sellerService.findSellersByBuyerId(buyer.getUserId());
+			model.addAttribute("sellerList",sellers);
 			session.setAttribute("username", buyer.getFirstName() + " " + buyer.getLastName());
 		} else if (userService.hasRole("ROLE_SELLER")) {
 			Seller seller = sellerService.findSeller(principal.getName());
@@ -74,7 +71,7 @@ public class HomeController {
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
 
-		modelAndView.setViewName("home");
+
 		
 		String sellerName = (String) model.asMap().get("sellerName");
 		if (sellerName != null) {
@@ -91,6 +88,7 @@ public class HomeController {
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("tab", tab);
 		model.addAttribute("status", status);
+		modelAndView.setViewName("home");
 		return modelAndView;
 	}
 
