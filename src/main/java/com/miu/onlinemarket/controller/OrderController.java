@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -84,13 +85,30 @@ public class OrderController {
 	}
 
 	@GetMapping("/placeOrder")
-	public String placeOrder(Principal principal) throws ResourceNotFoundException {
+	public String placeOrder(@ModelAttribute Checkout checkout, Principal principal) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
 				.findFirst();
 		order.orElse(new Order()).setStatus(Status.PAYMENT_CONFIRMED);
 		Order newOrder = new Order(0, Status.PREPARED, new HashSet<Item>());
 		buyerService.updateUserOrder(newOrder, principal.getName());
+		if (checkout.isChecked()) {
+			double requiredPoints = order.orElse(new Order()).getTotalPrice() * 100;
+			double actualPoints = buyer.getPoints() / 100;
+			if (buyer.getPoints() == requiredPoints) {
+				buyer.setPoints(0);
+				buyerService.update(buyer);
+				order.orElse(new Order()).setTotalPrice(0);
+			} else if (buyer.getPoints() < requiredPoints) {
+				buyer.setPoints(0);
+				buyerService.update(buyer);
+				order.orElse(new Order()).setTotalPrice(order.orElse(new Order()).getTotalPrice() - actualPoints);
+			} else {
+				buyer.setPoints((int)(buyer.getPoints() - requiredPoints));
+				buyerService.update(buyer);
+				order.orElse(new Order()).setTotalPrice(0);
+			}
+		}
 		orderService.save(order.orElse(new Order()));
 		return "redirect:/home";
 	}
@@ -150,7 +168,7 @@ public class OrderController {
 			Buyer buyer = item.getBuyer();
 			int points = (int)(buyer.getPoints() + (item.getQuantity() * item.getProduct().getPrice() * 0.1));
 			buyer.setPoints(points);
-			buyerService.save(buyer);
+			buyerService.update(buyer);
 		}
 		itemService.save(item);
 		return "redirect:/selledItems";

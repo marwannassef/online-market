@@ -3,7 +3,6 @@ package com.miu.onlinemarket.controller;
 import java.security.Principal;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.miu.onlinemarket.domain.Address;
 import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.Checkout;
 import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.PaymentMethod;
 import com.miu.onlinemarket.domain.Status;
@@ -55,6 +52,7 @@ public class PaymentController {
 				.findFirst();
 		model.addAttribute("order", order.orElse(new Order()));
 		model.addAttribute("buyer", buyer);
+		model.addAttribute("checkout", new Checkout());
 		return "checkout";
 	}
 

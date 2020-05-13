@@ -42,20 +42,20 @@
 								(USD)</span> <strong th:text="${order.getTotalPrice()} + ' $'">$20</strong></li>
 					</ul>
 
-					<form class="card p-2">
+					<form th:action="@{/placeOrder}" th:object="${checkout}">
 						<div class="input-group">
-							<input type="text" class="form-control" placeholder="Promo code">
-							<div class="input-group-append">
-								<button type="submit" class="btn btn-secondary">Redeem</button>
-							</div>
+							<label for="firstName">Points</label> 
+							<p th:text="': ' + ${buyer.getPoints()}"></p>
+							<br>
 						</div>
+						<div class="custom-control custom-checkbox">
+						    <input type="checkbox" class="custom-control-input" id="defaultUnchecked" th:field="*{checked}">
+						    <label class="custom-control-label" for="defaultUnchecked">Use Points</label>
+						</div>
+						<br>
+						<button type="submit" class="btn btn-primary form-control">Place Order</button>
 					</form>
-
 					<br>
-					<div class="input-group">
-						<a class="btn btn-primary form-control" th:href="@{/placeOrder}">
-							Place Order </a>
-					</div>
 				</div>
 				<div class="col-md-8 order-md-1">
 					<h4 class="mb-3">Shipping Address</h4>
