@@ -15,6 +15,15 @@
 			</a>
 		</div>
 	</div>
+	<div sec:authorize="!hasAuthority('ROLE_ADMIN')" th:if="${searchMessage != null}" style="width: 1000px">
+        <form method="get" th:action="@{/search}" th:object="${searchMessage}" ui-jp="parsley">
+			<div class="form-group has-search" style="margin: 0; margin-right: 20px">
+				<span class="fa fa-search form-control-feedback"></span>
+				<input type="text" class="form-control" placeholder="Search"
+					 id="filter" th:field="*{search}">
+			</div>
+        </form>
+    </div>
 	<div class="dropdown" sec:authorize="isAuthenticated()">
 		<img th:src="@{/img/user.png}" style="width: 30px; cursor: pointer;"
 			 id="dropdownMenuButton" data-toggle="dropdown" class="navbar-brand mr-1"

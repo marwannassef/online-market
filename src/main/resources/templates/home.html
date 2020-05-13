@@ -24,27 +24,24 @@
             <div class="tab-pane container fade" id="approve-seller"></div>
         </div>
     </div>
-    <div class="container" sec:authorize="!hasAuthority('ROLE_ADMIN')" style="margin-top: 10px;">
-        <form method="get" th:action="@{/search}" th:object="${searchMessage}" ui-jp="parsley">
-            <div class="row" style="padding: 10px; padding-left: 0px">
-                <div class="col-sm-4">
-                    <input class="form-control " id="filter" th:field="*{search}"
-                           type="text" placeholder="Search"/>
-                </div>
-            </div>
-        </form>
-        
-        <div class="dropdown">
-			<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" id="sellerMenu" th:text="${sellerName}">Select a Seller <span class="caret"></span></a>
-			<ul class="dropdown-menu bg-dark">
-				<li th:each="seller : ${sellerList}">
-					<a class="dropdown-item" th:href="@{'/searchBySeller'(id= ${seller.userId})}" th:text="${seller.firstName}">
-						Item I
-					</a>
-				</li>
-			</ul>
+    <div class="container" sec:authorize="!hasAuthority('ROLE_ADMIN')" style="margin-top: 10px;"
+    	>
+    	<div th:if="${productList.size() > 0 }">
+    	<div sec:authorize="hasAuthority('ROLE_BUYER')" style="padding: 10px;padding-left: 0px;">
+	        <div class="dropdown">
+				<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" id="sellerMenu" th:text="${sellerName}">Select a Seller <span class="caret"></span></a>
+				<ul class="dropdown-menu bg-dark">
+					<li th:each="seller : ${sellerList}">
+						<a class="dropdown-item" th:href="@{'/searchBySeller'(id= ${seller.userId})}" th:text="${seller.firstName}">
+							Item I
+						</a>
+					</li>
+				</ul>
+				<a th:href="@{/home}">
+					<img th:src="@{/img/delete.png}" style="width: 30px">
+				</a>
+			</div>
 		</div>
-
         <!--BUYER-->
 
         <div class="row" style="margin-right: 0px;padding-right: 0px; margin-bottom: 100px"
@@ -141,7 +138,10 @@
             </tr>
             </tbody>
         </table>
-
+	</div>
+	<div th:if="${productList.size() == 0 }" style=" text-align: center;">
+		<img th:src="@{/img/no-data.png}">
+	</div>
     </div>
 </div>
 
