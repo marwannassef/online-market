@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
@@ -40,7 +41,6 @@ import com.miu.onlinemarket.service.UserService;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@SessionAttributes("type")
 public class UserController {
 
 	@Autowired
@@ -66,18 +66,19 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/signup/{type}")
-	public String signUp(@PathVariable String type, Model model) {
+	public String signUp(@PathVariable String type, Model model,HttpSession session) {
 		model.addAttribute("user", new User());
 		model.addAttribute("type", type);
+		session.setAttribute("type",type);
 		return "signup";
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model)
+	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,HttpSession session)
 			throws IOException {
-		String type = model.getAttribute("type").toString();
+		String typee = (String)session.getAttribute("type");
 		if (bindingResult.hasErrors()) {
-			return "redirect:/signup/" + type;
+			return "signup";
 		}
 		MultipartFile image = user.getImage();
 		if (image != null && !image.isEmpty()) {
@@ -97,7 +98,7 @@ public class UserController {
 			user.setPhoto(baos.toByteArray());
 			baos.close();
 		}
-		if (type.equalsIgnoreCase("seller")) {
+		if (typee.equalsIgnoreCase("seller")) {
 			Seller seller = new Seller(user, false, null, null);
 			sellerService.save(seller);
 		} else {

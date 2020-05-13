@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,17 +16,17 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty(message = "Product name required")
+	@NotEmpty
 	private String name;
 
-	@NotEmpty(message = "Product description required")
+	@NotEmpty
 	private String description;
 
-	@Min(value = 0, message = "Price must be greater than 0")
-	private double price = 0;
+	@NotNull
+	private Double price ;
 
-	@Min(value = 0, message = "Quantity must be greater than 0")
-	private long quantity = 0;
+	@NotNull
+	private Long quantity ;
     
     @Transient
     private MultipartFile image;
@@ -90,19 +91,19 @@ public class Product {
 		this.description = description;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
-	public long getQuantity() {
+	public Long getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(long quantity) {
+	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
 

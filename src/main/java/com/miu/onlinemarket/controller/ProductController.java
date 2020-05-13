@@ -57,9 +57,13 @@ public class ProductController {
 
     @RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-    		Principal principal) throws ResourceNotFoundException, IOException{
+    		Principal principal,Model model) throws ResourceNotFoundException, IOException{
         if(bindingResult.hasErrors()) {
-            return "redirect:/product/addProduct";
+            Seller seller = sellerService.findSeller(principal.getName());
+            boolean approved = seller.getApproved();
+            model.addAttribute("approved",approved);
+            System.out.println(bindingResult);
+            return "addProduct";
         }
         
 		MultipartFile image = product.getImage();
@@ -110,7 +114,8 @@ public class ProductController {
     public String updateProductProcess(@Valid @ModelAttribute("product") Product product,@RequestParam("id") Long id, BindingResult bindingResult,
     		Principal principal) throws ResourceNotFoundException{
         if(bindingResult.hasErrors()) {
-            return "redirect:/product/updateProduct";
+            System.out.println(bindingResult);
+            return "update-product";
         }
 		MultipartFile image = product.getImage();
 		if (image != null && !image.isEmpty()) {

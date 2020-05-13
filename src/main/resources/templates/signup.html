@@ -21,13 +21,13 @@
 						<div class="col-md-6">
 							<input type="text" th:field="*{firstName}" class="form-control"
 								placeholder="First Name" />
-							<p th:if="${#fields.hasErrors('firstName')}"
+							<p class="alert-danger "th:if="${#fields.hasErrors('firstName')}"
 								th:errors="*{firstName}">firstName Error</p>
 						</div>
 						<div class="col-md-6">
 							<input type="text" th:field="*{lastName}" class="form-control"
 								placeholder="Last Name" />
-							<p th:if="${#fields.hasErrors('lastName')}"
+							<p  class="alert-danger" th:if="${#fields.hasErrors('lastName')}"
 								th:errors="*{lastName}">lastName Error</p>
 						</div>
 					</div>
@@ -35,37 +35,37 @@
 
 					<input type="email" th:field="*{email}" class="form-control"
 						placeholder="Email" />
-					<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
+					<p  class="alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
 						Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
 					<input type="tel" th:field="*{phoneNumber}" class="form-control"
 						placeholder="Phone Number" />
-					<p th:if="${#fields.hasErrors('phoneNumber')}"
+					<p class="alert-danger" th:if="${#fields.hasErrors('phoneNumber')}"
 						th:errors="*{phoneNumber}">PhoneNumber Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
 					<input type="text" th:field="*{dateOfBirth}" class="form-control"
 						placeholder="Date Of Birth" />
-					<p th:if="${#fields.hasErrors('dateOfBirth')}"
+					<p class="alert-danger"th:if="${#fields.hasErrors('dateOfBirth')}"
 						th:errors="*{dateOfBirth}">DateOfBirth Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
 					<input type="text" th:field="*{username}" class="form-control"
 						placeholder="Username" />
-					<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username
+					<p class="alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username
 						Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
 					<input type="password" th:field="*{password}" class="form-control"
 						placeholder="Password" />
-					<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password
+					<p class="alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password
 						Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
 					<input type="password" th:field="*{passwordCheck}"
 						class="form-control" placeholder="Re-enter Password" />
-					<p th:if="${#fields.hasErrors('passwordCheck')}"
+					<p class="alert-danger" th:if="${#fields.hasErrors('passwordCheck')}"
 						th:errors="*{passwordCheck}">Password Match Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 

@@ -129,8 +129,8 @@ public class OnApplicationStartUp {
 		product4.setName("Pepsi");
 		product4.setSeller(user);
 		product4.setDescription("Best Pepsi");
-		product4.setQuantity(2);
-		product4.setPrice(9);
+		product4.setQuantity(new Long(2));
+		product4.setPrice(new Double(0.9));
 		product4.setPhoto(productPhoto());
 		productRepository.save(product4);
 
@@ -138,8 +138,8 @@ public class OnApplicationStartUp {
 		product5.setName("Instant Pot");
 		product5.setSeller(user);
 		product5.setDescription("great healthy one-pot meals");
-		product5.setQuantity(7);
-		product5.setPrice(50);
+		product5.setQuantity(new Long(2));
+		product5.setPrice(new Double(0.9));
 		product5.setPhoto(productPhoto());
 		productRepository.save(product5);
 	}
@@ -186,8 +186,8 @@ public class OnApplicationStartUp {
 		product.setName("Mobile");
 		product.setSeller(user2);
 		product.setDescription("Best Mobile");
-		product.setQuantity(10);
-		product.setPrice(10);
+		product.setQuantity(new Long(9));
+		product.setPrice(new Double(0.9));
 		product.setPurchasedStatus(true);
 		product.setPhoto(productPhoto());
 		productRepository.save(product);
@@ -196,8 +196,8 @@ public class OnApplicationStartUp {
 		product2.setName("Cups");
 		product2.setSeller(user2);
 		product2.setDescription("Best Cups");
-		product2.setQuantity(0);
-		product2.setPrice(30);
+		product2.setQuantity(new Long(9));
+		product2.setPrice(new Double(0.9));
 		product2.setPhoto(productPhoto());
 		productRepository.save(product2);
 
@@ -205,8 +205,8 @@ public class OnApplicationStartUp {
 		product3.setName("TV");
 		product3.setSeller(user2);
 		product3.setDescription("Best TV");
-		product3.setQuantity(5);
-		product3.setPrice(30);
+		product3.setQuantity(new Long(9));
+		product3.setPrice(new Double(0.9));
 		product3.setPhoto(productPhoto());
 		productRepository.save(product3);
 
