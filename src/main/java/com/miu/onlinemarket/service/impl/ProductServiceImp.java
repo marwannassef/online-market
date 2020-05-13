@@ -7,6 +7,7 @@ import com.miu.onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -18,7 +19,12 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<Product> findAll() {
-        return productRepository.findAll();
+    	List<Product> products = productRepository.findAll();
+    	products.forEach(product -> {
+	    	if (product.getPhoto() != null && product.getPhoto().length != 0)
+	    		product.setPhotoBase64(Base64.getEncoder().encodeToString(product.getPhoto()));
+		});
+        return products;
     }
 
     @Override

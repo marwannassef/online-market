@@ -48,7 +48,7 @@
              sec:authorize="hasAuthority('ROLE_BUYER')">
             <div class="card-deck col-md-3 " style="padding: 10px; height: 500px" th:each="product,iter: ${productList}">
                 <div class="card" >
-                    <img src="https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+                    <img th:src="'data:image/png;base64,' + ${product.photoBase64}"
                          class="card-img-top" alt="image" style="width:100%; height: 50%;">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${product.name}">Card title</h5>
