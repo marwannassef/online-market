@@ -52,7 +52,7 @@ public class OrderController {
 		Optional<Item> tempItem = order.orElse(new Order()).getItems().stream()
 				.filter(itm -> itm.getProduct().getId() == id).findFirst();
 		if (!tempItem.isPresent()) {
-			Item item = new Item(product, 1, Status.PREPARED, product.getSeller(), order.orElse(new Order()));
+			Item item = new Item(product, 1, Status.PREPARED, product.getSeller(), order.orElse(new Order()), buyer);
 			itemService.save(item);
 			session.setAttribute("cartCount", order.orElse(new Order()).getItems().size() + 1);
 		} else {
@@ -145,6 +145,12 @@ public class OrderController {
 			Product product = item.getProduct();
 			product.setQuantity(product.getQuantity() + item.getQuantity());
 			productService.save(product);
+		}
+		if(status == Status.DELIVERED) {
+			Buyer buyer = item.getBuyer();
+			int points = (int)(buyer.getPoints() + (item.getQuantity() * item.getProduct().getPrice() * 0.1));
+			buyer.setPoints(points);
+			buyerService.save(buyer);
 		}
 		itemService.save(item);
 		return "redirect:/selledItems";

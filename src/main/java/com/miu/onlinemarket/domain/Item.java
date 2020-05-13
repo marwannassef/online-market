@@ -1,13 +1,6 @@
 package com.miu.onlinemarket.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 public class Item {
@@ -30,13 +23,16 @@ public class Item {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "orders_id")
 	private Order order;
-
-	public Item(Product product, long quantity, Status status, Seller seller, Order order) {
+	@OneToOne
+	@JoinColumn(name = "buyer_id")
+	Buyer buyer;
+	public Item(Product product, long quantity, Status status, Seller seller, Order order, Buyer buyer) {
 		this.product = product;
 		this.quantity = quantity;
 		this.status = status;
 		this.seller = seller;
 		this.order = order;
+		this.buyer = buyer;
 	}
 
 	public Item() {
@@ -90,4 +86,11 @@ public class Item {
 		this.order = order;
 	}
 
+	public Buyer getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(Buyer buyer) {
+		this.buyer = buyer;
+	}
 }
