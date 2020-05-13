@@ -5,7 +5,6 @@ import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
-import com.lowagie.text.pdf.AcroFields;
 import com.miu.onlinemarket.domain.*;
 import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +137,7 @@ public class OrderController {
 		Order order = orderService.findById(id).orElse(new Order());
 		model.addAttribute("order", order);
 
-		return "cart";
+		return "items";
 	}
 
 	@GetMapping("/selledItems")
@@ -150,7 +149,7 @@ public class OrderController {
 			items1.add(item);
 		}
 		model.addAttribute("items", items1);
-		return "selledItems";
+		return "items";
 	}
 	@GetMapping("/changeStatus")
 	public String changeStatus(@RequestParam("id") Long id,@RequestParam("status") Status status, Model model, Principal principal) throws ResourceNotFoundException {
@@ -176,6 +175,12 @@ public class OrderController {
 		}
 		itemService.save(item);
 		return "redirect:/selledItems";
+	}
+	@GetMapping("/itemStatus")
+	public String itemStatus(@RequestParam("id") Long id, Model model) throws ResourceNotFoundException {
+		Item item = itemService.findItem(id);
+		model.addAttribute("item",item);
+		return "itemStatus";
 	}
 
 }

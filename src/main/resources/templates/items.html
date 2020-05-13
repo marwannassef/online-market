@@ -10,6 +10,7 @@
 <body>
 <div class="col" layout:fragment="main-content">
     <div class="container" style="text-align: center">
+        <div sec:authorize="hasAuthority('ROLE_SELLER')">
         <h1>Selled Items</h1>
             <table class="table table-bordered table-striped">
                 <thead class="thead-light">
@@ -36,11 +37,66 @@
                             </div>
                         </div>
 
-
+                        </div>
                     </td>
+
                 </tr>
                 </tbody>
             </table>
+    </div>
+        <div sec:authorize="hasAuthority('ROLE_BUYER')">
+        <h1>Order List</h1>
+        <div th:if="${order.getItems().size() > 0 }">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Seller</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th th:if="${order.status != order.getStatus().PREPARED}">Shipping Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item: ${order.items}">
+                    <td th:text="${item.getProduct().getName()}">name</td>
+                    <td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
+                    <td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
+                    <td>
+                        <div class="input-group number-spinner" >
+                            <input type="number" disabled
+                                   th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}"
+                                   step="1"/>
+                        </div>
+                    </td>
+                    <td th:if="${order.status != order.getStatus().PREPARED}">
+                        <span th:text="${item.getStatus()}">Shipping Status</span>
+                    </td>
+                    <td>
+
+                        <span th:if="${item.status == item.getStatus().DELIVERED}">
+								<a class="btn btn-danger btn-sm mb-3"
+                                   href="#">Review </a>
+                        		</span>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot class="thead-dark">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <th><h6 style="margin: 0">Sum</h6></th>
+                    <th><h6 style="margin: 0" th:text="${order.getTotalPrice()} + ' $'"></h6></th>
+                </tr>
+                </tfoot>
+            </table>
+
+        </div>
+
+    </div>
     </div>
 </div>
 </body>
