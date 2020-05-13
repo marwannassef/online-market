@@ -1,6 +1,10 @@
 package com.miu.onlinemarket.preconfig;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +26,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import com.miu.onlinemarket.controller.UserController;
 import com.miu.onlinemarket.domain.Buyer;
 import com.miu.onlinemarket.domain.City;
 import com.miu.onlinemarket.domain.Country;
@@ -88,7 +96,7 @@ public class OnApplicationStartUp {
 		}
 	}
 
-	private void createAdminUser() throws ParseException {
+	private void createAdminUser() throws ParseException, IOException {
 		User user = new User();
 		user.setFirstName("admin");
 		user.setLastName("admin");
@@ -100,10 +108,11 @@ public class OnApplicationStartUp {
 		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_ADMIN"));
 		user.setRoles(roles);
+		user.setPhoto(userPhoto());
 		userService.save(user);
 	}
 
-	private void createSeller() throws ParseException {
+	private void createSeller() throws ParseException, IOException {
 		Seller user = new Seller();
 		user.setFirstName("seller");
 		user.setLastName("seller");
@@ -116,6 +125,7 @@ public class OnApplicationStartUp {
 		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		user.setRoles(roles);
+		user.setPhoto(userPhoto());
 		sellerService.save(user);
 
 		Product product4 = new Product();
@@ -124,6 +134,7 @@ public class OnApplicationStartUp {
 		product4.setDescription("Best Pepsi");
 		product4.setQuantity(2);
 		product4.setPrice(9);
+		product4.setPhoto(productPhoto());
 		productRepository.save(product4);
 
 		Product product5 = new Product();
@@ -132,10 +143,11 @@ public class OnApplicationStartUp {
 		product5.setDescription("great healthy one-pot meals");
 		product5.setQuantity(7);
 		product5.setPrice(50);
+		product5.setPhoto(productPhoto());
 		productRepository.save(product5);
 	}
 
-	private void createBuyer() throws ParseException {
+	private void createBuyer() throws ParseException, IOException {
 		Buyer user = new Buyer();
 		user.setFirstName("buyer");
 		user.setLastName("buyer");
@@ -150,13 +162,14 @@ public class OnApplicationStartUp {
 		user.setOrders(null);
 		user.setPaymentMethod(null);
 		user.setAddress(null);
+		user.setPhoto(userPhoto());
 		buyerService.save(user);
 		Review review = new Review();
 		review.setReview("nice one");
 		review.setBuyer(user);
 		reviewService.save(review);
 	}
-	private void createProduct() throws ParseException {
+	private void createProduct() throws ParseException, IOException {
 		Seller user2 = new Seller();
 		user2.setFirstName("bassem");
 		user2.setLastName("elsawy");
@@ -168,6 +181,7 @@ public class OnApplicationStartUp {
 		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		user2.setRoles(roles);
+		user2.setPhoto(userPhoto());
 		sellerRepository.save(user2);
 
 
@@ -178,6 +192,7 @@ public class OnApplicationStartUp {
 		product.setQuantity(10);
 		product.setPrice(10);
 		product.setPurchasedStatus(true);
+		product.setPhoto(productPhoto());
 		productRepository.save(product);
 
 		Product product2 = new Product();
@@ -186,6 +201,7 @@ public class OnApplicationStartUp {
 		product2.setDescription("Best Cups");
 		product2.setQuantity(0);
 		product2.setPrice(30);
+		product2.setPhoto(productPhoto());
 		productRepository.save(product2);
 
 		Product product3 = new Product();
@@ -194,6 +210,7 @@ public class OnApplicationStartUp {
 		product3.setDescription("Best TV");
 		product3.setQuantity(5);
 		product3.setPrice(30);
+		product3.setPhoto(productPhoto());
 		productRepository.save(product3);
 
 
@@ -284,6 +301,30 @@ public class OnApplicationStartUp {
 			}
 		}
 //		System.out.print(cities);
+	}
+	
+	private byte[] userPhoto () throws IOException {
+		String fileName = "static/img/user.png";
+		ClassLoader classLoader = new UserController().getClass().getClassLoader();
+		File file = new File(classLoader.getResource(fileName).getFile());
+		BufferedImage originalImage = ImageIO.read(file);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(originalImage, "png", baos);
+		baos.flush();
+		baos.close();
+		return baos.toByteArray();
+	}
+	
+	private byte[] productPhoto () throws IOException {
+		String fileName = "static/img/product.png";
+		ClassLoader classLoader = new UserController().getClass().getClassLoader();
+		File file = new File(classLoader.getResource(fileName).getFile());
+		BufferedImage originalImage = ImageIO.read(file);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(originalImage, "png", baos);
+		baos.flush();
+		baos.close();
+		return baos.toByteArray();
 	}
 
 }

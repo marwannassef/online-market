@@ -70,7 +70,7 @@ public class ProductController {
 				e.printStackTrace();
 			}
 		} else {
-			String fileName = "static/img/user.png";
+			String fileName = "static/img/product.png";
 			ClassLoader classLoader = new UserController().getClass().getClassLoader();
 			File file = new File(classLoader.getResource(fileName).getFile());
 			BufferedImage originalImage = ImageIO.read(file);
