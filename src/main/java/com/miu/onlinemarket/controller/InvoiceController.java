@@ -16,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.OrderModel;
 import com.miu.onlinemarket.service.InvoiceService;
+import com.miu.onlinemarket.service.OrderService;
 
 @Controller
 public class InvoiceController {
@@ -25,19 +27,22 @@ public class InvoiceController {
 	@Autowired
 	private InvoiceService invoiceService;
 
+	@Autowired
+	private OrderService orderService;
+
 	@PostMapping(value = "/generate", produces = "application/pdf")
 	public ResponseEntity<InputStreamResource> invoiceGenerate() throws IOException {
-		final OrderModel order = invoiceService.getOrderByCode("XYZ123456789");
+		final OrderModel order = invoiceService.getOrderByCode(orderService.findById(1L).orElse(new Order()));
 		final File invoicePdf = invoiceService.generateInvoiceFor(order, Locale.forLanguageTag("en"));
-		final HttpHeaders httpHeaders = getHttpHeaders("XYZ123456789", "en", invoicePdf);
+		final HttpHeaders httpHeaders = getHttpHeaders(orderService.findById(1L).orElse(new Order()).getOrderNumber(), invoicePdf);
 		return new ResponseEntity<>(new InputStreamResource(new FileInputStream(invoicePdf)), httpHeaders, OK);
 	}
 
-	private HttpHeaders getHttpHeaders(String code, String lang, File invoicePdf) {
+	private HttpHeaders getHttpHeaders(String code, File invoicePdf) {
 		HttpHeaders respHeaders = new HttpHeaders();
 		respHeaders.setContentType(APPLICATION_PDF);
 		respHeaders.setContentLength(invoicePdf.length());
-		respHeaders.setContentDispositionFormData("attachment", format("%s-%s.pdf", code, lang));
+		respHeaders.setContentDispositionFormData("attachment", format("%s.pdf", code));
 		return respHeaders;
 	}
 

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
 
 import com.miu.onlinemarket.domain.AddressModel;
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.Item;
+import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.OrderEntryModel;
 import com.miu.onlinemarket.domain.OrderModel;
 import com.miu.onlinemarket.service.InvoiceService;
@@ -92,32 +96,36 @@ public class InvoiceServiceImp implements InvoiceService {
     }
     
     @Override
-    public OrderModel getOrderByCode(final String code) {
+    public OrderModel getOrderByCode(Order order) {
 
-        return order(code);
+        return order(order);
 
     }
 
-    public OrderModel order(String code) {
-        return new OrderModel(code, address(), entries());
+    private OrderModel order(Order order) {
+        return new OrderModel(order.getOrderNumber(), address(order), entries(order));
     }
 
-    private AddressModel address() {
-        return new AddressModel("Mouad",
-                "EL Fakir",
-                "Gabriel Peri",
-                "75000",
-                "Paris",
-                "France");
+    private AddressModel address(Order order) {
+    	Buyer buyer = order.getItems().iterator().next().getBuyer();
+        return new AddressModel(buyer.getFirstName(),
+        		buyer.getLastName(),
+        		buyer.getAddress().getStreet(),
+        		buyer.getAddress().getZipCode(),
+        		buyer.getAddress().getCity() + "",
+        		buyer.getAddress().getState() + ", " + buyer.getAddress().getCountry());
     }
 
-    private List<OrderEntryModel> entries() {
-        return new ArrayList<OrderEntryModel>() {
-            {
-                add(new OrderEntryModel("Apple IPhone X", 1, 500d));
-                add(new OrderEntryModel("Samsung Galaxy s8", 2, 400d));
-            }
-        };
+    private List<OrderEntryModel> entries(Order order) {
+    	List<OrderEntryModel> orderEntries = new ArrayList<OrderEntryModel>();
+    	Iterator<Item> itr = order.getItems().iterator();
+    	while (itr.hasNext()) {
+    		Item item = itr.next();
+    		orderEntries.add(new OrderEntryModel(item.getProduct().getName(),
+							    				 (int)item.getQuantity(),
+    											 item.getProduct().getPrice()));
+    	}
+        return orderEntries;
     }
 
 }

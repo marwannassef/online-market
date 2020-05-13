@@ -93,6 +93,7 @@ public class OrderController {
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
 				.findFirst();
 		order.orElse(new Order()).setStatus(Status.PAYMENT_CONFIRMED);
+		order.orElse(new Order()).setOrderNumber("INVOICE#" + order.orElse(new Order()).getId());;
 		Order newOrder = new Order(0, Status.PREPARED, new HashSet<Item>());
 		buyerService.updateUserOrder(newOrder, principal.getName());
 		if (checkout.isChecked()) {
