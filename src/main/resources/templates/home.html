@@ -119,9 +119,25 @@
                     <span th:text="${product.quantity}">Quantity</span>
                 </td>
                 <td>
-                    Remove, Edit
+                    <a class="btn btn-primary btn-sm mb-3"
+                       th:href="@{/product/updateProduct (id=${product.id})}">
+                        Update
+                    </a>
+                    <span th:if="!${product.isPurchasedStatus()}">
+                       <a class="btn btn-primary btn-sm mb-3"
+                          th:href="@{/product/removeProduct (id=${product.id})}"
+                          onclick="if (!(confirm('Are you sure you want to remove this product'))) return false">
+                        Remove
+                    </a>
+                </span>
+                     <span th:if="${product.isPurchasedStatus()}">
+                     <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="THIS PRODUCT IS ALREADY PURCHASED YOU CAN NOT REMOVE IT">
+                    <button class="btn btn-primary btn-sm mb-3" disabled
+                            style="pointer-events: none;" type="button">Remove
+                    </button>
+                     </span>
+                </span>
                 </td>
-
             </tr>
             </tbody>
         </table>

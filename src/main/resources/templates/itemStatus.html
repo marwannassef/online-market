@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/dashboard_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Order</title>
+    <style>
+        ol.progtrckr {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        ol.progtrckr li {
+            display: inline-block;
+            text-align: center;
+            line-height: 3.5em;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="2"] li {
+            width: 49%;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="3"] li {
+            width: 33%;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="4"] li {
+            width: 24%;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="5"] li {
+            width: 19%;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="6"] li {
+            width: 16%;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="7"] li {
+            width: 14%;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="8"] li {
+            width: 12%;
+        }
+
+        ol.progtrckr[data-progtrckr-steps="9"] li {
+            width: 11%;
+        }
+
+        ol.progtrckr li.progtrckr-done {
+            color: black;
+            border-bottom: 4px solid yellowgreen;
+        }
+
+        ol.progtrckr li.progtrckr-todo {
+            color: silver;
+            border-bottom: 4px solid silver;
+        }
+
+        ol.progtrckr li:after {
+            content: "\00a0\00a0";
+        }
+
+        ol.progtrckr li:before {
+            position: relative;
+            bottom: -2.5em;
+            float: left;
+            left: 50%;
+            line-height: 1em;
+        }
+
+        ol.progtrckr li.progtrckr-done:before {
+            content: "\2713";
+            color: white;
+            background-color: yellowgreen;
+            height: 2.2em;
+            width: 2.2em;
+            line-height: 2.2em;
+            border: none;
+            border-radius: 2.2em;
+        }
+
+        ol.progtrckr li.progtrckr-todo:before {
+            content: "\039F";
+            color: silver;
+            background-color: white;
+            font-size: 2.2em;
+            bottom: -1.2em;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="col" layout:fragment="main-content">
+
+
+    <div class="container">
+        <h1 th:text="${item.getProduct().getName()} + ' Status'" style="text-align: center;color: #0f6674;padding: 50px">Order Status</h1>
+        <P th:if="${item.status == item.getStatus().CANCELLED}">Item is Canceled By the Seller</P>
+
+        <div th:if="${item.status != item.getStatus().CANCELLED}">
+            <ol class="progtrckr" data-progtrckr-steps="5">
+                `
+                <li class="progtrckr-done">Paid</li>
+                <!--
+               -->
+                <li class="progtrckr-done">Prepared</li>
+                <!--
+               -->
+                <li th:if="${item.status == item.getStatus().SHIPPED}" class="progtrckr-done">Shipped</li>
+                <li th:if="${item.status == item.getStatus().ON_THE_WAY}" class="progtrckr-done">Shipped</li>
+                <li th:if="${item.status == item.getStatus().DELIVERED}" class="progtrckr-done">Shipped</li>
+                <li th:if="${item.status == item.getStatus().PREPARED}" class="progtrckr-todo">Shipped</li>
+
+                <!--
+               -->
+                <li th:if="${item.status == item.getStatus().ON_THE_WAY}" class="progtrckr-done">On_The_Way</li>
+                <li th:if="${item.status == item.getStatus().DELIVERED}" class="progtrckr-done">On_The_Way</li>
+                <li th:if="${item.status == item.getStatus().PREPARED}" class="progtrckr-todo">On_The_Way</li>
+                <li th:if="${item.status == item.getStatus().SHIPPED}" class="progtrckr-todo">On_The_Way</li>
+                <!--
+               -->
+                <li th:if="${item.status == item.getStatus().DELIVERED}" class="progtrckr-done">Delivered</li>
+                <li th:if="${item.status == item.getStatus().ON_THE_WAY}" class="progtrckr-todo">Delivered</li>
+                <li th:if="${item.status == item.getStatus().PREPARED}" class="progtrckr-todo">Delivered</li>
+                <li th:if="${item.status == item.getStatus().SHIPPED}" class="progtrckr-todo">Delivered</li>
+            </ol>
+        </div>
+
+
+        <div class="row" style="margin-top: 100px;margin-left: 700px">
+            <div class="col-8">
+                <div class="details d-table">
+                    <div class="d-table-row">
+                        <div class="d-table-cell"> Shipped with  </div>
+                        <div class="d-table-cell"> &nbsp;&nbsp;Fedex</div>
+
+                    </div>
+                    <div class="d-table-row">
+                        <div class="d-table-cell"> Seller Mail </div>
+                        <div class="d-table-cell" th:text="' '+${item.getProduct().getSeller().getEmail()}">Email </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="d-table-row"><a href=#><i class="fa fa-phone" aria-hidden="true"></i></a></div>
+                <div class="d-table-row"><a href=#><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
