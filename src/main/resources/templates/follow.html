@@ -1,74 +1,70 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/dashboard_layout}"
-      xmlns:layout="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Following</title>
+<title>Following</title>
 </head>
 <body>
 
-<div class="col" layout:fragment="main-content">
+	<div class="col" layout:fragment="main-content">
 
-    <div class="container" sec:authorize="hasAuthority('ROLE_BUYER')">
-        <h1>Following Sellers</h1>
+		<div class="container" sec:authorize="hasAuthority('ROLE_BUYER')" style="text-align: center">
+			<h1>Following Sellers</h1>
+			<div th:if="${sellers.size() > 0 }">
+				<table class="table table-bordered table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+						</tr>
+					</thead>
 
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-            </tr>
-            </thead>
+					<tbody>
+						<tr th:each="seller: ${sellers}">
 
-            <tbody>
-            <tr th:each="seller: ${sellers}">
+							<td><span th:text="${seller.firstName}">First Name</span></td>
+							<td><span th:text="${seller.lastName}">Last Name</span></td>
+							<td><span th:text="${seller.email}">Email</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div th:if="${sellers.size() == 0 }">
+				<img th:src="@{/img/no-data.png}">
+			</div>
+		</div>
 
-                <td>
-                    <span th:text="${seller.firstName}">First Name</span>
-                </td>
-                <td>
-                    <span th:text="${seller.lastName}">Last Name</span>
-                </td>
-                <td>
-                    <span th:text="${seller.email}">Email</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+		<div class="container" sec:authorize="hasAuthority('ROLE_SELLER')" style="text-align: center">
+			<h1>Follower Buyers</h1>
+			<div th:if="${buyers.size() > 0 }">
+				<table class="table table-bordered table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+						</tr>
+					</thead>
 
-    <div class="container" sec:authorize="hasAuthority('ROLE_SELLER')">
-        <h1>Follower Buyers</h1>
+					<tbody>
+						<tr th:each="buyer: ${buyers}">
 
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-            </tr>
-            </thead>
+							<td><span th:text="${buyer.firstName}">First Name</span></td>
+							<td><span th:text="${buyer.lastName}">Last Name</span></td>
+							<td><span th:text="${buyer.email}">Email</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div th:if="${buyers.size() == 0 }">
+				<img th:src="@{/img/no-data.png}">
+			</div>
+		</div>
 
-            <tbody>
-            <tr th:each="buyer: ${buyers}">
-
-                <td>
-                    <span th:text="${buyer.firstName}">First Name</span>
-                </td>
-                <td>
-                    <span th:text="${buyer.lastName}">Last Name</span>
-                </td>
-                <td>
-                    <span th:text="${buyer.email}">Email</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-  </div>
+	</div>
 </body>
 </html>

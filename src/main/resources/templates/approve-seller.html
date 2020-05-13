@@ -1,59 +1,60 @@
 <div class="col" layout:fragment="main-content">
-	<div class="container">
-		<table class="table table-bordered table-striped">
-			<thead class="thead-dark">
-				<tr>
-					<th>Seller First Name</th>
-					<th>Seller Last Name</th>
-					<th>Seller Email</th>
-					<th>Approving</th>
-				</tr>
-			</thead>
+	<div class="container" style="text-align: center">
+		<div th:if="${sellerList.size() > 0 }">
+			<table class="table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th>Seller First Name</th>
+						<th>Seller Last Name</th>
+						<th>Seller Email</th>
+						<th>Approving</th>
+					</tr>
+				</thead>
 
-			<tbody>
-				<br>
-				<tr th:each="seller: ${sellerList}">
+				<tbody>
+					<br>
+					<tr th:each="seller: ${sellerList}">
 
-					<td><span th:text="${seller.firstName}"></span></td>
-					<td><span th:text="${seller.lastName}"></span></td>
-					<td><span th:text="${seller.email}"></span></td>
-					<td>
-						<a class="btn btn-primary btn-sm mb-3"
+						<td><span th:text="${seller.firstName}"></span></td>
+						<td><span th:text="${seller.lastName}"></span></td>
+						<td><span th:text="${seller.email}"></span></td>
+						<td><a class="btn btn-primary btn-sm mb-3"
 							data-toggle="modal" data-target="#myModal"
 							style="color: white; cursor: pointer;"
-							th:attr="data-target='#myModal'+${seller.userId}">
-							Approve </a>
-					</td>
-					<div class="modal fade" th:id="myModal+${seller.userId}">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-				
-								<!-- Modal Header -->
-								<div class="modal-header">
-									<h4 class="modal-title">Confirmation...</h4>
-									<button type="button" class="close" data-dismiss="modal">&times;</button>
+							th:attr="data-target='#myModal'+${seller.userId}"> Approve </a></td>
+						<div class="modal fade" th:id="myModal+${seller.userId}">
+							<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content">
+
+									<!-- Modal Header -->
+									<div class="modal-header">
+										<h4 class="modal-title">Confirmation...</h4>
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+									</div>
+
+									<!-- Modal body -->
+									<div class="modal-body">Are you sure you want to activate
+										this seller?</div>
+
+									<!-- Modal footer -->
+									<div class="modal-footer">
+										<a type="button" class="btn btn-primary"
+											th:href="@{'/approveSeller'(id=${seller.userId})}">Approve</a>
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Close</button>
+									</div>
+
 								</div>
-				
-								<!-- Modal body -->
-								<div class="modal-body">
-									Are you sure you want to activate this seller?
-								</div>
-				
-								<!-- Modal footer -->
-								<div class="modal-footer">
-									<a type="button" class="btn btn-primary"
-										th:href="@{'/approveSeller'(id=${seller.userId})}">Approve</a>
-									<button type="button" class="btn btn-secondary"
-										data-dismiss="modal">Close</button>
-								</div>
-				
 							</div>
 						</div>
-					</div>
-				</tr>
-			</tbody>
-		</table>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div th:if="${sellerList.size() == 0 }">
+			<img th:src="@{/img/no-data.png}">
+		</div>
 
 	</div>
-	
+
 </div>
