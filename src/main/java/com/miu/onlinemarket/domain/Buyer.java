@@ -9,7 +9,9 @@ import javax.persistence.*;
 @Entity
 public class Buyer extends User {
 
-	@OneToOne(cascade = {CascadeType.ALL})
+    private int points;
+	
+    @OneToOne(cascade = {CascadeType.ALL})
 	private Address address;
 
 	@OneToOne(cascade = {CascadeType.ALL})
@@ -75,4 +77,13 @@ public class Buyer extends User {
 		}
 		seller.add(newSeller);
 	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+	
 }
