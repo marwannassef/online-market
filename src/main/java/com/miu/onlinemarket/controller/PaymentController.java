@@ -19,6 +19,7 @@ import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.PaymentMethod;
 import com.miu.onlinemarket.domain.Status;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
+import com.miu.onlinemarket.service.AddressService;
 import com.miu.onlinemarket.service.BuyerService;
 
 @Controller
@@ -26,6 +27,9 @@ public class PaymentController {
 
 	@Autowired
 	private BuyerService buyerService;
+
+	@Autowired
+	private AddressService addressService;
 
 	@GetMapping("/addPayment")
 	public String showPayment(Model model, Principal principal) throws ResourceNotFoundException {
@@ -46,12 +50,27 @@ public class PaymentController {
 	}
 
 	@GetMapping("/checkout")
-	public String checkout(Model model, Principal principal) throws ResourceNotFoundException {
+	public String checkout(Model model, Principal principal) throws Exception {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
 				.findFirst();
 		model.addAttribute("order", order.orElse(new Order()));
 		model.addAttribute("buyer", buyer);
+		Optional<String> country = addressService.loadCountries().stream()
+															     .filter(c -> c.getId() == buyer.getAddress().getCountry())
+															     .findFirst()
+															     .map(c -> c.getName());
+		Optional<String> state = addressService.loadStates(buyer.getAddress().getCountry()).stream()
+														      .filter(c -> c.getId() == buyer.getAddress().getState())
+														      .findFirst()
+														      .map(c -> c.getName());
+		Optional<String> city = addressService.loadCities(buyer.getAddress().getState()).stream()
+														      .filter(c -> c.getId() == buyer.getAddress().getCity())
+														      .findFirst()
+														      .map(c -> c.getName());
+		model.addAttribute("country", country.orElse(""));
+		model.addAttribute("state", state.orElse(""));
+		model.addAttribute("city", city.orElse(""));
 		model.addAttribute("checkout", new Checkout());
 		return "checkout";
 	}

@@ -26,16 +26,34 @@
                    th:errors="*{street}">Street error</p>
 
                 <div style="clear: both; display: block; height: 10px;"></div>
-                <input type="text" th:field="*{city}"
-                       class="form-control" placeholder="City" />
-                <p th:if="${#fields.hasErrors('city')}"
-                   th:errors="*{city}">city error</p>
+                <select th:field="*{country}" class="form-control" id="country">
+		            <option th:value="0"> Select Country
+		            </option>
+		            <option th:each="country : ${countries}"
+		                    th:value="${country.id}"
+		                    th:text="${country.name}">
+		            </option>
+		        </select>
+                <p th:if="${#fields.hasErrors('country')}"
+                   th:errors="*{country}">Country Error</p>
 
                 <div style="clear: both; display: block; height: 10px;"></div>
-                <input type="text" th:field="*{state}"
-                       class="form-control" placeholder="State" />
+		        <select th:field="*{state}" class="form-control" id="state">
+		            <option th:value="0"> Select State
+		            </option>
+		        </select>
+		        <input type="hidden" id="stateId" th:value="*{state}">
                 <p th:if="${#fields.hasErrors('state')}"
                    th:errors="*{state}">State error</p>
+
+                <div style="clear: both; display: block; height: 10px;"></div>
+		        <select th:field="*{city}" class="form-control" id="city">
+		            <option th:value="0"> Select City
+		            </option>
+		        </select>
+		        <input type="hidden" id="cityId" th:value="*{city}">
+                <p th:if="${#fields.hasErrors('city')}"
+                   th:errors="*{city}">city error</p>
 
                 <div style="clear: both; display: block; height: 10px;"></div>
                 <input type="text" th:field="*{zipCode}"
@@ -43,15 +61,9 @@
                 <p th:if="${#fields.hasErrors('zipCode')}"
                    th:errors="*{zipCode}">ZipCode Error</p>
 
-                <div style="clear: both; display: block; height: 10px;"></div>
-                <input type="text" th:field="*{country}"
-                       class="form-control" placeholder="Country" />
-                <p th:if="${#fields.hasErrors('country')}"
-                   th:errors="*{country}">Country Error</p>
-
 
                 <div style="clear: both; display: block; height: 10px;"></div>
-                <input type="submit" class="btn btn-info col-2 form-control" value="Save">
+                <input type="submit" class="btn btn-primary form-control" value="Save">
             </form>
 
         </div>

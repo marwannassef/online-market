@@ -81,23 +81,25 @@
 					</div>
 
 					<div class="row">
-						<div class="col-md-5 mb-3">
-							<label for="country">Country</label> <select
-								class="custom-select d-block w-100" id="country"
-								style="background-color: #fff;" disabled>
-								<option value="">Choose...</option>
-								<option>United States</option>
-							</select>
+						<div class="col-md-6 mb-3">
+							<label for="country">Country</label>
+							<input type="text"
+							class="form-control" id="country" style="background-color: #fff;"
+							disabled th:value="${country}">
 						</div>
-						<div class="col-md-4 mb-3">
-							<label for="state">State</label> <select
-								class="custom-select d-block w-100" id="state"
-								style="background-color: #fff;" disabled>
-								<option value="">Choose...</option>
-								<option>California</option>
-							</select>
+						<div class="col-md-6 mb-3">
+							<label for="state">State</label>
+							<input type="text"
+							class="form-control" id="state" style="background-color: #fff;"
+							disabled th:value="${state}">
 						</div>
-						<div class="col-md-3 mb-3">
+						<div class="col-md-6 mb-3">
+							<label for="city">City</label>
+							<input type="text"
+							class="form-control" id="city" style="background-color: #fff;"
+							disabled th:value="${city}">
+						</div>
+						<div class="col-md-6 mb-3">
 							<label for="zip">Zip</label> <input type="text"
 								class="form-control" id="zip" style="background-color: #fff;"
 								disabled th:value="${buyer.getAddress().getZipCode()}">
@@ -121,13 +123,13 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-3 mb-3">
+						<div class="col-md-6 mb-3">
 							<label for="cc-expiration">Expiration</label> <input type="text"
 								class="form-control" id="cc-expiration"
 								style="background-color: #fff;" disabled
 								th:value="${buyer.getPaymentMethod().getExpiryDate()}">
 						</div>
-						<div class="col-md-3 mb-3">
+						<div class="col-md-6 mb-3">
 							<label for="cc-expiration">CVV</label> <input type="text"
 								class="form-control" id="cc-cvv" style="background-color: #fff;"
 								disabled th:value="${buyer.getPaymentMethod().getNameOnCard()}">
