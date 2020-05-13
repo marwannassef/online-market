@@ -70,8 +70,13 @@
                                    step="1"/>
                         </div>
                     </td>
+
                     <td th:if="${order.status != order.getStatus().PREPARED}">
-                        <span th:text="${item.getStatus()}">Shipping Status</span>
+
+                            <a th:href="@{'/itemStatus'(id=${item.id})}"> <span th:text="${item.status}">status</span> </a>
+
+<!--                        <span class="btn btn-outline-info" ></span>-->
+<!--                        <span th:text="${item.getStatus()}">Shipping Status</span>-->
                     </td>
                     <td>
 
