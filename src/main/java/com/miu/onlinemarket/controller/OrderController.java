@@ -69,6 +69,10 @@ public class OrderController {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
 				.findFirst();
+		model.addAttribute("checkoutEnable", true);
+		if (buyer.getAddress() == null || buyer.getPaymentMethod() == null) {
+			model.addAttribute("checkoutEnable", false);
+		}
 		model.addAttribute("order", order.orElse(new Order()));
 		return "cart";
 	}

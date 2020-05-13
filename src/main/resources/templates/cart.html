@@ -66,8 +66,11 @@
 						</tr>
 					</tfoot>
 				</table>
-				<div class="row" style="align-content: center; align-items: center; display: block;" th:if="${order.status == order.getStatus().PREPARED}">
+				<div class="row" style="align-content: center; align-items: center; display: block;" th:if="${checkoutEnable}">
 					<a class="btn btn-primary" th:href="@{/checkout}"> Check Out </a>
+				</div>
+				<div class="row" style="align-content: center; align-items: center; display: block;" th:if="!${checkoutEnable}">
+					<p>You didn't have a Shipping Address or Payment Method, Please update your information to enable Checkout.</p>
 				</div>
 			</div>
 			<div th:if="${order.getItems().size() == 0 }">
