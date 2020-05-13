@@ -1,7 +1,12 @@
 package com.miu.onlinemarket.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
@@ -51,10 +57,29 @@ public class ProductController {
 
     @RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-    		Principal principal) throws ResourceNotFoundException{
+    		Principal principal) throws ResourceNotFoundException, IOException{
         if(bindingResult.hasErrors()) {
             return "redirect:/product/addProduct";
         }
+        
+		MultipartFile image = product.getImage();
+		if (image != null && !image.isEmpty()) {
+			try {
+				product.setPhoto(image.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			String fileName = "static/img/user.png";
+			ClassLoader classLoader = new UserController().getClass().getClassLoader();
+			File file = new File(classLoader.getResource(fileName).getFile());
+			BufferedImage originalImage = ImageIO.read(file);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(originalImage, "png", baos);
+			baos.flush();
+			product.setPhoto(baos.toByteArray());
+			baos.close();
+		}
 
         Seller seller = sellerService.findSeller(principal.getName());
         product.setSeller(seller);
@@ -87,6 +112,14 @@ public class ProductController {
         if(bindingResult.hasErrors()) {
             return "redirect:/product/updateProduct";
         }
+		MultipartFile image = product.getImage();
+		if (image != null && !image.isEmpty()) {
+			try {
+				product.setPhoto(image.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
         Seller seller = sellerService.findSeller(principal.getName());
         product.setSeller(seller);
         productService.update(product,id);

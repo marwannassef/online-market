@@ -69,28 +69,11 @@
 						th:errors="*{passwordCheck}">Password Match Error</p>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
-					<!-- <div class="row">
-						<div class="col-md-1">
-							<input th:field="*{role}" type="radio" name="role"
-								value="ROLE_BUYER" checked>Buyer
-						</div>
-						<div class="col-md-4">
-							<input th:field="*{role}" type="radio" name="role"
-								value="ROLE_SELLER">Seller
-						</div>
-					</div>
-					<p th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Role
-						Error</p>
-					<div style="clear: both; display: block; height: 20px;"></div> -->
-					<div class="row">
-						<div class="col-md-6">
-							<p style="text-align: left;">Profile Picture</p>
-						</div>
-						<div class="col-md-6">
-							<input type="file" id="file" th:field="*{image}"
-								accept="image/png, image/jpeg" />
-						</div>
-					</div>
+					<div class="custom-file mb-3">
+				      <input type="file" class="custom-file-input" th:field="*{image}"
+							accept="image/png, image/jpeg" id="customFile">
+				      <label class="custom-file-label" for="customFile">Choose Photo</label>
+				    </div>
 					<div style="clear: both; display: block; height: 10px;"></div>
 
 					<input type="submit" class="btn btn-primary form-control" value="Save">

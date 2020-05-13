@@ -1,79 +1,149 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/dashboard_layout}"
-      xmlns:layout="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Product Details</title>
+<title>Product Details</title>
 </head>
 <body>
 
-<div class="col" layout:fragment="main-content">
+	<div class="col" layout:fragment="main-content">
 
-    <div class="container">
-        <h1>Product Details</h1>
+		<div class="container">
+			<h1>Product Details</h1>
+			<div class="single_product">
+				<div class="container-fluid"
+					style="background-color: #fff; padding: 11px;">
+					<div class="row">
+						<div class="col-lg-4 order-lg-2 order-1">
+							<div class="image_selected">
+								<img
+									th:src="'data:image/png;base64,' + ${product.photoBase64}">
+								
+							</div>
+						</div>
+						<div class="col-lg-6 order-3">
+							<div class="product_description">
+								<div class="product_name" th:text="${product.name}"></div>
+								<div class="product-rating">
+									<span class="badge badge-success"><i class="fa fa-star"></i>
+										4.5 Star</span> <span class="rating-review">35 Ratings & 45
+										Reviews</span>
+								</div>
+								<div>
+									<span class="product_price"
+										th:text="${product.getPrice()} + ' $'"></span>
+								</div>
+								<hr class="singleline">
+								<div>
+									<span class="product_info"
+										th:text="${product.getDescription()}"><span>
+								</div>
+								<div>
+									<div class="row">
+										<div class="col-md-5">
+											<div class="br-dashed">
+												<div class="row">
+													<div class="col-md-3 col-xs-3">
+														<img
+															src="https://img.icons8.com/color/48/000000/price-tag.png">
+													</div>
+													<div class="col-md-9 col-xs-9">
+														<div class="pr-info">
+															<span class="break-all">Get 5% instant discount +
+																10X rewards @ RENTOPC</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-7"></div>
+									</div>
+								</div>
+								<hr class="singleline">
+								<div class="order_info d-flex flex-row">
+									<form action="#">
+								</div>
+								<div class="row">
+									<div class="col-xs-6" style="margin-left: 13px;">
+										<div class="product_quantity">
+											<span>QTY: </span> <input id="quantity_input" type="text"
+												pattern="[0-9]*" value="1">
+											<div class="quantity_buttons">
+												<div id="quantity_inc_button"
+													class="quantity_inc quantity_control">
+													<i class="fas fa-chevron-up"></i>
+												</div>
+												<div id="quantity_dec_button"
+													class="quantity_dec quantity_control">
+													<i class="fas fa-chevron-down"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<a class="btn btn-primary shop-button"
+											sec:authorize="hasAuthority('ROLE_BUYER')"
+											th:href="@{/addProduct}"> Add To Cart </a> <a
+											class="btn btn-success shop-button"
+											sec:authorize="hasAuthority('ROLE_BUYER')"
+											th:href="@{/follow (id=${product.id})}"> Follow Seller </a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row row-underline">
+						<div class="col-md-6">
+							<span class=" deal-text">Reviews</span>
+						</div>
+						<div class="col-md-6">
+							<a href="#" data-abc="true"> <span class="ml-auto view-all"></span>
+							</a>
+						</div>
+					</div>
+					<div>
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-2">
+										<img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+											class="img img-rounded img-fluid" />
+										<p class="text-secondary text-center">15 Minutes Ago</p>
+									</div>
+									<div class="col-md-10">
+										<p>
+											<a class="float-left"
+												href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>Maniruzzaman
+													Akash</strong></a> <span class="float-right"><i
+												class="text-warning fa fa-star"></i></span> <span
+												class="float-right"><i
+												class="text-warning fa fa-star"></i></span> <span
+												class="float-right"><i
+												class="text-warning fa fa-star"></i></span> <span
+												class="float-right"><i
+												class="text-warning fa fa-star"></i></span>
 
-        <table>
-            <tr th:object="${product}">
-                <th>NAME</th>
-                <td th:text="${product.name}"></td>
-            </tr>
-            <tr th:object="${product}">
-                <th>DESCRIPTION</th>
-                <td th:text="${product.getDescription()}"></td>
-            </tr>
-            <tr th:object="${product}">
-                <th>PRICE</th>
-                <td th:text="${product.getPrice()}"></td>
-            </tr>
-
-        </table>
-
-        <div sec:authorize="hasAuthority('ROLE_BUYER')">
-            <a class="btn btn-primary btn-sm mb-3"
-               th:href="@{/addProduct}">
-                Add To Cart
-            </a>
-        </div>
-
-        <div sec:authorize="hasAuthority('ROLE_BUYER')">
-            <a class="btn btn-primary btn-sm mb-3"
-               th:href="@{/follow (id=${product.id})}">
-                Follow Seller
-            </a>
-        </div>
-        <br style="margin-top: 20px"><br>
-        <div class="row">
-            <div class="col-2">
-                <div sec:authorize="hasAuthority('ROLE_SELLER')">
-                    <a class="btn btn-primary btn-sm mb-3"
-                       th:href="@{/product/updateProduct (id=${product.id})}">
-                        Update Product
-                    </a>
-                </div>
-            </div>
-            <div class="col-15">
-                <div sec:authorize="hasAuthority('ROLE_SELLER')">
-                     <span th:if="!${status}">
-                       <a class="btn btn-primary btn-sm mb-3"
-                          th:href="@{/product/removeProduct (id=${product.id})}"
-                          onclick="if (!(confirm('Are you sure you want to remove this product'))) return false">
-                        Remove Product
-                    </a>
-                </span>
-                     <span th:if="${status}">
-                     <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="THIS PRODUCT IS ALREADY PURCHASED YOU CAN NOT REMOVE IT">
-                    <button class="btn btn-primary btn-sm mb-3" disabled
-                            style="pointer-events: none;" type="button">Remove Product
-                    </button>
-                     </span>
-                </span>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+										</p>
+										<div class="clearfix"></div>
+										<p>Lorem Ipsum is simply dummy text of the pr make but
+											also the leap into electronic typesetting, remaining
+											essentially unchanged. It was popularised in the 1960s with
+											the release of Letraset sheets containing Lorem Ipsum
+											passages, and more recently with desktop publishing software
+											like Aldus PageMaker including versions of Lorem Ipsum.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

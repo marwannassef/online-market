@@ -17,6 +17,8 @@
             <form th:object="${updateProduct}" action="#" th:action="@{/product/updateProductProcess(id=${updateProduct.id})}"
                   method="post" enctype="multipart/form-data">
 
+				<img class="rounded-circle" th:src="'data:image/png;base64,' + *{photoBase64}" style="width: 200px">
+
                 <div style="clear: both; display: block; height: 10px;"></div>
 
                 <input type="text" th:field="*{name}" class="form-control"
@@ -40,6 +42,14 @@
                        placeholder="Add Quantity" />
                 <p th:if="${#fields.hasErrors('quantity')}"
                    th:errors="*{quantity}">Quantity Error</p>
+                <div style="clear: both; display: block; height: 10px;"></div>
+					<input type="text" th:field="*{photo}" hidden="true"/>
+
+				<div class="custom-file mb-3">
+			      <input type="file" class="custom-file-input" th:field="*{image}"
+						accept="image/png, image/jpeg" id="customFile">
+			      <label class="custom-file-label" for="customFile">Choose Photo</label>
+			    </div>
                 <div style="clear: both; display: block; height: 10px;"></div>
 
                 <input type="submit" class="btn btn-primary form-control" value="Save Product">

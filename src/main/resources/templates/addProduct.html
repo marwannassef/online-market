@@ -42,6 +42,13 @@
                    th:if="${#fields.hasErrors('quantity')}">Quantity Error</p>
                 <div style="clear: both; display: block; height: 10px;"></div>
 
+				<div class="custom-file mb-3">
+			      <input type="file" class="custom-file-input" th:field="*{image}"
+						accept="image/png, image/jpeg" id="customFile">
+			      <label class="custom-file-label" for="customFile">Choose Photo</label>
+			    </div>
+                <div style="clear: both; display: block; height: 10px;"></div>
+
                 <span th:if="${approved}">
                        <input class="btn btn-primary form-control" type="submit" value="Save Product">
                 </span>

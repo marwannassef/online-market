@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Entity
 public class Product {
 
@@ -24,6 +26,16 @@ public class Product {
 
 	@Min(value = 0, message = "Quantity must be greater than 0")
 	private long quantity = 0;
+    
+    @Transient
+    private MultipartFile image;
+    
+    @Transient
+    private String photoBase64;
+    
+    @Lob
+    @Column(name = "photo", columnDefinition="BLOB")
+    private byte[] photo;
 
 	private boolean purchasedStatus = false;
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -108,6 +120,30 @@ public class Product {
 
 	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
+	}
+
+	public MultipartFile getImage() {
+		return image;
+	}
+
+	public void setImage(MultipartFile image) {
+		this.image = image;
+	}
+
+	public String getPhotoBase64() {
+		return photoBase64;
+	}
+
+	public void setPhotoBase64(String photoBase64) {
+		this.photoBase64 = photoBase64;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
 	}
 
 }

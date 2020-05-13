@@ -7,6 +7,7 @@ import com.miu.onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -27,9 +28,11 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Product findById(Long id) throws ResourceNotFoundException {
-        return productRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Product with id " + id +" not found")
-        );
+    	Product product = productRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Product with id " + id +" not found"));
+    	if (product.getPhoto() != null && product.getPhoto().length != 0)
+    		product.setPhotoBase64(Base64.getEncoder().encodeToString(product.getPhoto()));
+        return product;
     }
 
 
