@@ -45,8 +45,7 @@ public class PaymentController {
 	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, BindingResult bindingResult, Principal principal,
 							 RedirectAttributes redirectAttributes, Model model) throws Exception {
 		if(bindingResult.hasErrors()) {
-			String status = (String) model.asMap().get("status");
-			model.addAttribute("status", status);
+			model.addAttribute("status", "failed");
 			return "paymentMethod";
 		}
 		Long userId = buyerService.findByUsername(principal.getName()).getUserId();

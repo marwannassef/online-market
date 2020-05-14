@@ -47,8 +47,7 @@ public class AddressController {
 	public String addAddress(@Valid @ModelAttribute("address") Address address, BindingResult bindingResult,
 							 Principal principal, RedirectAttributes redirectAttributes,Model model) throws Exception {
 		if(bindingResult.hasErrors()) {
-			String status = (String) model.asMap().get("status");
-			model.addAttribute("status", status);
+			model.addAttribute("status", "failed");
 			model.addAttribute("countries", addressService.loadCountries());
 			return "address";
 		}

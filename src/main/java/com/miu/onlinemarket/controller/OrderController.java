@@ -118,11 +118,13 @@ public class OrderController {
 		}
 		model.addAttribute("order", order.orElse(new Order()));
 		model.addAttribute("itm", new Product());
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "cart";
 	}
 
 	@GetMapping("/removeCartItem")
-	public String removeItem(@RequestParam("id") Long id, HttpSession session) throws ResourceNotFoundException {
+	public String removeItem(@RequestParam("id") Long id, HttpSession session, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Item item = itemService.findItem(id);
 		Order order= item.getOrder();
 		order.setTotalPrice(order.getTotalPrice()-(item.getQuantity()*item.getProduct().getPrice()));
@@ -131,12 +133,13 @@ public class OrderController {
 		product.setQuantity(product.getQuantity() + item.getQuantity());
 		productService.save(product);
 		itemService.delete(id);
+		redirectAttributes.addFlashAttribute("status", "success");
 		session.setAttribute("cartCount", Integer.parseInt(session.getAttribute("cartCount").toString()) - 1);
 		return "redirect:/cart";
 	}
 
 	@GetMapping("/placeOrder")
-	public String placeOrder(@ModelAttribute Checkout checkout, Principal principal) throws ResourceNotFoundException {
+	public String placeOrder(@ModelAttribute Checkout checkout, Principal principal, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
 				.findFirst();
@@ -146,7 +149,7 @@ public class OrderController {
 		buyerService.updateUserOrder(newOrder, principal.getName());
 		if (checkout.isChecked()) {
 			double requiredPoints = order.orElse(new Order()).getTotalPrice() * 100;
-			double actualPoints = buyer.getPoints() / 100;
+			double actualPoints = (double)buyer.getPoints() / 100;
 			if (buyer.getPoints() == requiredPoints) {
 				buyer.setPoints(0);
 				buyerService.update(buyer);
@@ -168,6 +171,7 @@ public class OrderController {
 		}
 		order.orElse(new Order()).setTotalPrice(order.orElse(new Order()).getTotalPrice()-((double) buyer.getPoints()/10));
 		orderService.save(order.orElse(new Order()));
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
 
@@ -182,6 +186,8 @@ public class OrderController {
 				orders.add(order);
 		}
 		model.addAttribute("orders", orders);
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "orders";
 	}
 
@@ -191,7 +197,8 @@ public class OrderController {
 
 		Order order = orderService.findById(id).orElse(new Order());
 		model.addAttribute("order", order);
-
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "items";
 	}
 
@@ -204,10 +211,12 @@ public class OrderController {
 			items1.add(item);
 		}
 		model.addAttribute("items", items1);
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "items";
 	}
 	@GetMapping("/changeStatus")
-	public String changeStatus(@RequestParam("id") Long id,@RequestParam("status") Status status, Model model, Principal principal) throws ResourceNotFoundException {
+	public String changeStatus(@RequestParam("id") Long id,@RequestParam("status") Status status, Model model, Principal principal, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 
 
 		Item item = itemService.findItem(id);
@@ -229,6 +238,7 @@ public class OrderController {
 			buyerService.update(buyer);
 		}
 		itemService.save(item);
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/selledItems";
 	}
 	@GetMapping("/itemStatus")
@@ -238,7 +248,7 @@ public class OrderController {
 		return "itemStatus";
 	}
 	@GetMapping("/removeOrderItem")
-	public String removeOrderItem(@RequestParam("id") Long id,Model model, HttpSession httpSession) throws ResourceNotFoundException {
+	public String removeOrderItem(@RequestParam("id") Long id,Model model, HttpSession httpSession, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Item item = itemService.findItem(id);
 		Order order1 = item.getOrder();
 
@@ -252,7 +262,7 @@ public class OrderController {
 		orderService.save(order1);
 		Order order = orderService.findById(order1.getId()).orElse(new Order());
 		httpSession.setAttribute("orderId", order.getId());
-
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/displayItems";
 	}
 	@GetMapping("/displayItems")
@@ -261,6 +271,8 @@ public class OrderController {
 		System.out.println(id);
 		Order order = orderService.findById(id).orElse(new Order());
 		model.addAttribute("order", order);
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "items";
 	}
 

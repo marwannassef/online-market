@@ -16,6 +16,9 @@ $(document).ready(function() {
 	if (status == 'success') {
 		toast.success("Operation succeeded...");
 	}
+	if (status == 'failed') {
+		toast.error("Operation failed...");
+	}
 	$('#addToCart').click(function() {
 		toast.success("This toast notification with sound");
 	});

@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="col" layout:fragment="main-content">
+	<input type="hidden" th:value="${status}" id="status" />
     <div class="container" style="text-align: center">
         <div sec:authorize="hasAuthority('ROLE_SELLER')">
             <h1>Selled Items</h1>
