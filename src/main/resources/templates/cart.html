@@ -9,6 +9,12 @@
 </head>
 <body>
 	<div class="col" layout:fragment="main-content">
+		<form method="post" th:action="@{/updateQuantity}" th:object="${itm}" hidden="true" id="form">
+			<div class="form-group has-search" style="margin: 0; margin-right: 20px">
+				<input type="text" id="itmId" th:field="*{id}">
+				<input type="text" id="itmQuantity" th:field="*{quantity}">
+			</div>
+        </form>
 		<div class="container" style="text-align: center">
 			<h1>Shopping Cart</h1>
 			<div th:if="${order.getItems().size() > 0 }">
@@ -19,7 +25,8 @@
 							<th>Seller</th>
 							<th>Price</th>
 							<th>Quantity</th>
-							<th th:if="${order.status != order.getStatus().PREPARED}">Shipping Status</th>
+							<th th:if="${order.status != order.getStatus().PREPARED}">Shipping
+								Status</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -28,32 +35,23 @@
 							<td th:text="${item.getProduct().getName()}">name</td>
 							<td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
 							<td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
-							<td>
-								<div class="input-group number-spinner" th:if="${order.status == order.getStatus().PREPARED}">
-									<input type="number"
-										   th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}"
-										   step="1"/>
-								</div>
-								<div class="input-group number-spinner" th:if="${order.status != order.getStatus().PREPARED}">
-									<input type="number" disabled
-										   th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}"
-										   step="1"/>
-								</div>
+							<td style="width: 250px"><input value="0" min="1"
+								th:max="${item.getProduct().getQuantity()} + ${item.getQuantity()}" type="number"
+								th:id="${item.getProduct().getId()}" autocomplete="off"
+								th:value="${item.getQuantity()}" step="1" />
+								<input type="hidden" th:value="${item.getQuantity()}" id="oldQuantity">
 							</td>
-							<td th:if="${order.status != order.getStatus().PREPARED}">
-								<span th:text="${item.getStatus()}">Shipping Status</span>
-							</td>
-							<td>
-								<span th:if="${order.status == order.getStatus().PREPARED}">
-								<a class="navbar-brand mr-1" th:href="@{'/removeCartItem'(id= ${item.getId()})}">
-									<img th:src="@{/img/delete.png}" style="width: 30px">
+							<td th:if="${order.status != order.getStatus().PREPARED}"><span
+								th:text="${item.getStatus()}">Shipping Status</span></td>
+							<td><span
+								th:if="${order.status == order.getStatus().PREPARED}"> <a
+									class="navbar-brand mr-1"
+									th:href="@{'/removeCartItem'(id= ${item.getId()})}"> <img
+										th:src="@{/img/delete.png}" style="width: 30px">
 								</a>
-								</span>
-								<span th:if="${item.status == item.getStatus().DELIVERED}">
-								<a class="btn btn-danger btn-sm mb-3"
-								   href="#">Review </a>
-                        		</span>
-							</td>
+							</span> <span th:if="${item.status == item.getStatus().DELIVERED}">
+									<a class="btn btn-danger btn-sm mb-3" href="#">Review </a>
+							</span></td>
 						</tr>
 					</tbody>
 					<tfoot class="thead-dark">
@@ -62,20 +60,25 @@
 							<td></td>
 							<td></td>
 							<th><h6 style="margin: 0">Sum</h6></th>
-							<th><h6 style="margin: 0" th:text="${order.getTotalPrice()} + ' $'"></h6></th>
+							<th><h6 style="margin: 0"
+									th:text="${order.getTotalPrice()} + ' $'"></h6></th>
 						</tr>
 					</tfoot>
 				</table>
-				<div class="row" style="align-content: center; align-items: center; display: block;" th:if="${checkoutEnable}">
+				<div class="row"
+					style="align-content: center; align-items: center; display: block;"
+					th:if="${checkoutEnable}">
 					<a class="btn btn-primary" th:href="@{/checkout}"> Check Out </a>
 				</div>
-				<div class="row" style="align-content: center; align-items: center; display: block;" th:if="!${checkoutEnable}">
-					<p>You didn't have a Shipping Address or Payment Method, Please update your information to enable Checkout.</p>
+				<div class="row"
+					style="align-content: center; align-items: center; display: block;"
+					th:if="!${checkoutEnable}">
+					<p>You didn't have a Shipping Address or Payment Method, Please
+						update your information to enable Checkout.</p>
 				</div>
 			</div>
 			<div th:if="${order.getItems().size() == 0 }">
-				<img th:src="@{/img/no-product-found.png}">
-				<br>
+				<img th:src="@{/img/no-product-found.png}"> <br>
 				<h4>You cart is empty!!!</h4>
 			</div>
 		</div>
