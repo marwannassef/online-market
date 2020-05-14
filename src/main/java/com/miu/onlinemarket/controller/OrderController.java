@@ -1,11 +1,8 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -179,13 +176,19 @@ public class OrderController {
 	@GetMapping("/orders")
 	public String displayOrder(Model model, Principal principal) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
+		//ordered
 		Set<Order> ord = buyer.getOrders();
 		List<Order> orders = new ArrayList<>();
 		for (Order order: ord) {
 			if(order.getStatus() != Status.PREPARED)
 				orders.add(order);
 		}
-		model.addAttribute("orders", orders);
+		List<Order> ordersSorted = orders.stream()
+				.sorted(Comparator.comparing(order -> order.getId()))
+				.collect(Collectors.toList());
+
+		model.addAttribute("orders", ordersSorted);
+		//ordered
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("status", status);
 		return "orders";
@@ -196,6 +199,17 @@ public class OrderController {
 	public String displayItems(@RequestParam("id") Long id, Model model, Principal principal) throws ResourceNotFoundException {
 
 		Order order = orderService.findById(id).orElse(new Order());
+		//ordered
+		Set<Item> items = order.getItems();
+		List<Item> itemsSorted = items.stream()
+				.sorted(Comparator.comparing(item -> item.getId()))
+				.collect(Collectors.toList());
+		Set<Item> setItems = new LinkedHashSet<>();
+		for (Item item: itemsSorted) {
+			setItems.add(item);
+		}
+		order.setItems(setItems);
+		//ordered
 		model.addAttribute("order", order);
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("status", status);
@@ -206,11 +220,18 @@ public class OrderController {
 	public String selledItems(Principal principal,Model model) throws ResourceNotFoundException{
 		Seller seller = sellerService.findSeller(principal.getName());
 		Set<Item> items =  seller.getItems();
-		List<Item> items1 = new ArrayList<>();
-		for(Item item: items) {
-			items1.add(item);
+
+		//ordered
+		List<Item> itemsSorted = items.stream()
+				.sorted(Comparator.comparing(item -> item.getId()))
+				.collect(Collectors.toList());
+		Set<Item> setItems = new LinkedHashSet<>();
+		for (Item item: itemsSorted) {
+			setItems.add(item);
 		}
-		model.addAttribute("items", items1);
+		//ordered
+
+		model.addAttribute("items", setItems);
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("status", status);
 		return "items";
