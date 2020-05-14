@@ -116,19 +116,19 @@
                 <li th:if="${item.status == item.getStatus().SHIPPED}" class="progtrckr-done">Shipped</li>
                 <li th:if="${item.status == item.getStatus().ON_THE_WAY}" class="progtrckr-done">Shipped</li>
                 <li th:if="${item.status == item.getStatus().DELIVERED}" class="progtrckr-done">Shipped</li>
-                <li th:if="${item.status == item.getStatus().PREPARED}" class="progtrckr-todo">Shipped</li>
+                <li th:if="${item.status == item.getStatus().PAYMENT_CONFIRMED}" class="progtrckr-todo">Shipped</li>
 
                 <!--
                -->
                 <li th:if="${item.status == item.getStatus().ON_THE_WAY}" class="progtrckr-done">On_The_Way</li>
                 <li th:if="${item.status == item.getStatus().DELIVERED}" class="progtrckr-done">On_The_Way</li>
-                <li th:if="${item.status == item.getStatus().PREPARED}" class="progtrckr-todo">On_The_Way</li>
+                <li th:if="${item.status == item.getStatus().PAYMENT_CONFIRMED}" class="progtrckr-todo">On_The_Way</li>
                 <li th:if="${item.status == item.getStatus().SHIPPED}" class="progtrckr-todo">On_The_Way</li>
                 <!--
                -->
                 <li th:if="${item.status == item.getStatus().DELIVERED}" class="progtrckr-done">Delivered</li>
                 <li th:if="${item.status == item.getStatus().ON_THE_WAY}" class="progtrckr-todo">Delivered</li>
-                <li th:if="${item.status == item.getStatus().PREPARED}" class="progtrckr-todo">Delivered</li>
+                <li th:if="${item.status == item.getStatus().PAYMENT_CONFIRMED}" class="progtrckr-todo">Delivered</li>
                 <li th:if="${item.status == item.getStatus().SHIPPED}" class="progtrckr-todo">Delivered</li>
             </ol>
         </div>

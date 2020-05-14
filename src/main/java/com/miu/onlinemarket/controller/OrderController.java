@@ -289,8 +289,19 @@ public class OrderController {
 	@GetMapping("/displayItems")
 	public String displayItems(HttpSession httpSession, Model model) {
 		Long id = (Long) httpSession.getAttribute("orderId");
-		System.out.println(id);
 		Order order = orderService.findById(id).orElse(new Order());
+		//ordered
+		Set<Item> items = order.getItems();
+		List<Item> itemsSorted = items.stream()
+				.sorted(Comparator.comparing(item -> item.getId()))
+				.collect(Collectors.toList());
+		Set<Item> setItems = new LinkedHashSet<>();
+		for (Item item: itemsSorted) {
+			setItems.add(item);
+		}
+		order.setItems(setItems);
+		//ordered
+
 		model.addAttribute("order", order);
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("status", status);
