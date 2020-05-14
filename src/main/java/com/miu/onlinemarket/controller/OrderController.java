@@ -166,6 +166,7 @@ public class OrderController {
 			product.setPurchasedStatus(true);
 			productService.save(product);
 		}
+		order.orElse(new Order()).setTotalPrice(order.orElse(new Order()).getTotalPrice()-((double) buyer.getPoints()/10));
 		orderService.save(order.orElse(new Order()));
 		return "redirect:/home";
 	}
