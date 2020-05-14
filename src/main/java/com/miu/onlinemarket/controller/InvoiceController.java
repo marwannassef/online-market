@@ -14,7 +14,8 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.OrderModel;
@@ -30,11 +31,11 @@ public class InvoiceController {
 	@Autowired
 	private OrderService orderService;
 
-	@PostMapping(value = "/generate", produces = "application/pdf")
-	public ResponseEntity<InputStreamResource> invoiceGenerate() throws IOException {
-		final OrderModel order = invoiceService.getOrderByCode(orderService.findById(1L).orElse(new Order()));
+	@GetMapping(value = "/generate", produces = "application/pdf")
+	public ResponseEntity<InputStreamResource> invoiceGenerate(@RequestParam("id") Long id) throws Exception {
+		final OrderModel order = invoiceService.getOrderByCode(orderService.findById(id).orElse(new Order()));
 		final File invoicePdf = invoiceService.generateInvoiceFor(order, Locale.forLanguageTag("en"));
-		final HttpHeaders httpHeaders = getHttpHeaders(orderService.findById(1L).orElse(new Order()).getOrderNumber(), invoicePdf);
+		final HttpHeaders httpHeaders = getHttpHeaders(orderService.findById(id).orElse(new Order()).getOrderNumber(), invoicePdf);
 		return new ResponseEntity<>(new InputStreamResource(new FileInputStream(invoicePdf)), httpHeaders, OK);
 	}
 

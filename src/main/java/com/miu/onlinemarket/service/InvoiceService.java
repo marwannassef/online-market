@@ -11,6 +11,6 @@ public interface InvoiceService {
 	
 	public File generateInvoiceFor(OrderModel order, Locale locale) throws IOException;
 	
-	public OrderModel getOrderByCode(Order order);
+	public OrderModel getOrderByCode(Order order) throws Exception;
 
 }

@@ -11,9 +11,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
@@ -24,6 +27,7 @@ import com.miu.onlinemarket.domain.Item;
 import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.OrderEntryModel;
 import com.miu.onlinemarket.domain.OrderModel;
+import com.miu.onlinemarket.service.AddressService;
 import com.miu.onlinemarket.service.InvoiceService;
 
 import net.sf.jasperreports.engine.JRException;
@@ -43,6 +47,9 @@ public class InvoiceServiceImp implements InvoiceService {
 
     @Value("${invoice.template.path}")
     private String invoice_template;
+    
+    @Autowired
+    AddressService addressService;
 
     @Override
     public File generateInvoiceFor(OrderModel order, Locale locale) throws IOException {
@@ -96,24 +103,36 @@ public class InvoiceServiceImp implements InvoiceService {
     }
     
     @Override
-    public OrderModel getOrderByCode(Order order) {
+    public OrderModel getOrderByCode(Order order) throws Exception {
 
         return order(order);
 
     }
 
-    private OrderModel order(Order order) {
+    private OrderModel order(Order order) throws Exception {
         return new OrderModel(order.getOrderNumber(), address(order), entries(order));
     }
 
-    private AddressModel address(Order order) {
+    private AddressModel address(Order order) throws Exception {
     	Buyer buyer = order.getItems().iterator().next().getBuyer();
+		Optional<String> country = addressService.loadCountries().stream()
+			     .filter(c -> c.getId() == buyer.getAddress().getCountry())
+			     .findFirst()
+			     .map(c -> c.getName());
+		Optional<String> state = addressService.loadStates(buyer.getAddress().getCountry()).stream()
+				      .filter(c -> c.getId() == buyer.getAddress().getState())
+				      .findFirst()
+				      .map(c -> c.getName());
+		Optional<String> city = addressService.loadCities(buyer.getAddress().getState()).stream()
+				      .filter(c -> c.getId() == buyer.getAddress().getCity())
+				      .findFirst()
+				      .map(c -> c.getName());
         return new AddressModel(buyer.getFirstName(),
         		buyer.getLastName(),
         		buyer.getAddress().getStreet(),
         		buyer.getAddress().getZipCode(),
-        		buyer.getAddress().getCity() + "",
-        		buyer.getAddress().getState() + ", " + buyer.getAddress().getCountry());
+        		city.orElse("") + "",
+        		state.orElse("") + ", " + country.orElse(""));
     }
 
     private List<OrderEntryModel> entries(Order order) {

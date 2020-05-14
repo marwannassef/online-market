@@ -12,39 +12,50 @@
 <div class="col" layout:fragment="main-content">
 
 
-    <div class="container">
+    <div class="container" style="text-align: center">
+        	<div th:if="${orders.size() > 0 }">
         <h1>Order List</h1>
         <div>
-            <table class="table table-bordered table-striped" style="width: 75%;">
-                <colgroup>
-                    <col span="1" style="width: 20%;">
-                    <col span="1" style="width: 40%;">
-                    <col span="1" style="width: 40%;">
-                </colgroup>
-                <thead class="thead-light">
-                <tr>
-                    <th># Number</th>
-                    <th>Total Price</th>
-                    <th>View</th>
-                </tr>
-                </thead>
-                <tbody th:each="order, iter: ${orders}">
-                <tr>
-                    <td th:text="${iter.index+1}">#</td>
-                    <td style="font-weight: bold">$(<span th:text="${order.getTotalPrice()}"></span>)</td>
-                    <td>
-                        <span>
-                            <a class="btn btn-outline-primary btn-sm mb-3"
-                               th:href="@{'/items'(id=${order.id})}">
-                                Details
-                            </a>
-                        </span>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
+	            <table class="table table-bordered table-striped">
+	                <colgroup>
+	                    <col span="1" style="width: 20%;">
+	                    <col span="1" style="width: 40%;">
+	                    <col span="1" style="width: 40%;">
+	                </colgroup>
+	                <thead class="thead-dark">
+	                <tr>
+	                    <th># Number</th>
+	                    <th>Total Price</th>
+	                    <th>View</th>
+	                </tr>
+	                </thead>
+	                <tbody th:each="order, iter: ${orders}">
+	                <tr>
+	                    <td th:text="${iter.index+1}">#</td>
+	                    <td style="font-weight: bold"><span th:text="${order.getTotalPrice()} + ' $'"></span></td>
+	                    <td>
+	                        <span>
+	                            <a class="btn btn-outline-primary btn-sm mb-3"
+	                               th:href="@{'/items'(id=${order.id})}">
+	                                Details
+	                            </a>
+	                        </span>
+	                        <span>
+	                            <a class="btn btn-outline-primary btn-sm mb-3"
+	                               th:href="@{'/generate'(id=${order.id})}">
+	                                Invoice
+	                            </a>
+	                        </span>
+	                    </td>
+	
+	                </tr>
+	                </tbody>
+	            </table>
+            </div>
         </div>
+			<div th:if="${orders.size() == 0 }">
+				<img th:src="@{/img/no-data.png}">
+			</div>
     </div>
 </div>
 
