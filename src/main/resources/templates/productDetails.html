@@ -10,13 +10,15 @@
 <body>
 
 	<div class="col" layout:fragment="main-content">
-		<form method="post" th:action="@{/updateQuantity}" th:object="${itm}" hidden="true" id="form">
-			<div class="form-group has-search" style="margin: 0; margin-right: 20px">
-				<input type="text" id="itmId" th:field="*{id}">
-				<input type="text" id="itmQuantity" th:field="*{quantity}">
-				<input type="text" id="desc" th:field="*{description}">
+		<form method="post" th:action="@{/updateQuantity}" th:object="${itm}"
+			hidden="true" id="form">
+			<div class="form-group has-search"
+				style="margin: 0; margin-right: 20px">
+				<input type="text" id="itmId" th:field="*{id}"> <input
+					type="text" id="itmQuantity" th:field="*{quantity}"> <input
+					type="text" id="desc" th:field="*{description}">
 			</div>
-        </form>
+		</form>
 
 		<div class="container">
 			<h1>Product Details</h1>
@@ -26,18 +28,16 @@
 					<div class="row">
 						<div class="col-lg-4 order-lg-2 order-1">
 							<div class="image_selected">
-								<img
-									th:src="'data:image/png;base64,' + ${product.photoBase64}">
-								
+								<img th:src="'data:image/png;base64,' + ${product.photoBase64}">
+
 							</div>
 						</div>
 						<div class="col-lg-6 order-3">
 							<div class="product_description">
 								<div class="product_name" th:text="${product.name}"></div>
 								<div class="product-rating">
-									<span class="badge badge-success"><i class="fa fa-star"></i>
-										4.5 Star</span> <span class="rating-review">35 Ratings & 45
-										Reviews</span>
+									<span class="badge badge-success" th:text="${reviews.size()} + ' Reviews'"><i class="fa fa-star"></i>
+										4.5 Star</span>
 								</div>
 								<div>
 									<span class="product_price"
@@ -75,19 +75,18 @@
 								</div>
 								<div class="row">
 									<div class="col-xs-6" style="margin-left: 13px;">
-										<input min="1"
-											th:max="${product.getQuantity()}" type="number"
-											id="pd" autocomplete="off"
-											value="1" step="1" />
-										<input type="hidden" th:value="${product.getId()}" id="productId">
+										<input min="1" th:max="${product.getQuantity()}" type="number"
+											id="pd" autocomplete="off" value="1" step="1" /> <input
+											type="hidden" th:value="${product.getId()}" id="productId">
 									</div>
 								</div>
 								<br>
 								<div class="row">
 									<div class="col-xs-6">
-										<a class="btn btn-primary shop-button" style="color: white; cursor: pointer;"
-											sec:authorize="hasAuthority('ROLE_BUYER')" id="add"> Add To Cart </a> <a
-											class="btn btn-success shop-button"
+										<a class="btn btn-primary shop-button"
+											style="color: white; cursor: pointer;"
+											sec:authorize="hasAuthority('ROLE_BUYER')" id="add"> Add
+											To Cart </a> <a class="btn btn-success shop-button"
 											sec:authorize="hasAuthority('ROLE_BUYER')"
 											th:href="@{/follow (id=${product.id})}"> Follow Seller </a>
 									</div>
@@ -104,20 +103,19 @@
 							</a>
 						</div>
 					</div>
-					<div>
+					<div th:each="review: ${reviews}">
 						<div class="card">
 							<div class="card-body">
 								<div class="row">
 									<div class="col-md-2">
-										<img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+										<img th:src="'data:image/png;base64,' + ${review.buyer.photoBase64}"
 											class="img img-rounded img-fluid" />
-										<p class="text-secondary text-center">15 Minutes Ago</p>
 									</div>
 									<div class="col-md-10">
-										<p>
-											<a class="float-left"
-												href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>Maniruzzaman
-													Akash</strong></a> <span class="float-right"><i
+										<p style="color: blue;" th:text="${review.buyer.firstName} + ' ' + ${review.buyer.lastName}">
+											<span class="float-left"
+												th:text="${review.review}"></span>
+												<span class="float-right"><i
 												class="text-warning fa fa-star"></i></span> <span
 												class="float-right"><i
 												class="text-warning fa fa-star"></i></span> <span
@@ -128,16 +126,13 @@
 
 										</p>
 										<div class="clearfix"></div>
-										<p>Lorem Ipsum is simply dummy text of the pr make but
-											also the leap into electronic typesetting, remaining
-											essentially unchanged. It was popularised in the 1960s with
-											the release of Letraset sheets containing Lorem Ipsum
-											passages, and more recently with desktop publishing software
-											like Aldus PageMaker including versions of Lorem Ipsum.</p>
+										<p><span class="float-left"
+												th:text="${review.review}"></span></p>
 									</div>
 								</div>
 							</div>
 						</div>
+						<br>
 					</div>
 				</div>
 			</div>

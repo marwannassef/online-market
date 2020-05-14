@@ -89,14 +89,15 @@
 				<div sec:authorize="hasAuthority('ROLE_SELLER')"
 					style="padding: 10px; padding-left: 0px;">
 					<div th:if="${seller.getApproved() == false}">
-						<span class="d-inline-block" data-toggle="tooltip" tabindex="0"
-							title="YOU NEED TO WAIT UNTIL ADMIN APPROVE YOU">
-							<button class="btn btn-primary mb-3" disabled
-								style="pointer-events: none;" type="button">Add Product
-							</button>
-						</span>
+						<a
+							class="btn btn-primary mb-3" title="Hint" data-toggle="popover"
+							data-trigger="hover"
+							data-content="YOU NEED TO WAIT UNTIL ADMIN APPROVE YOU"
+							style="opacity: 0.7; color: white;"> Add Product
+						</a>
+					</div>
 				</div>
-				</div>
+
 
 
 				<div sec:authorize="hasAuthority('ROLE_SELLER')"
