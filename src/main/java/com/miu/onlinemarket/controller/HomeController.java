@@ -107,11 +107,23 @@ public class HomeController {
 	public String getProductByName(@ModelAttribute SearchMessage searchMessage, Principal principal, Model model) throws ResourceNotFoundException {
 		if (userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("productList", productService.searchByName(searchMessage.getSearch()));
+			String sellerName = (String) model.asMap().get("sellerName");
+			if (sellerName != null) {
+				model.addAttribute("sellerName", sellerName);
+			}else{
+				model.addAttribute("sellerName","Select seller");
+			}
 		} else if (userService.hasRole("ROLE_SELLER")) {
 			Seller seller = sellerService.findSeller(principal.getName());
 			List<Product> productList = sellerService.searchByName(searchMessage.getSearch(), seller.getUserId());
 			model.addAttribute("productList", productList);
 			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
+			String sellerName = (String) model.asMap().get("sellerName");
+			if (sellerName != null) {
+				model.addAttribute("sellerName", sellerName);
+			}else{
+				model.addAttribute("sellerName","Select seller");
+			}
 		}
 		return "home";
 	}

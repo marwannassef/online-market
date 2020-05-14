@@ -23,8 +23,10 @@
 
                 <input type="text" th:field="*{name}" class="form-control"
                        placeholder="Product Name" />
-                <p class="alert-danger" th:if="${#fields.hasErrors('name')}"
-                   th:errors="*{name}">ProductName Error</p>
+                <p th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}">CardNumber error</p>
+<!--                <p class="alert-danger" th:if="${#fields.hasErrors('name')}"-->
+<!--                   th:errors="*{name}">ProductName Error</p>-->
                 <div style="clear: both; display: block; height: 10px;"></div>
 
                 <input type="text" th:field="*{description}" class="form-control"

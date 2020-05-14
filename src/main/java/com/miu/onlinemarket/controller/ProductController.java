@@ -116,7 +116,7 @@ public class ProductController {
 
 		return "update-product";
 	}
-
+	
 	@RequestMapping(value = "/updateProductProcess", method = RequestMethod.POST)
 	public String updateProductProcess(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
 			@RequestParam("id") Long id, Principal principal, Model model) throws ResourceNotFoundException {
