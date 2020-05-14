@@ -124,6 +124,9 @@ public class OrderController {
 	@GetMapping("/removeCartItem")
 	public String removeItem(@RequestParam("id") Long id, HttpSession session) throws ResourceNotFoundException {
 		Item item = itemService.findItem(id);
+		Order order= item.getOrder();
+		order.setTotalPrice(order.getTotalPrice()-(item.getQuantity()*item.getProduct().getPrice()));
+		orderService.save(order);
 		Product product = (Product) productService.findById(item.getProduct().getId());
 		product.setQuantity(product.getQuantity() + item.getQuantity());
 		productService.save(product);
@@ -157,6 +160,11 @@ public class OrderController {
 				buyerService.update(buyer);
 				order.orElse(new Order()).setTotalPrice(0);
 			}
+		}
+		for (Item item : order.orElse(new Order()).getItems()) {
+			Product product= item.getProduct();
+			product.setPurchasedStatus(true);
+			productService.save(product);
 		}
 		orderService.save(order.orElse(new Order()));
 		return "redirect:/home";
@@ -232,13 +240,14 @@ public class OrderController {
 	public String removeOrderItem(@RequestParam("id") Long id,Model model, HttpSession httpSession) throws ResourceNotFoundException {
 		Item item = itemService.findItem(id);
 		Order order1 = item.getOrder();
-		order1.getItems().remove(item);
+
 		order1.setTotalPrice(order1.getTotalPrice() -(item.getQuantity() * item.getProduct().getPrice()));
 
 		Product product = (Product) productService.findById(item.getProduct().getId());
 		product.setQuantity(product.getQuantity() + item.getQuantity());
 		productService.save(product);
-		itemService.delete(id);
+		item.setStatus(Status.CANCELLED);
+		itemService.save(item);
 		orderService.save(order1);
 		Order order = orderService.findById(order1.getId()).orElse(new Order());
 		httpSession.setAttribute("orderId", order.getId());

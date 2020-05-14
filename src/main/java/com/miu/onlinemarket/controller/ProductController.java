@@ -116,6 +116,7 @@ public class ProductController {
     public String updateProductProcess(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,@RequestParam("id") Long id,
     		Principal principal,Model model) throws ResourceNotFoundException{
         if(bindingResult.hasErrors()) {
+            System.out.println(bindingResult);
             model.addAttribute("updateProduct",product);
             return "update-product";
         }
