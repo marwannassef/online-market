@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.miu.onlinemarket.domain.Address;
 import com.miu.onlinemarket.domain.City;
 import com.miu.onlinemarket.domain.State;
-import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.AddressService;
 import com.miu.onlinemarket.service.BuyerService;
 
