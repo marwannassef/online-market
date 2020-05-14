@@ -44,7 +44,7 @@ public class Item {
 	public Item() {
 	}
 
-	public boolean isReviewStatus() {
+	public boolean getReviewStatus() {
 		return reviewStatus;
 	}
 

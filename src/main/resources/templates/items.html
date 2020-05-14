@@ -95,12 +95,13 @@
                                 </a>
                         </span>
 
-                        <span th:if="${(item.status == item.getStatus().DELIVERED) and !(item.reviewStatus)}">
+
+                        <span th:if="${item.status==item.getStatus().DELIVERED && !(item.reviewStatus) }">
                             <a class="btn btn-primary"
                                data-target="#myModal" data-toggle="modal"
                                style="color: white; cursor: pointer;"
                                th:attr="data-target='#myModal'+${order.id}"> Review </a>
-                        		</span>
+                        </span>
                         </td>
                         <div class="modal fade" th:id="myModal+${order.id}">
                             <div class="modal-dialog modal-dialog-centered">
