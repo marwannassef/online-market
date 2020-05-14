@@ -102,7 +102,7 @@
 
     <div class="container">
         <h1 th:text="${item.getProduct().getName()} + ' Status'" style="text-align: center;color: #0f6674;padding: 50px">Order Status</h1>
-        <h3 th:if="${item.status == item.getStatus().CANCELLED}" style="text-align: center;">Item is Canceled By the Seller</h3>
+        <h3 th:if="${item.status == item.getStatus().CANCELLED}" style="text-align: center;">Sorry Item is Canceled</h3>
 
         <div th:if="${item.status != item.getStatus().CANCELLED}">
             <ol class="progtrckr" data-progtrckr-steps="5">
