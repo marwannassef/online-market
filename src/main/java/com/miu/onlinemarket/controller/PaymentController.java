@@ -76,6 +76,7 @@ public class PaymentController {
 		model.addAttribute("state", state.orElse(""));
 		model.addAttribute("city", city.orElse(""));
 		model.addAttribute("checkout", new Checkout());
+		model.addAttribute("discount", false);
 		return "checkout";
 	}
 

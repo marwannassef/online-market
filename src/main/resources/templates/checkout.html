@@ -19,7 +19,7 @@
 							class="badge badge-secondary badge-pill"
 							th:text="${order.getItems().size()}">3</span>
 					</h4>
-					<ul class="list-group mb-3">
+					<ul class="list-group mb-3" style="text-align: left;">
 						<li th:each="item: ${order.items}"
 							class="list-group-item d-flex justify-content-between lh-condensed">
 							<div>
@@ -35,22 +35,17 @@
 							class="list-group-item d-flex justify-content-between bg-light">
 							<div class="text-success">
 								<h6 class="my-0">Points Discount</h6>
-								<small>0 Points</small>
-							</div> <span class="text-success">-5 $</span>
+								<small th:text="${buyer.getPoints()} + ' Points'">0 Points</small>
+							</div> <span class="text-success" id="pp">0 $</span>
 						</li>
 						<li class="list-group-item d-flex justify-content-between"><span>Total
-								(USD)</span> <strong th:text="${order.getTotalPrice()} + ' $'">$20</strong></li>
+								(USD)</span> <strong th:text="${order.getTotalPrice()} + ' $'" id="tt">$20</strong></li>
 					</ul>
 
 					<form th:action="@{/placeOrder}" th:object="${checkout}">
-						<div class="input-group">
-							<label for="firstName">Points</label> 
-							<p th:text="': ' + ${buyer.getPoints()}"></p>
-							<br>
-						</div>
 						<div class="custom-control custom-checkbox">
 						    <input type="checkbox" class="custom-control-input" id="defaultUnchecked" th:field="*{checked}">
-						    <label class="custom-control-label" for="defaultUnchecked">Use Points</label>
+						    <label class="custom-control-label" for="defaultUnchecked" style="user-select: none;">Use Points</label>
 						</div>
 						<br>
 						<button type="submit" class="btn btn-primary form-control">Place Order</button>

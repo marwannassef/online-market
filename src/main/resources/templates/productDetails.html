@@ -74,7 +74,7 @@
 								<div class="order_info d-flex flex-row">
 									<form action="#">
 								</div>
-								<div class="row">
+								<div class="row" sec:authorize="hasAuthority('ROLE_BUYER')">
 									<div class="col-xs-6" style="margin-left: 13px;">
 										<input min="1" th:max="${product.getQuantity()}" type="number"
 											id="pd" autocomplete="off" value="1" step="1" /> <input

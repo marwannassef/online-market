@@ -31,6 +31,7 @@
                        placeholder="Description" />
                 <p  class="alert-danger"th:if="${#fields.hasErrors('description')}"
                    th:errors="*{description}">Description Error</p>
+                <div style="clear: both; display: block; height: 10px;"></div>
 
                 <input type="text" th:field="*{price}" class="form-control"
                        placeholder="Enter Price" />

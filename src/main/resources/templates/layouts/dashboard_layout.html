@@ -62,6 +62,19 @@
     	$("#desc").val('details');
     	$("#form").submit();
    	});
+    $("#defaultUnchecked").click(function(){
+        if($(this).prop("checked") == true){
+            $("#pp").text("- " + [[${buyer.points}]] / 100 + " $");
+            $("#tt").text([[${order.totalPrice}]] - ([[${buyer.points}]] / 100) + " $");
+        }
+        else if($(this).prop("checked") == false){
+            $("#pp").text("0 $");
+            $("#tt").text([[${order.totalPrice}]] + " $");
+        }
+    });
+    console.log([[${discount}]]);
+    $("#ddd").hide();
+    console.log([[${discount}]]);
 </script>
 </body>
 
