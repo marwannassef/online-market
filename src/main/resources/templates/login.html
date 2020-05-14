@@ -27,9 +27,12 @@
 						<input type="password" name="password" class="form-control"
 							placeholder="Password" />
 					</div>
-					<div style="clear: both; display: block; height: 10px;"></div>
-					<input type ="checkbox" name="remember-me"/> Remember Me?
-					<div style="clear: both; display: block; height: 10px;"></div>
+
+					<div>
+					<input type="checkbox" class="input-form" id="remember-me" th:name="remember-me" name= "remember-me" />
+					<label for = "remember-me"	>Remember Me ?</label>
+					</div>
+
 					<div>
 						<input type="submit" class="btn btn-primary form-control" value="Sign In" />
 					</div>

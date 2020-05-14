@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             	.and()
 	        .rememberMe()
 	        	.key("uniqueAndSecret")
-	        	.tokenValiditySeconds(15)
+	        	.tokenValiditySeconds(1000000)
 	    		.and()
         	.csrf()
 	    		.disable();
