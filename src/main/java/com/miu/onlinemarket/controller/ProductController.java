@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miu.onlinemarket.domain.Item;
 import com.miu.onlinemarket.domain.Product;
@@ -41,8 +42,6 @@ public class ProductController {
 	@GetMapping("/detail")
 	public String displayProductDetails(@RequestParam("id") long id, Model model) throws ResourceNotFoundException {
 		Product product = productService.findById(id);
-		boolean status = product.isPurchasedStatus();
-		model.addAttribute("status", status);
 		model.addAttribute("product", product);
 		product.getReviews().forEach(review -> {
 	    	if (review.getBuyer().getPhoto() != null && review.getBuyer().getPhoto().length != 0)
@@ -50,6 +49,8 @@ public class ProductController {
 		});
 		model.addAttribute("reviews", product.getReviews());
 		model.addAttribute("itm", new Product());
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "productDetails";
 	}
 
@@ -59,17 +60,19 @@ public class ProductController {
 		Seller seller = sellerService.findSeller(principal.getName());
 		boolean approved = seller.getApproved();
 		model.addAttribute("approved", approved);
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "addProduct";
 	}
 
 	@RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
 	public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-			Principal principal, Model model) throws ResourceNotFoundException, IOException {
+			Principal principal, Model model, RedirectAttributes redirectAttributes) throws ResourceNotFoundException, IOException {
 		if (bindingResult.hasErrors()) {
 			Seller seller = sellerService.findSeller(principal.getName());
 			boolean approved = seller.getApproved();
 			model.addAttribute("approved", approved);
-			System.out.println(bindingResult);
+			model.addAttribute("status", "failed");
 			return "addProduct";
 		}
 
@@ -95,15 +98,17 @@ public class ProductController {
 		Seller seller = sellerService.findSeller(principal.getName());
 		product.setSeller(seller);
 		productService.save(product);
+		redirectAttributes.addFlashAttribute("status", "success");
 
 		return "redirect:/home";
 	}
 
 	@GetMapping("/removeProduct")
-	public String removeProduct(@RequestParam("id") Long id) throws ResourceNotFoundException {
+	public String removeProduct(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 
 		Product product = productService.findById(id);
 		productService.delete(product);
+		redirectAttributes.addFlashAttribute("status", "success");
 
 		return "redirect:/home";
 	}
@@ -113,15 +118,18 @@ public class ProductController {
 
 		Product product = productService.findById(id);
 		model.addAttribute("updateProduct", product);
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 
 		return "update-product";
 	}
 	
 	@RequestMapping(value = "/updateProductProcess", method = RequestMethod.POST)
 	public String updateProductProcess(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-			@RequestParam("id") Long id, Principal principal, Model model) throws ResourceNotFoundException {
+			@RequestParam("id") Long id, Principal principal, Model model, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("updateProduct", product);
+			model.addAttribute("status", "failed");
 			return "update-product";
 		}
 		MultipartFile image = product.getImage();
@@ -135,6 +143,7 @@ public class ProductController {
 		Seller seller = sellerService.findSeller(principal.getName());
 		product.setSeller(seller);
 		productService.update(product, id);
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
 

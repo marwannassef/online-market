@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miu.onlinemarket.service.ReviewService;
 
@@ -32,15 +33,16 @@ public class ReviewController {
 	private ItemService itemService;
 
 	@GetMapping("/approveReview")
-	public String approveReview(@RequestParam("id") Long id, Model model) throws ResourceNotFoundException {
+	public String approveReview(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Review review = reviewService.findReviewById(id);
 		review.setReviewStatus(true);
 		reviewService.save(review);
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
 
 	@GetMapping("/addReview")
-	public String saveReview(@RequestParam("itemId") Long id,@RequestParam("review") String comment, @RequestParam("productId") Long productId,Principal principal) throws ResourceNotFoundException {
+	public String saveReview(@RequestParam("itemId") Long id,@RequestParam("review") String comment, @RequestParam("productId") Long productId,Principal principal, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Review review = new Review();
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		review.setReview(comment);
@@ -52,6 +54,7 @@ public class ReviewController {
 		Item item=itemService.findItem(id);
 		item.setReviewStatus(true);
 		itemService.save(item);
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/orders";
 	}
 }

@@ -9,6 +9,7 @@
 </head>
 <body>
 	<div class="col" layout:fragment="main-content">
+		<input type="hidden" th:value="${status}" id="status" />
 		<form method="post" th:action="@{/updateQuantity}" th:object="${itm}" hidden="true" id="form">
 			<div class="form-group has-search" style="margin: 0; margin-right: 20px">
 				<input type="text" id="itmId" th:field="*{id}">

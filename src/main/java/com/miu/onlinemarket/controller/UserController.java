@@ -56,12 +56,14 @@ public class UserController {
 	private ProductService productService;
 
 	@RequestMapping(value = { "/login", "/" })
-	public String login(SessionStatus status) {
+	public String login(SessionStatus status, Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!auth.getPrincipal().toString().equalsIgnoreCase("anonymousUser")) {
 			return "redirect:/home";
 		}
 		status.setComplete();
+		String statuss = (String) model.asMap().get("status");
+		model.addAttribute("status", statuss);
 		return "login";
 	}
 
@@ -70,14 +72,17 @@ public class UserController {
 		model.addAttribute("user", new User());
 		model.addAttribute("type", type);
 		session.setAttribute("type",type);
+		String status = (String) model.asMap().get("status");
+		model.addAttribute("status", status);
 		return "signup";
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,HttpSession session)
+	public String addUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,HttpSession session, RedirectAttributes redirectAttributes)
 			throws IOException {
 		String typee = (String)session.getAttribute("type");
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("status", "failed");
 			return "signup";
 		}
 		MultipartFile image = user.getImage();
@@ -105,6 +110,7 @@ public class UserController {
 			Buyer buyer = new Buyer(user, null, null, null);
 			buyerService.save(buyer);
 		}
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/login";
 	}
 
@@ -126,7 +132,8 @@ public class UserController {
 	public String profile(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,
 			Principal principal, RedirectAttributes redirectAttributes) throws IOException, ResourceNotFoundException {
 		if (bindingResult.hasErrors()) {
-			return "redirect:/profile";
+			model.addAttribute("status", "failed");
+			return "profile";
 		}
 		MultipartFile image = user.getImage();
 		if (image != null && !image.isEmpty()) {
@@ -154,19 +161,22 @@ public class UserController {
 		Seller seller = sellerService.findSellerById(id);
 		seller.setApproved(true);
 		sellerService.update(seller);
+		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
 
 	@GetMapping("/follow")
-	public RedirectView FollowSeller(@RequestParam("id") Long idVal, Principal principal) throws ResourceNotFoundException {
+	public RedirectView FollowSeller(@RequestParam("id") Long idVal, Principal principal, RedirectAttributes redirectAttributes,Model model) throws ResourceNotFoundException {
 		Long id2 = productService.findById(idVal).getSeller().getUserId();
 		Seller seller = sellerService.findSellerById(id2);
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Buyer tempBuyer = buyerService.findBuyerBySellerId(seller.getUserId());
 		if(tempBuyer == null){
-		buyer.addSeller(seller);
-		buyerService.update(buyer);
+			buyer.addSeller(seller);
+			buyerService.update(buyer);
 		}
+		model.addAttribute("status", "success");
+		redirectAttributes.addFlashAttribute("status", "success");
 		return new RedirectView("/product/detail?id="+idVal);
 	}
 
