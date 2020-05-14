@@ -90,7 +90,7 @@
 <!--                        <span th:text="${item.getStatus()}">Shipping Status</span>-->
                     </td>
                     <td>
-                        <span th:if="${item.status == item.getStatus().PREPARED}">
+                        <span th:if="${item.status == item.getStatus().PAYMENT_CONFIRMED}">
 								<a class="navbar-brand mr-1" th:href="@{'/removeOrderItem'(id= ${item.getId()})}">
 									<img th:src="@{/img/cancel.png}" style="width: 30px">
                                 </a>
