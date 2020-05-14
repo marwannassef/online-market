@@ -1,149 +1,178 @@
 <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/dashboard_layout}"
-      xmlns:layout="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>HOME</title>
+<title>HOME</title>
 </head>
 <body>
-<div class="col" layout:fragment="main-content">
-    <input type="hidden" th:value="${tab}" id="tab"/>
-    <input type="hidden" th:value="${status}" id="status"/>
-    <div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')" style="margin-top: 10px;">
-        <br>
-        <ul class="nav nav-tabs nav-justified" id="adminTabs">
-            <li class="nav-item"><a href="#approve-review" data-url="/approve-review" class="nav-link active">Approve
-                Review</a></li>
-            <li class="nav-item"><a href="#approve-seller" data-url="/approve-seller" class="nav-link" id="tab2">Approve
-                Seller</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane container active" id="approve-review">Active panel</div>
-            <div class="tab-pane container fade" id="approve-seller"></div>
-        </div>
-    </div>
-    <div class="container" sec:authorize="!hasAuthority('ROLE_ADMIN')" style="margin-top: 10px;"
-    	>
-    	<div th:if="${productList.size() > 0 }">
-    	<div sec:authorize="hasAuthority('ROLE_BUYER')" style="padding: 10px;padding-left: 0px;">
-	        <div class="dropdown">
-				<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" id="sellerMenu" th:text="${sellerName}">Select a Seller <span class="caret"></span></a>
-				<ul class="dropdown-menu bg-dark">
-					<li th:each="seller : ${sellerList}">
-						<a class="dropdown-item" th:href="@{'/searchBySeller'(id= ${seller.userId})}" th:text="${seller.firstName}">
-							Item I
-						</a>
-					</li>
-				</ul>
-				<a th:href="@{/home}">
-					<img th:src="@{/img/delete.png}" style="width: 30px">
-				</a>
+	<div class="col" layout:fragment="main-content">
+		<input type="hidden" th:value="${tab}" id="tab" /> <input
+			type="hidden" th:value="${status}" id="status" />
+		<div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')"
+			style="margin-top: 10px;">
+			<br>
+			<ul class="nav nav-tabs nav-justified" id="adminTabs">
+				<li class="nav-item"><a href="#approve-review"
+					data-url="/approve-review" class="nav-link active">Approve
+						Review</a></li>
+				<li class="nav-item"><a href="#approve-seller"
+					data-url="/approve-seller" class="nav-link" id="tab2">Approve
+						Seller</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane container active" id="approve-review">Active
+					panel</div>
+				<div class="tab-pane container fade" id="approve-seller"></div>
 			</div>
 		</div>
-        <!--BUYER-->
+		<div class="container" sec:authorize="!hasAuthority('ROLE_ADMIN')"
+			style="margin-top: 10px;">
+			<div th:if="${productList.size() > 0 }">
+				<div sec:authorize="hasAuthority('ROLE_BUYER')"
+					style="padding: 10px; padding-left: 0px;">
+					<div class="dropdown">
+						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+							href="#" id="sellerMenu" th:text="${sellerName}">Select a
+							Seller <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu bg-dark">
+							<li th:each="seller : ${sellerList}"><a
+								class="dropdown-item"
+								th:href="@{'/searchBySeller'(id= ${seller.userId})}"
+								th:text="${seller.firstName}"> Item I </a></li>
+						</ul>
+						<a th:href="@{/home}"> <img th:src="@{/img/delete.png}"
+							style="width: 30px">
+						</a>
+					</div>
+				</div>
+				<!--BUYER-->
 
-        <div class="row" style="margin-right: 0px;padding-right: 0px; margin-bottom: 100px"
-             sec:authorize="hasAuthority('ROLE_BUYER')">
-            <div class="card-deck col-md-3 " style="padding: 10px; height: 500px" th:each="product,iter: ${productList}">
-                <div class="card" >
-                    <img th:src="'data:image/png;base64,' + ${product.photoBase64}"
-                         class="card-img-top" alt="image" style="width:100%; height: 50%;">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${product.name}">Card title</h5>
-                        <p class="card-text" style="height: 48px;" th:text="${product.description}"></p>
-                        <strong> <span th:text="${product.price} + ' $'"></span></strong>
-                        <p class="card-text" th:if="${product.quantity > 0}"><small class="text-muted">In
-                            Stock</small></p>
-                        <p class="card-text" th:if="${product.quantity <= 0}"><small class="text-muted">Out Of
-                            Stock</small></p>
-                        <span th:if="${product.quantity > 0}">
-                        <a class="btn btn-primary btn-sm mb-3"
-                           th:href="@{'/addToCart'(id=${product.id})}">
-                            Add To Cart
-                        </a>
-                    </span>
-                        <span th:if="${product.quantity <= 0}">
-                        <a class="btn btn-secondary btn-sm mb-3 disabled">
-                            Add To Cart
-                        </a>
-                    </span>
-                        <span>
-                        <a class="btn btn-outline-info btn-sm mb-3 "
-                           th:href="@{'/product/detail'(id=${product.id})}">
-                            Details
-                        </a>
-                    </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+				<div class="row"
+					style="margin-right: 0px; padding-right: 0px; margin-bottom: 100px"
+					sec:authorize="hasAuthority('ROLE_BUYER')">
+					<div class="card-deck col-md-3 "
+						style="padding: 10px; height: 500px"
+						th:each="product,iter: ${productList}">
+						<div class="card">
+							<img th:src="'data:image/png;base64,' + ${product.photoBase64}"
+								class="card-img-top" alt="image"
+								style="width: 100%; height: 50%;">
+							<div class="card-body">
+								<h5 class="card-title" th:text="${product.name}">Card title</h5>
+								<p class="card-text" style="height: 48px;"
+									th:text="${product.description}"></p>
+								<strong> <span th:text="${product.price} + ' $'"></span></strong>
+								<p class="card-text" th:if="${product.quantity > 0}">
+									<small class="text-muted">In Stock</small>
+								</p>
+								<p class="card-text" th:if="${product.quantity <= 0}">
+									<small class="text-muted">Out Of Stock</small>
+								</p>
+								<span th:if="${product.quantity > 0}"> <a
+									class="btn btn-primary mb-3"
+									th:href="@{'/addToCart'(id=${product.id})}"> Add To Cart </a>
+								</span> <span th:if="${product.quantity <= 0}"> <a
+									class="btn btn-primary mb-3 disabled"> Add To Cart </a>
+								</span> <span> <a class="btn btn-secondary mb-3 "
+									th:href="@{'/product/detail'(id=${product.id})}"> Details </a>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
 
-        <!--seller-->
-        <div sec:authorize="hasAuthority('ROLE_SELLER')" style="padding: 10px;padding-left: 0px;">
-            <div th:if="${seller.getApproved() == false}">
-              <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="YOU NEED TO WAIT UNTIL ADMIN APPROVE YOU">
-                    <button class="btn btn-info btn-sm mb-3" disabled
-                            style="pointer-events: none;" type="button">Add Product
-                    </button>
-            </div>
-        </div>
+				<!--seller-->
+				<div sec:authorize="hasAuthority('ROLE_SELLER')"
+					style="padding: 10px; padding-left: 0px;">
+					<div th:if="${seller.getApproved() == false}">
+						<span class="d-inline-block" data-toggle="tooltip" tabindex="0"
+							title="YOU NEED TO WAIT UNTIL ADMIN APPROVE YOU">
+							<button class="btn btn-primary mb-3" disabled
+								style="pointer-events: none;" type="button">Add Product
+							</button>
+					</div>
+				</div>
 
-        <div sec:authorize="hasAuthority('ROLE_SELLER')" style="padding: 10px;padding-left: 0px;">
-            <div th:if="${seller.getApproved() == true}">
-                <a class="btn btn-info btn-sm mb-3"
-                   th:href="@{/product/addProduct}">
-                    Add Product
-                </a>
-            </div>
-        </div>
-        <table class="table table-bordered table-striped" sec:authorize="hasAuthority('ROLE_SELLER')">
-            <thead class="thead-dark">
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Action</th>
-            </tr>
-            </thead>
+				<div sec:authorize="hasAuthority('ROLE_SELLER')"
+					style="padding: 10px; padding-left: 0px;">
+					<div th:if="${seller.getApproved() == true}">
+						<a class="btn btn-primary mb-3" th:href="@{/product/addProduct}">
+							Add Product </a>
+					</div>
+				</div>
+				<table class="table table-bordered table-striped"
+					sec:authorize="hasAuthority('ROLE_SELLER')">
+					<thead class="thead-dark" style="text-align: center">
+						<tr>
+							<th>Product Name</th>
+							<th>Quantity</th>
+							<th>Action</th>
+						</tr>
+					</thead>
 
-            <tbody>
-            <tr th:each="product: ${productList}">
+					<tbody>
+						<tr th:each="product: ${productList}">
 
-                <td><a th:href="@{'/product/detail'(id=${product.id})}"> <span th:text="${product.name}">name</span></a>
-                </td>
-                <td>
-                    <span th:text="${product.quantity}">Quantity</span>
-                </td>
-                <td>
-                    <a class="btn btn-primary btn-sm mb-3"
-                       th:href="@{/product/updateProduct (id=${product.id})}">
-                        Update
-                    </a>
-                    <span th:if="!${product.isPurchasedStatus()}">
-                       <a class="btn btn-primary btn-sm mb-3"
-                          th:href="@{/product/removeProduct (id=${product.id})}"
-                          onclick="if (!(confirm('Are you sure you want to remove this product'))) return false">
-                        Remove
-                    </a>
-                </span>
-                     <span th:if="${product.isPurchasedStatus()}">
-                     <span class="d-inline-block" data-toggle="tooltip" tabindex="0" title="THIS PRODUCT IS ALREADY PURCHASED YOU CAN NOT REMOVE IT">
-                    <button class="btn btn-primary btn-sm mb-3" disabled
-                            style="pointer-events: none;" type="button">Remove
-                    </button>
-                     </span>
-                </span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+							<td><a th:href="@{'/product/detail'(id=${product.id})}">
+									<span th:text="${product.name}">name</span>
+							</a></td>
+							<td><span th:text="${product.quantity}">Quantity</span></td>
+							<td style="text-align: center"><a class="navbar-brand mr-1"
+								th:href="@{/product/updateProduct (id=${product.id})}"> <img
+									th:src="@{/img/edit.png}" style="width: 30px">
+							</a> <span th:if="!${product.isPurchasedStatus()}"> <a
+									class="navbar-brand mr-1" data-toggle="modal"
+									data-target="#myModal" style="color: white; cursor: pointer;"
+									th:attr="data-target='#myModal'+${product.id}"> <img
+										th:src="@{/img/delete.png}" style="width: 30px">
+								</a>
+							</span> <span th:if="${product.isPurchasedStatus()}"> <a
+									class="navbar-brand mr-1" title="Hint" data-toggle="popover"
+									data-trigger="hover"
+									data-content="THIS PRODUCT IS ALREADY PURCHASED YOU CAN NOT REMOVE IT"
+									style="opacity: 0.5;"> <img
+										th:src="@{/img/delete.png}" style="width: 30px">
+								</a>
+							</span></td>
+
+							<div class="modal fade" th:id="myModal+${product.id}">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+
+										<!-- Modal Header -->
+										<div class="modal-header">
+											<h4 class="modal-title">Confirmation...</h4>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+
+										<!-- Modal body -->
+										<div class="modal-body">Are you sure you want to delete
+											this product?</div>
+
+										<!-- Modal footer -->
+										<div class="modal-footer">
+											<a type="button" class="btn btn-danger"
+												th:href="@{'/product/removeProduct'(id=${product.id})}">Delete</a>
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">Close</button>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div th:if="${productList.size() == 0 }" style="text-align: center;">
+				<img th:src="@{/img/no-data.png}">
+			</div>
+		</div>
 	</div>
-	<div th:if="${productList.size() == 0 }" style=" text-align: center;">
-		<img th:src="@{/img/no-data.png}">
-	</div>
-    </div>
-</div>
 
 
 </body>

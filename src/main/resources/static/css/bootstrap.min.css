@@ -6346,7 +6346,7 @@ a.close.disabled {
 	line-break: auto;
 	font-size: .875rem;
 	word-wrap: break-word;
-	background-color: #fff;
+	background-color: #343a40;
 	background-clip: padding-box;
 	border: 1px solid rgba(0, 0, 0, .2);
 	border-radius: .3rem
@@ -6383,14 +6383,14 @@ a.close.disabled {
 .bs-popover-top>.arrow::before {
 	bottom: 0;
 	border-width: .5rem .5rem 0;
-	border-top-color: rgba(0, 0, 0, .25)
+	border-top-color: #343a40;
 }
 
 .bs-popover-auto[x-placement^=top]>.arrow::after,
 .bs-popover-top>.arrow::after {
 	bottom: 1px;
 	border-width: .5rem .5rem 0;
-	border-top-color: #fff
+	border-top-color: #343a40
 }
 
 .bs-popover-auto[x-placement^=right],
@@ -6410,14 +6410,14 @@ a.close.disabled {
 .bs-popover-right>.arrow::before {
 	left: 0;
 	border-width: .5rem .5rem .5rem 0;
-	border-right-color: rgba(0, 0, 0, .25)
+	border-right-color: #343a40
 }
 
 .bs-popover-auto[x-placement^=right]>.arrow::after,
 .bs-popover-right>.arrow::after {
 	left: 1px;
 	border-width: .5rem .5rem .5rem 0;
-	border-right-color: #fff
+	border-right-color: #343a40
 }
 
 .bs-popover-auto[x-placement^=bottom],
@@ -6434,14 +6434,14 @@ a.close.disabled {
 .bs-popover-bottom>.arrow::before {
 	top: 0;
 	border-width: 0 .5rem .5rem .5rem;
-	border-bottom-color: rgba(0, 0, 0, .25)
+	border-bottom-color: #343a40
 }
 
 .bs-popover-auto[x-placement^=bottom]>.arrow::after,
 .bs-popover-bottom>.arrow::after {
 	top: 1px;
 	border-width: 0 .5rem .5rem .5rem;
-	border-bottom-color: #fff
+	border-bottom-color: #343a40
 }
 
 .bs-popover-auto[x-placement^=bottom] .popover-header::before,
@@ -6453,7 +6453,7 @@ a.close.disabled {
 	width: 1rem;
 	margin-left: -.5rem;
 	content: "";
-	border-bottom: 1px solid #f7f7f7
+	border-bottom: 1px solid #343a40
 }
 
 .bs-popover-auto[x-placement^=left],
@@ -6473,7 +6473,7 @@ a.close.disabled {
 .bs-popover-left>.arrow::before {
 	right: 0;
 	border-width: .5rem 0 .5rem .5rem;
-	border-left-color: rgba(0, 0, 0, .25)
+	border-left-color: #343a40
 }
 
 .bs-popover-auto[x-placement^=left]>.arrow::after,
@@ -6487,10 +6487,11 @@ a.close.disabled {
 	padding: .5rem .75rem;
 	margin-bottom: 0;
 	font-size: 1rem;
-	background-color: #f7f7f7;
-	border-bottom: 1px solid #ebebeb;
+	background-color: #e78200;
+	border-bottom: 1px solid #e78200;
 	border-top-left-radius: calc(.3rem - 1px);
-	border-top-right-radius: calc(.3rem - 1px)
+	border-top-right-radius: calc(.3rem - 1px);
+	color: #fff
 }
 
 .popover-header:empty {
@@ -6499,7 +6500,7 @@ a.close.disabled {
 
 .popover-body {
 	padding: .5rem .75rem;
-	color: #212529
+	color: #fff
 }
 
 .carousel {

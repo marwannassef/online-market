@@ -38,8 +38,31 @@
 <script th:src="@{/js/number-spinner.js}"></script>
 <script th:src="@{/js/notification.js}"></script>
 <script th:src="@{/js/product-details.js}"></script>
-
+<script th:src="@{/js/bootstrap-input-spinner.js}"></script>
 <script src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.js"></script>
+<script>
+    var $input = $("input[type='number']");
+    $input.inputSpinner();
+    $( "input[type='number']" ).change(function() {
+    	console.log($(this).attr('id'));
+    	console.log($(this).val());
+    	if ($(this).attr('id') == 'pd') {
+    		return;
+    	}
+    	$("#itmId").val($(this).attr('id'));
+    	$("#itmQuantity").val($(this).val() - $("#oldQuantity").val());
+    	$("#form").submit();
+    	$("#oldQuantity").val() = $(this).val();
+   	});
+    $( "#add" ).click(function() {
+    	console.log($("#pd").val());
+    	console.log($("#productId").val());
+    	$("#itmId").val($("#productId").val());
+    	$("#itmQuantity").val($("#pd").val());
+    	$("#desc").val('details');
+    	$("#form").submit();
+   	});
+</script>
 </body>
 
 </html>

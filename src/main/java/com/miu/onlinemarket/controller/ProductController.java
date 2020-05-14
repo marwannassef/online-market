@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.miu.onlinemarket.domain.Item;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
@@ -42,6 +43,7 @@ public class ProductController {
         boolean status = product.isPurchasedStatus();
         model.addAttribute("status",status);
          model.addAttribute("product",product);
+ 		model.addAttribute("itm", new Product());
         return "productDetails";
     }
 

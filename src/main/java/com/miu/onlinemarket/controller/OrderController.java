@@ -1,21 +1,37 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import com.miu.onlinemarket.domain.*;
-import com.miu.onlinemarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.Checkout;
+import com.miu.onlinemarket.domain.Item;
+import com.miu.onlinemarket.domain.Order;
+import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.domain.Status;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
+import com.miu.onlinemarket.service.BuyerService;
+import com.miu.onlinemarket.service.ItemService;
+import com.miu.onlinemarket.service.OrderService;
+import com.miu.onlinemarket.service.ProductService;
+import com.miu.onlinemarket.service.SellerService;
+import com.miu.onlinemarket.service.UserService;
 
 @Controller
 public class OrderController {
@@ -63,6 +79,34 @@ public class OrderController {
 		return "redirect:/home";
 	}
 
+	@PostMapping({ "/updateQuantity" })
+	public String updateQuantity(@ModelAttribute Product prod, Model model, HttpSession session, Principal principal,
+			RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+		Product product = (Product) productService.findById(prod.getId());
+		product.setQuantity(product.getQuantity() - prod.getQuantity());
+		productService.save(product);
+		Buyer buyer = buyerService.findByUsername(principal.getName());
+		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
+				.findFirst();
+		Order orderItem = order.orElse(new Order());
+		orderItem.setTotalPrice(orderItem.getTotalPrice() + (product.getPrice() * prod.getQuantity()));
+		orderService.save(orderItem);
+		Optional<Item> tempItem = order.orElse(new Order()).getItems().stream()
+				.filter(itm -> itm.getProduct().getId() == prod.getId()).findFirst();
+		if (!tempItem.isPresent()) {
+			Item item = new Item(product, prod.getQuantity(), Status.PREPARED, product.getSeller(), order.orElse(new Order()), buyer);
+			itemService.save(item);
+			session.setAttribute("cartCount", order.orElse(new Order()).getItems().size() + 1);
+		} else {
+			tempItem.get().setQuantity(tempItem.get().getQuantity() + prod.getQuantity());
+			itemService.save(tempItem.get());
+		}
+		redirectAttributes.addFlashAttribute("status", "success");
+		if (prod.getDescription() != null && prod.getDescription().equalsIgnoreCase("details"))
+			return "redirect:/product/detail?id=" + prod.getId();
+		return "redirect:/cart";
+	}
+
 	@GetMapping("/cart")
 	public String displayCart(Model model, Principal principal) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
@@ -73,6 +117,7 @@ public class OrderController {
 			model.addAttribute("checkoutEnable", false);
 		}
 		model.addAttribute("order", order.orElse(new Order()));
+		model.addAttribute("itm", new Product());
 		return "cart";
 	}
 

@@ -4,3 +4,6 @@
 //$(document).change('#body input',function(){
 //	alert($(this).attr('id'));
 //});
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();   
+});
