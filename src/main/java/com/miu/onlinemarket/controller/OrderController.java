@@ -183,5 +183,30 @@ public class OrderController {
 		model.addAttribute("item",item);
 		return "itemStatus";
 	}
+	@GetMapping("/removeOrderItem")
+	public String removeOrderItem(@RequestParam("id") Long id,Model model, HttpSession httpSession) throws ResourceNotFoundException {
+		Item item = itemService.findItem(id);
+		Order order1 = item.getOrder();
+		order1.getItems().remove(item);
+		order1.setTotalPrice(order1.getTotalPrice() -(item.getQuantity() * item.getProduct().getPrice()));
+
+		Product product = (Product) productService.findById(item.getProduct().getId());
+		product.setQuantity(product.getQuantity() + item.getQuantity());
+		productService.save(product);
+		itemService.delete(id);
+		orderService.save(order1);
+		Order order = orderService.findById(order1.getId()).orElse(new Order());
+		httpSession.setAttribute("orderId", order.getId());
+
+		return "redirect:/displayItems";
+	}
+	@GetMapping("/displayItems")
+	public String displayItems(HttpSession httpSession, Model model) {
+		Long id = (Long) httpSession.getAttribute("orderId");
+		System.out.println(id);
+		Order order = orderService.findById(id).orElse(new Order());
+		model.addAttribute("order", order);
+		return "items";
+	}
 
 }
