@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

@@ -1,11 +1,19 @@
 package com.miu.onlinemarket.domain;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -25,20 +33,20 @@ public class Product {
 	private String description;
 
 	@NotNull
-	private Double price ;
+	private Double price;
 
 	@NotNull
-	private Long quantity ;
-    
-    @Transient
-    private MultipartFile image;
-    
-    @Transient
-    private String photoBase64;
-    
-    @Lob
-    @Column(name = "photo", columnDefinition="BLOB")
-    private byte[] photo;
+	private Long quantity;
+
+	@Transient
+	private MultipartFile image;
+
+	@Transient
+	private String photoBase64;
+
+	@Lob
+	@Column(name = "photo", columnDefinition = "BLOB")
+	private byte[] photo;
 
 	private boolean purchasedStatus = false;
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -149,8 +157,8 @@ public class Product {
 		this.photo = photo;
 	}
 
-	public void addReview(Review newReview){
-		if(reviews == null){
+	public void addReview(Review newReview) {
+		if (reviews == null) {
 			reviews = new HashSet<>();
 		}
 		reviews.add(newReview);

@@ -5,16 +5,16 @@ import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 
 public interface UserService {
 
-    User authenticate(User user);
+	User authenticate(User user);
 
-    User save(User user);
+	User save(User user);
 
-    public boolean hasRole(String role);
-    
-    public User findByUsername(String username) throws ResourceNotFoundException;
-    
-    public User update(User user) throws ResourceNotFoundException;
+	public boolean hasRole(String role);
 
-    User findUser(String username);
+	public User findByUsername(String username) throws ResourceNotFoundException;
+
+	public User update(User user) throws ResourceNotFoundException;
+
+	User findUser(String username);
 
 }

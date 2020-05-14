@@ -19,7 +19,7 @@ public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String orderNumber;
 
 	private double totalPrice = 0;
@@ -79,5 +79,5 @@ public class Order {
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-	
+
 }

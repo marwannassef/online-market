@@ -1,24 +1,30 @@
 package com.miu.onlinemarket.domain;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Buyer extends User {
 
-    private int points;
-	
-    @OneToOne(cascade = {CascadeType.ALL})
+	private int points;
+
+	@OneToOne(cascade = { CascadeType.ALL })
 	private Address address;
 
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne(cascade = { CascadeType.ALL })
 	private PaymentMethod paymentMethod;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "buyer_id")
 	Set<Order> orders;
 
@@ -72,13 +78,14 @@ public class Buyer extends User {
 		this.orders = orders;
 	}
 
-	public void addSeller(Seller newSeller){
-		if(seller == null){
+	public void addSeller(Seller newSeller) {
+		if (seller == null) {
 			seller = new ArrayList<>();
 		}
 		seller.add(newSeller);
 	}
-	public void removeSeller(Seller newSeller){
+
+	public void removeSeller(Seller newSeller) {
 		seller.remove(newSeller);
 	}
 
@@ -89,5 +96,5 @@ public class Buyer extends User {
 	public void setPoints(int points) {
 		this.points = points;
 	}
-	
+
 }

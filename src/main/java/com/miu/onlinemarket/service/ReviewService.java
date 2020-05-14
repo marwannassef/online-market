@@ -1,9 +1,9 @@
 package com.miu.onlinemarket.service;
 
+import java.util.List;
+
 import com.miu.onlinemarket.domain.Review;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
-
-import java.util.List;
 
 public interface ReviewService {
 

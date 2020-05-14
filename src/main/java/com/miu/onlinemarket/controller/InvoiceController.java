@@ -6,7 +6,6 @@ import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,8 @@ public class InvoiceController {
 	public ResponseEntity<InputStreamResource> invoiceGenerate(@RequestParam("id") Long id) throws Exception {
 		final OrderModel order = invoiceService.getOrderByCode(orderService.findById(id).orElse(new Order()));
 		final File invoicePdf = invoiceService.generateInvoiceFor(order, Locale.forLanguageTag("en"));
-		final HttpHeaders httpHeaders = getHttpHeaders(orderService.findById(id).orElse(new Order()).getOrderNumber(), invoicePdf);
+		final HttpHeaders httpHeaders = getHttpHeaders(orderService.findById(id).orElse(new Order()).getOrderNumber(),
+				invoicePdf);
 		return new ResponseEntity<>(new InputStreamResource(new FileInputStream(invoicePdf)), httpHeaders, OK);
 	}
 

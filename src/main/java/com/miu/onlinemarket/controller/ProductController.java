@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.miu.onlinemarket.domain.Item;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
@@ -44,8 +43,8 @@ public class ProductController {
 		Product product = productService.findById(id);
 		model.addAttribute("product", product);
 		product.getReviews().forEach(review -> {
-	    	if (review.getBuyer().getPhoto() != null && review.getBuyer().getPhoto().length != 0)
-	    		review.getBuyer().setPhotoBase64(Base64.getEncoder().encodeToString(review.getBuyer().getPhoto()));
+			if (review.getBuyer().getPhoto() != null && review.getBuyer().getPhoto().length != 0)
+				review.getBuyer().setPhotoBase64(Base64.getEncoder().encodeToString(review.getBuyer().getPhoto()));
 		});
 		model.addAttribute("reviews", product.getReviews());
 		model.addAttribute("itm", new Product());
@@ -67,7 +66,8 @@ public class ProductController {
 
 	@RequestMapping(value = "/addProductProcess", method = RequestMethod.POST)
 	public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-			Principal principal, Model model, RedirectAttributes redirectAttributes) throws ResourceNotFoundException, IOException {
+			Principal principal, Model model, RedirectAttributes redirectAttributes)
+			throws ResourceNotFoundException, IOException {
 		if (bindingResult.hasErrors()) {
 			Seller seller = sellerService.findSeller(principal.getName());
 			boolean approved = seller.getApproved();
@@ -104,7 +104,8 @@ public class ProductController {
 	}
 
 	@GetMapping("/removeProduct")
-	public String removeProduct(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+	public String removeProduct(@RequestParam("id") Long id, RedirectAttributes redirectAttributes)
+			throws ResourceNotFoundException {
 
 		Product product = productService.findById(id);
 		productService.delete(product);
@@ -123,10 +124,11 @@ public class ProductController {
 
 		return "update-product";
 	}
-	
+
 	@RequestMapping(value = "/updateProductProcess", method = RequestMethod.POST)
 	public String updateProductProcess(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-			@RequestParam("id") Long id, Principal principal, Model model, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+			@RequestParam("id") Long id, Principal principal, Model model, RedirectAttributes redirectAttributes)
+			throws ResourceNotFoundException {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("updateProduct", product);
 			model.addAttribute("status", "failed");

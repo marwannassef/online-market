@@ -1,6 +1,12 @@
 package com.miu.onlinemarket.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -19,7 +25,7 @@ public class Review {
 	@JoinColumn(name = "buyer_id")
 	private Buyer buyer;
 
-	public Review(String review, boolean reviewStatus, Buyer buyer){
+	public Review(String review, boolean reviewStatus, Buyer buyer) {
 		this.review = review;
 		this.reviewStatus = reviewStatus;
 		this.buyer = buyer;

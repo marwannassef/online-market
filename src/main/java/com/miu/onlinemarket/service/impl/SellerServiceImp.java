@@ -59,7 +59,7 @@ public class SellerServiceImp implements SellerService {
     @Override
     public Seller update(Seller seller) throws ResourceNotFoundException {
     	Seller oldSeller = sellerRepository.findByUsername(seller.getUsername());
-        if(seller == null){
+        if(oldSeller == null){
             throw new ResourceNotFoundException("Seller with username " +seller.getUsername()+" is not found");
         }
     	seller.setRoles(oldSeller.getRoles());

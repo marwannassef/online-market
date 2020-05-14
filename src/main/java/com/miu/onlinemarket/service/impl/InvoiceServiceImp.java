@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,111 +39,98 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 @Service
 public class InvoiceServiceImp implements InvoiceService {
 
-    private static Logger logger = LogManager.getLogger(InvoiceServiceImp.class);
+	private static Logger logger = LogManager.getLogger(InvoiceServiceImp.class);
 
-    @Value("${invoice.logo.path}")
-    private String logo_path;
+	@Value("${invoice.logo.path}")
+	private String logo_path;
 
-    @Value("${invoice.template.path}")
-    private String invoice_template;
-    
-    @Autowired
-    AddressService addressService;
+	@Value("${invoice.template.path}")
+	private String invoice_template;
 
-    @Override
-    public File generateInvoiceFor(OrderModel order, Locale locale) throws IOException {
+	@Autowired
+	AddressService addressService;
 
-        File pdfFile = File.createTempFile("my-invoice", ".pdf");
+	@Override
+	public File generateInvoiceFor(OrderModel order, Locale locale) throws IOException {
 
-        logger.info(String.format("Invoice pdf path : %s", pdfFile.getAbsolutePath()));
+		File pdfFile = File.createTempFile("my-invoice", ".pdf");
 
-        try(FileOutputStream pos = new FileOutputStream(pdfFile))
-        {
-            // Load invoice JRXML template.
-            final JasperReport report = loadTemplate();
+		logger.info(String.format("Invoice pdf path : %s", pdfFile.getAbsolutePath()));
 
-            // Fill parameters map.
-            final Map<String, Object> parameters = parameters(order, locale);
+		try (FileOutputStream pos = new FileOutputStream(pdfFile)) {
+			// Load invoice JRXML template.
+			final JasperReport report = loadTemplate();
 
-            // Create an empty datasource.
-            final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList("Invoice"));
+			// Fill parameters map.
+			final Map<String, Object> parameters = parameters(order, locale);
 
-            // Render the invoice as a PDF file.
-            JasperReportsUtils.renderAsPdf(report, parameters, dataSource, pos);
+			// Create an empty datasource.
+			final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+					Collections.singletonList("Invoice"));
 
-            // return file.
-            return pdfFile;
-        }
-        catch (final Exception e)
-        {
-            logger.error(String.format("An error occured during PDF creation: %s", e));
-            throw new RuntimeException(e);
-        }
-    }
+			// Render the invoice as a PDF file.
+			JasperReportsUtils.renderAsPdf(report, parameters, dataSource, pos);
 
-    // Fill template order params
-    private Map<String, Object> parameters(OrderModel order, Locale locale) {
-        final Map<String, Object> parameters = new HashMap<>();
-        parameters.put("logo", getClass().getResourceAsStream(logo_path));
-        parameters.put("order",  order);
-        parameters.put("REPORT_LOCALE", locale);
-        return parameters;
-    }
+			// return file.
+			return pdfFile;
+		} catch (final Exception e) {
+			logger.error(String.format("An error occured during PDF creation: %s", e));
+			throw new RuntimeException(e);
+		}
+	}
 
-    // Load invoice JRXML template
-    private JasperReport loadTemplate() throws JRException {
+	// Fill template order params
+	private Map<String, Object> parameters(OrderModel order, Locale locale) {
+		final Map<String, Object> parameters = new HashMap<>();
+		parameters.put("logo", getClass().getResourceAsStream(logo_path));
+		parameters.put("order", order);
+		parameters.put("REPORT_LOCALE", locale);
+		return parameters;
+	}
 
-        logger.info(String.format("Invoice template path : %s", invoice_template));
+	// Load invoice JRXML template
+	private JasperReport loadTemplate() throws JRException {
 
-        final InputStream reportInputStream = getClass().getResourceAsStream(invoice_template);
-        final JasperDesign jasperDesign = JRXmlLoader.load(reportInputStream);
+		logger.info(String.format("Invoice template path : %s", invoice_template));
 
-        return JasperCompileManager.compileReport(jasperDesign);
-    }
-    
-    @Override
-    public OrderModel getOrderByCode(Order order) throws Exception {
+		final InputStream reportInputStream = getClass().getResourceAsStream(invoice_template);
+		final JasperDesign jasperDesign = JRXmlLoader.load(reportInputStream);
 
-        return order(order);
+		return JasperCompileManager.compileReport(jasperDesign);
+	}
 
-    }
+	@Override
+	public OrderModel getOrderByCode(Order order) throws Exception {
 
-    private OrderModel order(Order order) throws Exception {
-        return new OrderModel(order.getOrderNumber(), address(order), entries(order));
-    }
+		return order(order);
 
-    private AddressModel address(Order order) throws Exception {
-    	Buyer buyer = order.getItems().iterator().next().getBuyer();
+	}
+
+	private OrderModel order(Order order) throws Exception {
+		return new OrderModel(order.getOrderNumber(), address(order), entries(order));
+	}
+
+	private AddressModel address(Order order) throws Exception {
+		Buyer buyer = order.getItems().iterator().next().getBuyer();
 		Optional<String> country = addressService.loadCountries().stream()
-			     .filter(c -> c.getId() == buyer.getAddress().getCountry())
-			     .findFirst()
-			     .map(c -> c.getName());
+				.filter(c -> c.getId() == buyer.getAddress().getCountry()).findFirst().map(c -> c.getName());
 		Optional<String> state = addressService.loadStates(buyer.getAddress().getCountry()).stream()
-				      .filter(c -> c.getId() == buyer.getAddress().getState())
-				      .findFirst()
-				      .map(c -> c.getName());
+				.filter(c -> c.getId() == buyer.getAddress().getState()).findFirst().map(c -> c.getName());
 		Optional<String> city = addressService.loadCities(buyer.getAddress().getState()).stream()
-				      .filter(c -> c.getId() == buyer.getAddress().getCity())
-				      .findFirst()
-				      .map(c -> c.getName());
-        return new AddressModel(buyer.getFirstName(),
-        		buyer.getLastName(),
-        		buyer.getAddress().getStreet(),
-        		buyer.getAddress().getZipCode(),
-        		city.orElse("") + "",
-        		state.orElse("") + ", " + country.orElse(""));
-    }
+				.filter(c -> c.getId() == buyer.getAddress().getCity()).findFirst().map(c -> c.getName());
+		return new AddressModel(buyer.getFirstName(), buyer.getLastName(), buyer.getAddress().getStreet(),
+				buyer.getAddress().getZipCode(), city.orElse("") + "", state.orElse("") + ", " + country.orElse(""));
+	}
 
-    private List<OrderEntryModel> entries(Order order) {
-    	List<OrderEntryModel> orderEntries = new ArrayList<OrderEntryModel>();
-    	Iterator<Item> itr = order.getItems().iterator();
-    	while (itr.hasNext()) {
-    		Item item = itr.next();
-    		orderEntries.add(new OrderEntryModel(item.getProduct().getName(),
-							    				 (int)item.getQuantity(),
-    											 item.getProduct().getPrice()));
-    	}
-        return orderEntries;
-    }
+	private List<OrderEntryModel> entries(Order order) {
+		List<OrderEntryModel> orderEntries = new ArrayList<OrderEntryModel>();
+		Iterator<Item> itr = order.getItems().iterator();
+		while (itr.hasNext()) {
+			Item item = itr.next();
+			orderEntries.add(new OrderEntryModel(item.getProduct().getName(), (int) item.getQuantity(),
+					item.getProduct().getPrice()));
+		}
+		return orderEntries;
+	}
 
 }

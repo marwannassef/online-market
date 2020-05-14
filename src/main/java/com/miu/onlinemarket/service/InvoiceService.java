@@ -8,9 +8,9 @@ import com.miu.onlinemarket.domain.Order;
 import com.miu.onlinemarket.domain.OrderModel;
 
 public interface InvoiceService {
-	
+
 	public File generateInvoiceFor(OrderModel order, Locale locale) throws IOException;
-	
+
 	public OrderModel getOrderByCode(Order order) throws Exception;
 
 }

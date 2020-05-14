@@ -3,32 +3,30 @@ package com.miu.onlinemarket.preconfig;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 
-import com.miu.onlinemarket.domain.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import com.miu.onlinemarket.controller.UserController;
+import com.miu.onlinemarket.domain.Address;
+import com.miu.onlinemarket.domain.Buyer;
+import com.miu.onlinemarket.domain.PaymentMethod;
+import com.miu.onlinemarket.domain.Product;
+import com.miu.onlinemarket.domain.Review;
+import com.miu.onlinemarket.domain.Role;
+import com.miu.onlinemarket.domain.Seller;
+import com.miu.onlinemarket.domain.User;
 import com.miu.onlinemarket.repository.ProductRepository;
 import com.miu.onlinemarket.repository.RoleRepository;
 import com.miu.onlinemarket.repository.UserRepository;
@@ -149,11 +147,9 @@ public class OnApplicationStartUp {
 		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepo.findByName("ROLE_BUYER"));
 		user.setRoles(roles);
-//		Order order = new Order(12.0,Status.PAYMENT_CONFIRMED);
-//		user.addOder(order);
-		LocalDate date = LocalDate.of(2020,9,15);
-		PaymentMethod paymentMethod= new PaymentMethod("2093",date,"263","ahmed");
-		Address address = new Address("1000 Nth",44506,3936,"52557",231);
+		LocalDate date = LocalDate.of(2020, 9, 15);
+		PaymentMethod paymentMethod = new PaymentMethod("2093", date, "263", "ahmed");
+		Address address = new Address("1000 Nth", 44506, 3936, "52557", 231);
 		user.setPaymentMethod(paymentMethod);
 		user.setAddress(address);
 		user.setPhoto(userPhoto());
@@ -163,6 +159,7 @@ public class OnApplicationStartUp {
 		review.setBuyer(user);
 		reviewService.save(review);
 	}
+
 	private void createProduct() throws ParseException, IOException {
 		Seller user2 = new Seller();
 		user2.setFirstName("bassem");
@@ -178,7 +175,6 @@ public class OnApplicationStartUp {
 		user2.setRoles(roles);
 		user2.setPhoto(userPhoto());
 		sellerRepository.save(user2);
-
 
 		Product product = new Product();
 		product.setName("Mobile");
@@ -208,11 +204,9 @@ public class OnApplicationStartUp {
 		product3.setPhoto(productPhoto());
 		productRepository.save(product3);
 
-
-
 	}
-	
-	private byte[] userPhoto () throws IOException {
+
+	private byte[] userPhoto() throws IOException {
 		String fileName = "static/img/user.png";
 		ClassLoader classLoader = new UserController().getClass().getClassLoader();
 		File file = new File(classLoader.getResource(fileName).getFile());
@@ -223,8 +217,8 @@ public class OnApplicationStartUp {
 		baos.close();
 		return baos.toByteArray();
 	}
-	
-	private byte[] productPhoto () throws IOException {
+
+	private byte[] productPhoto() throws IOException {
 		String fileName = "static/img/product.png";
 		ClassLoader classLoader = new UserController().getClass().getClassLoader();
 		File file = new File(classLoader.getResource(fileName).getFile());

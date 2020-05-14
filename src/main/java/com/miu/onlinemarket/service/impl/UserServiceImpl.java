@@ -2,7 +2,6 @@ package com.miu.onlinemarket.service.impl;
 
 import java.util.Base64;
 
-import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,79 +10,77 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.miu.onlinemarket.domain.Buyer;
-import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.User;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.repository.UserRepository;
 import com.miu.onlinemarket.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Override
-    public User authenticate(User user) {
-        return userRepository.findByUsername(user.getUsername());
-    }
+	@Override
+	public User authenticate(User user) {
+		return userRepository.findByUsername(user.getUsername());
+	}
 
-    @Override
-    public User save(User user) {
-        user.setPassword(encodePassword(user.getPassword()));
-        return userRepository.save(user);
-    }
+	@Override
+	public User save(User user) {
+		user.setPassword(encodePassword(user.getPassword()));
+		return userRepository.save(user);
+	}
 
-    @Override
-    public User update(User user) throws ResourceNotFoundException {
-    	User oldUser = userRepository.findByUsername(user.getUsername());
-        if(oldUser == null) {
-            throw new ResourceNotFoundException("User with username " + oldUser.getUsername() + " is not found");
-        }
-    	user.setRoles(oldUser.getRoles());
-        return userRepository.save(user);
-    }
+	@Override
+	public User update(User user) throws ResourceNotFoundException {
+		User oldUser = userRepository.findByUsername(user.getUsername());
+		if (oldUser == null) {
+			throw new ResourceNotFoundException("User with username " + user.getUsername() + " is not found");
+		}
+		user.setRoles(oldUser.getRoles());
+		return userRepository.save(user);
+	}
 
+	@Override
+	public User findByUsername(String username) throws ResourceNotFoundException {
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new ResourceNotFoundException("User with username " + username + " is not found");
+		}
+		if (user.getPhoto() != null && user.getPhoto().length != 0)
+			user.setPhotoBase64(Base64.getEncoder().encodeToString(user.getPhoto()));
+		return user;
+	}
 
-    @Override
-    public User findByUsername(String username) throws ResourceNotFoundException {
-    	User user = userRepository.findByUsername(username);
-        if(user == null) {
-            throw new ResourceNotFoundException("User with username " + user.getUsername() + " is not found");
-        }
-    	if (user.getPhoto() != null && user.getPhoto().length != 0)
-    		user.setPhotoBase64(Base64.getEncoder().encodeToString(user.getPhoto()));
-        return user;
-    }
+	private String encodePassword(String password) {
+		return bCryptPasswordEncoder.encode(password);
+	}
 
-    private String encodePassword(String password) {
-        return bCryptPasswordEncoder.encode(password);
-    }
+	@Override
+	public boolean hasRole(String role) {
+		// get security context from thread local
+		SecurityContext context = SecurityContextHolder.getContext();
+		if (context == null)
+			return false;
 
-    @Override
-    public boolean hasRole(String role) {
-        // get security context from thread local
-        SecurityContext context = SecurityContextHolder.getContext();
-        if (context == null)
-            return false;
+		Authentication authentication = context.getAuthentication();
+		if (authentication == null)
+			return false;
 
-        Authentication authentication = context.getAuthentication();
-        if (authentication == null)
-            return false;
+		for (GrantedAuthority auth : authentication.getAuthorities()) {
+			if (role.equals(auth.getAuthority()))
+				return true;
+		}
 
-        for (GrantedAuthority auth : authentication.getAuthorities()) {
-            if (role.equals(auth.getAuthority()))
-                return true;
-        }
+		return false;
+	}
 
-        return false;
-    }
-
-    @Override
-    public User findUser(String username) {
-        return userRepository.findByUsername(username);
-    }
+	@Override
+	public User findUser(String username) {
+		return userRepository.findByUsername(username);
+	}
 }

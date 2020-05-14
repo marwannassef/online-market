@@ -6,9 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.CreditCardNumber;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -28,11 +30,11 @@ public class PaymentMethod {
 	private LocalDate expiryDate;
 
 	@NotEmpty
-	@Size(min = 3,max = 3)
+	@Size(min = 3, max = 3)
 	private String cvv;
 
 	@NotEmpty
-	@Size(min = 5,max = 14)
+	@Size(min = 5, max = 14)
 	private String nameOnCard;
 
 	public PaymentMethod() {

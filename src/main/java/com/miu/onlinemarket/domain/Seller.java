@@ -3,21 +3,25 @@ package com.miu.onlinemarket.domain;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Seller extends User {
 
 	private Boolean approved = false;
 
-	@OneToMany(mappedBy = "seller",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
 	List<Product> products;
 
 	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name ="seller_id")
+	@JoinColumn(name = "seller_id")
 	Set<Item> items;
 
-	@ManyToMany(mappedBy = "seller",fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "seller", fetch = FetchType.EAGER)
 	List<Buyer> buyers;
 
 	public Seller() {

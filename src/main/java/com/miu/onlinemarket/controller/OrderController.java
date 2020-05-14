@@ -1,7 +1,13 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
@@ -28,7 +34,6 @@ import com.miu.onlinemarket.service.ItemService;
 import com.miu.onlinemarket.service.OrderService;
 import com.miu.onlinemarket.service.ProductService;
 import com.miu.onlinemarket.service.SellerService;
-import com.miu.onlinemarket.service.UserService;
 
 @Controller
 public class OrderController {
@@ -40,9 +45,6 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private ProductService productService;
@@ -65,7 +67,8 @@ public class OrderController {
 		Optional<Item> tempItem = order.orElse(new Order()).getItems().stream()
 				.filter(itm -> itm.getProduct().getId() == id).findFirst();
 		if (!tempItem.isPresent()) {
-			Item item = new Item(product, 1, Status.PAYMENT_CONFIRMED, product.getSeller(), order.orElse(new Order()), buyer);
+			Item item = new Item(product, 1, Status.PAYMENT_CONFIRMED, product.getSeller(), order.orElse(new Order()),
+					buyer);
 			itemService.save(item);
 			session.setAttribute("cartCount", order.orElse(new Order()).getItems().size() + 1);
 		} else {
@@ -91,7 +94,8 @@ public class OrderController {
 		Optional<Item> tempItem = order.orElse(new Order()).getItems().stream()
 				.filter(itm -> itm.getProduct().getId() == prod.getId()).findFirst();
 		if (!tempItem.isPresent()) {
-			Item item = new Item(product, prod.getQuantity(), Status.PAYMENT_CONFIRMED, product.getSeller(), order.orElse(new Order()), buyer);
+			Item item = new Item(product, prod.getQuantity(), Status.PAYMENT_CONFIRMED, product.getSeller(),
+					order.orElse(new Order()), buyer);
 			itemService.save(item);
 			session.setAttribute("cartCount", order.orElse(new Order()).getItems().size() + 1);
 		} else {
@@ -121,10 +125,11 @@ public class OrderController {
 	}
 
 	@GetMapping("/removeCartItem")
-	public String removeItem(@RequestParam("id") Long id, HttpSession session, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+	public String removeItem(@RequestParam("id") Long id, HttpSession session, RedirectAttributes redirectAttributes)
+			throws ResourceNotFoundException {
 		Item item = itemService.findItem(id);
-		Order order= item.getOrder();
-		order.setTotalPrice(order.getTotalPrice()-(item.getQuantity()*item.getProduct().getPrice()));
+		Order order = item.getOrder();
+		order.setTotalPrice(order.getTotalPrice() - (item.getQuantity() * item.getProduct().getPrice()));
 		orderService.save(order);
 		Product product = (Product) productService.findById(item.getProduct().getId());
 		product.setQuantity(product.getQuantity() + item.getQuantity());
@@ -136,17 +141,19 @@ public class OrderController {
 	}
 
 	@GetMapping("/placeOrder")
-	public String placeOrder(@ModelAttribute Checkout checkout, Principal principal, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+	public String placeOrder(@ModelAttribute Checkout checkout, Principal principal,
+			RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
 		Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
 				.findFirst();
 		order.orElse(new Order()).setStatus(Status.PAYMENT_CONFIRMED);
-		order.orElse(new Order()).setOrderNumber("INVOICE#" + order.orElse(new Order()).getId());;
+		order.orElse(new Order()).setOrderNumber("INVOICE#" + order.orElse(new Order()).getId());
+		;
 		Order newOrder = new Order(0, Status.PREPARED, new HashSet<Item>());
 		buyerService.updateUserOrder(newOrder, principal.getName());
 		if (checkout.isChecked()) {
 			double requiredPoints = order.orElse(new Order()).getTotalPrice() * 100;
-			double actualPoints = (double)buyer.getPoints() / 100;
+			double actualPoints = (double) buyer.getPoints() / 100;
 			if (buyer.getPoints() == requiredPoints) {
 				buyer.setPoints(0);
 				buyerService.update(buyer);
@@ -156,60 +163,58 @@ public class OrderController {
 				buyerService.update(buyer);
 				order.orElse(new Order()).setTotalPrice(order.orElse(new Order()).getTotalPrice() - actualPoints);
 			} else {
-				buyer.setPoints((int)(buyer.getPoints() - requiredPoints));
+				buyer.setPoints((int) (buyer.getPoints() - requiredPoints));
 				buyerService.update(buyer);
 				order.orElse(new Order()).setTotalPrice(0);
 			}
 		}
 		for (Item item : order.orElse(new Order()).getItems()) {
-			Product product= item.getProduct();
+			Product product = item.getProduct();
 			product.setPurchasedStatus(true);
 			productService.save(product);
 		}
-		order.orElse(new Order()).setTotalPrice(order.orElse(new Order()).getTotalPrice()-((double) buyer.getPoints()/10));
+		order.orElse(new Order())
+				.setTotalPrice(order.orElse(new Order()).getTotalPrice() - ((double) buyer.getPoints() / 10));
 		orderService.save(order.orElse(new Order()));
 		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
 
-
 	@GetMapping("/orders")
 	public String displayOrder(Model model, Principal principal) throws ResourceNotFoundException {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
-		//ordered
+		// ordered
 		Set<Order> ord = buyer.getOrders();
 		List<Order> orders = new ArrayList<>();
-		for (Order order: ord) {
-			if(order.getStatus() != Status.PREPARED)
+		for (Order order : ord) {
+			if (order.getStatus() != Status.PREPARED)
 				orders.add(order);
 		}
-		List<Order> ordersSorted = orders.stream()
-				.sorted(Comparator.comparing(order -> order.getId()))
+		List<Order> ordersSorted = orders.stream().sorted(Comparator.comparing(order -> order.getId()))
 				.collect(Collectors.toList());
 
 		model.addAttribute("orders", ordersSorted);
-		//ordered
+		// ordered
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("status", status);
 		return "orders";
 	}
 
-
 	@GetMapping("/items")
-	public String displayItems(@RequestParam("id") Long id, Model model, Principal principal) throws ResourceNotFoundException {
+	public String displayItems(@RequestParam("id") Long id, Model model, Principal principal)
+			throws ResourceNotFoundException {
 
 		Order order = orderService.findById(id).orElse(new Order());
-		//ordered
+		// ordered
 		Set<Item> items = order.getItems();
-		List<Item> itemsSorted = items.stream()
-				.sorted(Comparator.comparing(item -> item.getId()))
+		List<Item> itemsSorted = items.stream().sorted(Comparator.comparing(item -> item.getId()))
 				.collect(Collectors.toList());
 		Set<Item> setItems = new LinkedHashSet<>();
-		for (Item item: itemsSorted) {
+		for (Item item : itemsSorted) {
 			setItems.add(item);
 		}
 		order.setItems(setItems);
-		//ordered
+		// ordered
 		model.addAttribute("order", order);
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("status", status);
@@ -217,44 +222,43 @@ public class OrderController {
 	}
 
 	@GetMapping("/selledItems")
-	public String selledItems(Principal principal,Model model) throws ResourceNotFoundException{
+	public String selledItems(Principal principal, Model model) throws ResourceNotFoundException {
 		Seller seller = sellerService.findSeller(principal.getName());
-		Set<Item> items =  seller.getItems();
+		Set<Item> items = seller.getItems();
 
-		//ordered
-		List<Item> itemsSorted = items.stream()
-				.sorted(Comparator.comparing(item -> item.getId()))
+		// ordered
+		List<Item> itemsSorted = items.stream().sorted(Comparator.comparing(item -> item.getId()))
 				.collect(Collectors.toList());
 		Set<Item> setItems = new LinkedHashSet<>();
-		for (Item item: itemsSorted) {
+		for (Item item : itemsSorted) {
 			setItems.add(item);
 		}
-		//ordered
+		// ordered
 
 		model.addAttribute("items", setItems);
 		String status = (String) model.asMap().get("status");
 		model.addAttribute("status", status);
 		return "items";
 	}
-	@GetMapping("/changeStatus")
-	public String changeStatus(@RequestParam("id") Long id,@RequestParam("status") Status status, Model model, Principal principal, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 
+	@GetMapping("/changeStatus")
+	public String changeStatus(@RequestParam("id") Long id, @RequestParam("status") Status status, Model model,
+			Principal principal, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 
 		Item item = itemService.findItem(id);
 		item.setStatus(status);
-		if(status == Status.CANCELLED)
-		{
+		if (status == Status.CANCELLED) {
 			Order order = item.getOrder();
-			order.setTotalPrice(order.getTotalPrice()-(item.getQuantity()*item.getProduct().getPrice()));
+			order.setTotalPrice(order.getTotalPrice() - (item.getQuantity() * item.getProduct().getPrice()));
 			orderService.save(order);
 
 			Product product = item.getProduct();
 			product.setQuantity(product.getQuantity() + item.getQuantity());
 			productService.save(product);
 		}
-		if(status == Status.DELIVERED) {
+		if (status == Status.DELIVERED) {
 			Buyer buyer = item.getBuyer();
-			int points = (int)(buyer.getPoints() + (item.getQuantity() * item.getProduct().getPrice() * 0.1));
+			int points = (int) (buyer.getPoints() + (item.getQuantity() * item.getProduct().getPrice() * 0.1));
 			buyer.setPoints(points);
 			buyerService.update(buyer);
 		}
@@ -262,18 +266,21 @@ public class OrderController {
 		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/selledItems";
 	}
+
 	@GetMapping("/itemStatus")
 	public String itemStatus(@RequestParam("id") Long id, Model model) throws ResourceNotFoundException {
 		Item item = itemService.findItem(id);
-		model.addAttribute("item",item);
+		model.addAttribute("item", item);
 		return "itemStatus";
 	}
+
 	@GetMapping("/removeOrderItem")
-	public String removeOrderItem(@RequestParam("id") Long id,Model model, HttpSession httpSession, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+	public String removeOrderItem(@RequestParam("id") Long id, Model model, HttpSession httpSession,
+			RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
 		Item item = itemService.findItem(id);
 		Order order1 = item.getOrder();
 
-		order1.setTotalPrice(order1.getTotalPrice() -(item.getQuantity() * item.getProduct().getPrice()));
+		order1.setTotalPrice(order1.getTotalPrice() - (item.getQuantity() * item.getProduct().getPrice()));
 
 		Product product = (Product) productService.findById(item.getProduct().getId());
 		product.setQuantity(product.getQuantity() + item.getQuantity());
@@ -286,21 +293,21 @@ public class OrderController {
 		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/displayItems";
 	}
+
 	@GetMapping("/displayItems")
 	public String displayItems(HttpSession httpSession, Model model) {
 		Long id = (Long) httpSession.getAttribute("orderId");
 		Order order = orderService.findById(id).orElse(new Order());
-		//ordered
+		// ordered
 		Set<Item> items = order.getItems();
-		List<Item> itemsSorted = items.stream()
-				.sorted(Comparator.comparing(item -> item.getId()))
+		List<Item> itemsSorted = items.stream().sorted(Comparator.comparing(item -> item.getId()))
 				.collect(Collectors.toList());
 		Set<Item> setItems = new LinkedHashSet<>();
-		for (Item item: itemsSorted) {
+		for (Item item : itemsSorted) {
 			setItems.add(item);
 		}
 		order.setItems(setItems);
-		//ordered
+		// ordered
 
 		model.addAttribute("order", order);
 		String status = (String) model.asMap().get("status");

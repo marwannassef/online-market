@@ -38,19 +38,14 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
 		return resolver;
 	}
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(
-                "/img/**",
-                "/css/**",
-                "/js/**",
-                "/webjars/**")
-                .addResourceLocations(
-                        "classpath:/static/img/",
-                        "classpath:/static/css/",
-                        "classpath:/static/js/",
-                        "/webjars/").resourceChain(false);
-    }
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/img/**", "/css/**", "/js/**", "/webjars/**")
+				.addResourceLocations("classpath:/static/img/", "classpath:/static/css/", "classpath:/static/js/",
+						"/webjars/")
+				.resourceChain(false);
+	}
+
 	@Override
 	public Validator getValidator() {
 		return validator();

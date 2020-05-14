@@ -9,8 +9,9 @@ public class Country {
 	private String name;
 
 	private long phoneCode;
-	
-	public Country() { }
+
+	public Country() {
+	}
 
 	public Country(long id, String sortname, String name, long phoneCode) {
 		this.id = id;

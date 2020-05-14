@@ -1,14 +1,15 @@
 package com.miu.onlinemarket.domain;
 
 public class State {
-	
+
 	private long id;
 
 	private String name;
 
 	private long country_id;
-	
-	public State() { }
+
+	public State() {
+	}
 
 	public State(long id, String name, long country_id) {
 		super();

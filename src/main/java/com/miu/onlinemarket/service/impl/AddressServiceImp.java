@@ -19,7 +19,7 @@ import com.miu.onlinemarket.service.AddressService;
 
 @Service
 public class AddressServiceImp implements AddressService {
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<Country> loadCountries() throws Exception {
@@ -111,5 +111,5 @@ public class AddressServiceImp implements AddressService {
 		return cities.get(id);
 //		System.out.print(cities);
 	}
-	
+
 }

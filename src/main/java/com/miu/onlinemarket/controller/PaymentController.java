@@ -42,9 +42,10 @@ public class PaymentController {
 	}
 
 	@PostMapping("/addPayment")
-	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, BindingResult bindingResult, Principal principal,
-							 RedirectAttributes redirectAttributes, Model model) throws Exception {
-		if(bindingResult.hasErrors()) {
+	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod,
+			BindingResult bindingResult, Principal principal, RedirectAttributes redirectAttributes, Model model)
+			throws Exception {
+		if (bindingResult.hasErrors()) {
 			model.addAttribute("status", "failed");
 			return "paymentMethod";
 		}
@@ -53,6 +54,7 @@ public class PaymentController {
 		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
+
 	@GetMapping("/checkout")
 	public String checkout(Model model, Principal principal) throws Exception {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
@@ -61,17 +63,11 @@ public class PaymentController {
 		model.addAttribute("order", order.orElse(new Order()));
 		model.addAttribute("buyer", buyer);
 		Optional<String> country = addressService.loadCountries().stream()
-															     .filter(c -> c.getId() == buyer.getAddress().getCountry())
-															     .findFirst()
-															     .map(c -> c.getName());
+				.filter(c -> c.getId() == buyer.getAddress().getCountry()).findFirst().map(c -> c.getName());
 		Optional<String> state = addressService.loadStates(buyer.getAddress().getCountry()).stream()
-														      .filter(c -> c.getId() == buyer.getAddress().getState())
-														      .findFirst()
-														      .map(c -> c.getName());
+				.filter(c -> c.getId() == buyer.getAddress().getState()).findFirst().map(c -> c.getName());
 		Optional<String> city = addressService.loadCities(buyer.getAddress().getState()).stream()
-														      .filter(c -> c.getId() == buyer.getAddress().getCity())
-														      .findFirst()
-														      .map(c -> c.getName());
+				.filter(c -> c.getId() == buyer.getAddress().getCity()).findFirst().map(c -> c.getName());
 		model.addAttribute("country", country.orElse(""));
 		model.addAttribute("state", state.orElse(""));
 		model.addAttribute("city", city.orElse(""));

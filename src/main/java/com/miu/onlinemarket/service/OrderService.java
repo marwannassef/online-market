@@ -1,11 +1,12 @@
 package com.miu.onlinemarket.service;
 
-import com.miu.onlinemarket.domain.Order;
-
 import java.util.Optional;
+
+import com.miu.onlinemarket.domain.Order;
 
 public interface OrderService {
 
-    public Order save(Order order);
-    public Optional<Order> findById(Long id);
+	public Order save(Order order);
+
+	public Optional<Order> findById(Long id);
 }

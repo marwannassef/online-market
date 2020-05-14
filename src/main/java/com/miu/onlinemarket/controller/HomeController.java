@@ -4,8 +4,9 @@ import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+
 import javax.servlet.http.HttpSession;
-import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,12 +24,12 @@ import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.SearchMessage;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.Status;
+import com.miu.onlinemarket.exceptionhandling.ResourceNotFoundException;
 import com.miu.onlinemarket.service.BuyerService;
 import com.miu.onlinemarket.service.ProductService;
 import com.miu.onlinemarket.service.ReviewService;
 import com.miu.onlinemarket.service.SellerService;
 import com.miu.onlinemarket.service.UserService;
-
 
 @Controller
 @SessionAttributes("cartCount")
@@ -49,40 +50,38 @@ public class HomeController {
 	@Autowired
 	private ReviewService reviewService;
 
-
 	@GetMapping("/home")
-	public ModelAndView getAllProducts(Model model, Principal principal, HttpSession session) throws ResourceNotFoundException {
+	public ModelAndView getAllProducts(Model model, Principal principal, HttpSession session)
+			throws ResourceNotFoundException {
 		ModelAndView modelAndView = new ModelAndView();
 		session.setAttribute("username", "Admin");
 		if (userService.hasRole("ROLE_BUYER")) {
 			Buyer buyer = buyerService.findByUsername(principal.getName());
-			Optional<Order> order = buyer.getOrders().stream()
-										   .filter(ord -> ord.getStatus() == Status.PREPARED)
-										   .findFirst();
+			Optional<Order> order = buyer.getOrders().stream().filter(ord -> ord.getStatus() == Status.PREPARED)
+					.findFirst();
 			model.addAttribute("cartCount", order.orElse(new Order()).getItems().size());
 			model.addAttribute("productList", productService.findAll());
 			List<Seller> sellers = sellerService.findSellersByBuyerId(buyer.getUserId());
-			model.addAttribute("sellerList",sellers);
+			model.addAttribute("sellerList", sellers);
 			session.setAttribute("username", buyer.getFirstName() + " " + buyer.getLastName());
 		} else if (userService.hasRole("ROLE_SELLER")) {
 			Seller seller = sellerService.findSeller(principal.getName());
 			model.addAttribute("productList", seller.getProducts());
-			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
+			model.addAttribute("seller", sellerService.findSeller(principal.getName()));
 			session.setAttribute("username", seller.getFirstName() + " " + seller.getLastName());
 		}
 		modelAndView.addObject("searchMessage", new SearchMessage());
 
-
-		
 		String sellerName = (String) model.asMap().get("sellerName");
 		if (sellerName != null) {
 			model.addAttribute("sellerName", sellerName);
-		}else{
-			model.addAttribute("sellerName","Select seller");
+		} else {
+			model.addAttribute("sellerName", "Select seller");
 		}
-		List<Product> products = (List<Product>)model.getAttribute("products");
-		if(products != null){
-			model.addAttribute("productList",products);
+		@SuppressWarnings("unchecked")
+		List<Product> products = (List<Product>) model.getAttribute("products");
+		if (products != null) {
+			model.addAttribute("productList", products);
 		}
 
 		String tab = (String) model.asMap().get("tab");
@@ -104,25 +103,26 @@ public class HomeController {
 	}
 
 	@GetMapping("/search")
-	public String getProductByName(@ModelAttribute SearchMessage searchMessage, Principal principal, Model model) throws ResourceNotFoundException {
+	public String getProductByName(@ModelAttribute SearchMessage searchMessage, Principal principal, Model model)
+			throws ResourceNotFoundException {
 		if (userService.hasRole("ROLE_BUYER")) {
 			model.addAttribute("productList", productService.searchByName(searchMessage.getSearch()));
 			String sellerName = (String) model.asMap().get("sellerName");
 			if (sellerName != null) {
 				model.addAttribute("sellerName", sellerName);
-			}else{
-				model.addAttribute("sellerName","Select seller");
+			} else {
+				model.addAttribute("sellerName", "Select seller");
 			}
 		} else if (userService.hasRole("ROLE_SELLER")) {
 			Seller seller = sellerService.findSeller(principal.getName());
 			List<Product> productList = sellerService.searchByName(searchMessage.getSearch(), seller.getUserId());
 			model.addAttribute("productList", productList);
-			model.addAttribute("seller",sellerService.findSeller(principal.getName()));
+			model.addAttribute("seller", sellerService.findSeller(principal.getName()));
 			String sellerName = (String) model.asMap().get("sellerName");
 			if (sellerName != null) {
 				model.addAttribute("sellerName", sellerName);
-			}else{
-				model.addAttribute("sellerName","Select seller");
+			} else {
+				model.addAttribute("sellerName", "Select seller");
 			}
 		}
 		return "home";
@@ -135,8 +135,8 @@ public class HomeController {
 		Seller seller = sellerService.findSellerById(id);
 		List<Product> productList = sellerService.findSellerById(id).getProducts();
 		productList.forEach(product -> {
-	    	if (product.getPhoto() != null && product.getPhoto().length != 0)
-	    		product.setPhotoBase64(Base64.getEncoder().encodeToString(product.getPhoto()));
+			if (product.getPhoto() != null && product.getPhoto().length != 0)
+				product.setPhotoBase64(Base64.getEncoder().encodeToString(product.getPhoto()));
 		});
 		redirectAttributes.addFlashAttribute("sellerName", seller.getFirstName() + " " + seller.getLastName());
 		redirectAttributes.addFlashAttribute("products", productList);

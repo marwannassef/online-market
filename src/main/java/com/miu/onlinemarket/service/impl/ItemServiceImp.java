@@ -1,11 +1,11 @@
 package com.miu.onlinemarket.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.miu.onlinemarket.domain.Item;
 import com.miu.onlinemarket.repository.ItemRepository;
 import com.miu.onlinemarket.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.stereotype.Service;
 
 
 @Service
