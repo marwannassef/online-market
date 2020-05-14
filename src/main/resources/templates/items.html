@@ -13,7 +13,7 @@
         <div sec:authorize="hasAuthority('ROLE_SELLER')">
             <h1>Selled Items</h1>
             <table class="table table-bordered table-striped">
-                <thead class="thead-light">
+                <thead class="thead-dark">
                 <tr>
                     <th>Product Name</th>
                     <th>Quantity</th>
@@ -33,11 +33,11 @@
 
                             </button>
                             <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                                <div th:if="${item.status == item.getStatus().PREPARED}"><a
+                                <div th:if="${item.status == item.getStatus().PAYMENT_CONFIRMED}"><a
                                         class="btn btn-outline-danger"
                                         th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().CANCELLED})}">CANCELLED</a>
                                 </div>
-                                <div th:if="${item.status == item.getStatus().PREPARED}"><a
+                                <div th:if="${item.status == item.getStatus().PAYMENT_CONFIRMED}"><a
                                         class="btn btn-outline-primary"
                                         th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().SHIPPED})}">SHIPPED</a>
                                 </div>
@@ -96,19 +96,11 @@
                         </span>
 
                         <span th:if="${(item.status == item.getStatus().DELIVERED) and !(item.reviewStatus)}">
-                            <a class="btn btn-primary btn-sm mb-3"
+                            <a class="btn btn-primary"
                                data-target="#myModal" data-toggle="modal"
                                style="color: white; cursor: pointer;"
                                th:attr="data-target='#myModal'+${order.id}"> Review </a>
                         		</span>
-                            <div th:if="${item.reviewStatus}">
-                              <span class="d-inline-block" data-toggle="tooltip" tabindex="0"
-                                    title="YOU ALREADY ADDED REVIEW">
-                                    <button class="btn btn-info btn-sm mb-3" disabled
-                                            style="pointer-events: none;" type="button">Review
-                                    </button>
-                              </span>
-                            </div>
                         </td>
                         <div class="modal fade" th:id="myModal+${order.id}">
                             <div class="modal-dialog modal-dialog-centered">
