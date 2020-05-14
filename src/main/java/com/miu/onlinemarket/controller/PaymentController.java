@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,14 +42,18 @@ public class PaymentController {
 	}
 
 	@PostMapping("/addPayment")
-	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, Principal principal,
-			RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
+	public String addPayment(@Valid @ModelAttribute("paymentMethod") PaymentMethod paymentMethod, BindingResult bindingResult, Principal principal,
+							 RedirectAttributes redirectAttributes, Model model) throws Exception {
+		if(bindingResult.hasErrors()) {
+			String status = (String) model.asMap().get("status");
+			model.addAttribute("status", status);
+			return "paymentMethod";
+		}
 		Long userId = buyerService.findByUsername(principal.getName()).getUserId();
 		buyerService.updatePayment(userId, paymentMethod);
 		redirectAttributes.addFlashAttribute("status", "success");
 		return "redirect:/home";
 	}
-
 	@GetMapping("/checkout")
 	public String checkout(Model model, Principal principal) throws Exception {
 		Buyer buyer = buyerService.findByUsername(principal.getName());
