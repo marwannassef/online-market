@@ -1,6 +1,7 @@
 package com.miu.onlinemarket.controller;
 
 import java.security.Principal;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
@@ -121,6 +122,10 @@ public class HomeController {
 
 		Seller seller = sellerService.findSellerById(id);
 		List<Product> productList = sellerService.findSellerById(id).getProducts();
+		productList.forEach(product -> {
+	    	if (product.getPhoto() != null && product.getPhoto().length != 0)
+	    		product.setPhotoBase64(Base64.getEncoder().encodeToString(product.getPhoto()));
+		});
 		redirectAttributes.addFlashAttribute("sellerName", seller.getFirstName() + " " + seller.getLastName());
 		redirectAttributes.addFlashAttribute("products", productList);
 		return "redirect:/home";
