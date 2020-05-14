@@ -101,10 +101,10 @@
                             <a class="btn btn-primary"
                                data-target="#myModal" data-toggle="modal"
                                style="color: white; cursor: pointer;"
-                               th:attr="data-target='#myModal'+${order.id}"> Review </a>
+                               th:attr="data-target='#myModal'+${item.id}"> Review </a>
                         </span>
                         </td>
-                        <div class="modal fade" th:id="myModal+${order.id}">
+                        <div class="modal fade" th:id="myModal+${item.id}">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
 
