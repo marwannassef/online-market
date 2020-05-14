@@ -5,6 +5,9 @@
 
 <head>
     <title>Address</title>
+    <style>
+        p{color: red}
+    </style>
 </head>
 <body>
 <div class="col" layout:fragment="main-content">
@@ -15,7 +18,7 @@
             <h1>Payment</h1>
 
 
-            <!--/*@thymesVar id="paymentMethod" type=""*/-->
+
             <form th:object="${paymentMethod}" th:action="@{/addPayment}" action="#"
                   method="post" enctype="multipart/form-data">
 

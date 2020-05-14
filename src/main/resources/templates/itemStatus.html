@@ -107,10 +107,10 @@
         <div th:if="${item.status != item.getStatus().CANCELLED}">
             <ol class="progtrckr" data-progtrckr-steps="5">
                 `
-                <li class="progtrckr-done">Paid</li>
+                <li class="progtrckr-done">Prepared</li>
                 <!--
                -->
-                <li class="progtrckr-done">Prepared</li>
+                <li class="progtrckr-done">PAYMENT_CONFIRMED</li>
                 <!--
                -->
                 <li th:if="${item.status == item.getStatus().SHIPPED}" class="progtrckr-done">Shipped</li>
