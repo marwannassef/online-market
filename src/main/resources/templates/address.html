@@ -5,6 +5,9 @@
 
 <head>
     <title>Address</title>
+    <style>
+        p{color: red}
+    </style>
 </head>
 <body>
 <div class="col" layout:fragment="main-content">
@@ -27,31 +30,31 @@
 
                 <div style="clear: both; display: block; height: 10px;"></div>
                 <select th:field="*{country}" class="form-control" id="country">
-		            <option th:value="0"> Select Country
-		            </option>
-		            <option th:each="country : ${countries}"
-		                    th:value="${country.id}"
-		                    th:text="${country.name}">
-		            </option>
-		        </select>
+                    <option th:value="0"> Select Country
+                    </option>
+                    <option th:each="country : ${countries}"
+                            th:value="${country.id}"
+                            th:text="${country.name}">
+                    </option>
+                </select>
                 <p th:if="${#fields.hasErrors('country')}"
                    th:errors="*{country}">Country Error</p>
 
                 <div style="clear: both; display: block; height: 10px;"></div>
-		        <select th:field="*{state}" class="form-control" id="state">
-		            <option th:value="0"> Select State
-		            </option>
-		        </select>
-		        <input type="hidden" id="stateId" th:value="*{state}">
+                <select th:field="*{state}" class="form-control" id="state">
+                    <option th:value="0"> Select State
+                    </option>
+                </select>
+                <input type="hidden" id="stateId" th:value="*{state}">
                 <p th:if="${#fields.hasErrors('state')}"
                    th:errors="*{state}">State error</p>
 
                 <div style="clear: both; display: block; height: 10px;"></div>
-		        <select th:field="*{city}" class="form-control" id="city">
-		            <option th:value="0"> Select City
-		            </option>
-		        </select>
-		        <input type="hidden" id="cityId" th:value="*{city}">
+                <select th:field="*{city}" class="form-control" id="city">
+                    <option th:value="0"> Select City
+                    </option>
+                </select>
+                <input type="hidden" id="cityId" th:value="*{city}">
                 <p th:if="${#fields.hasErrors('city')}"
                    th:errors="*{city}">city error</p>
 
