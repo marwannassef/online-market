@@ -85,6 +85,11 @@ public class UserController {
 			model.addAttribute("status", "failed");
 			return "signup";
 		}
+		if (!user.getPassword().equalsIgnoreCase(user.getPasswordCheck())) {
+			bindingResult.rejectValue("passwordCheck", "error.userexists", "* Value not valid.");
+			model.addAttribute("status", "failed");
+			return "signup";
+		}
 		MultipartFile image = user.getImage();
 		if (image != null && !image.isEmpty()) {
 			try {
