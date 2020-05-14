@@ -146,7 +146,7 @@ public class OrderController {
 		buyerService.updateUserOrder(newOrder, principal.getName());
 		if (checkout.isChecked()) {
 			double requiredPoints = order.orElse(new Order()).getTotalPrice() * 100;
-			double actualPoints = buyer.getPoints() / 100;
+			double actualPoints = (double)buyer.getPoints() / 100;
 			if (buyer.getPoints() == requiredPoints) {
 				buyer.setPoints(0);
 				buyerService.update(buyer);
