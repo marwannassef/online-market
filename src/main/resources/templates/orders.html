@@ -35,15 +35,15 @@
 	                    <td style="font-weight: bold"><span th:text="${order.getTotalPrice()} + ' $'"></span></td>
 	                    <td>
 	                        <span>
-	                            <a class="btn btn-outline-primary btn-sm mb-3"
+	                            <a class="navbar-brand mr-1"
 	                               th:href="@{'/items'(id=${order.id})}">
-	                                Details
+	                                <img th:src="@{/img/details.png}" style="width: 30px">
 	                            </a>
 	                        </span>
 	                        <span>
-	                            <a class="btn btn-outline-primary btn-sm mb-3"
+	                            <a class="navbar-brand mr-1"
 	                               th:href="@{'/generate'(id=${order.id})}">
-	                                Invoice
+	                                <img th:src="@{/img/pdf.png}" style="width: 30px">
 	                            </a>
 	                        </span>
 	                    </td>

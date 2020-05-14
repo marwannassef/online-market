@@ -76,14 +76,7 @@
                         <td th:text="${item.getProduct().getName()}">name</td>
                         <td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
                         <td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
-                        <td>
-                            <div class="input-group number-spinner">
-                                <input disabled min="1"
-                                       step="1" th:max="${item.getProduct().getQuantity()}"
-                                       th:value="${item.getQuantity()}"
-                                       type="number"/>
-                            </div>
-                        </td>
+                        <td th:text="${item.getQuantity()}">Price</td>
 
                         <td th:if="${order.status != order.getStatus().PREPARED}">
 
@@ -98,7 +91,7 @@
                     <td>
                         <span th:if="${item.status == item.getStatus().PREPARED}">
 								<a class="navbar-brand mr-1" th:href="@{'/removeOrderItem'(id= ${item.getId()})}">
-									<img th:src="@{/img/delete.png}" style="width: 30px">
+									<img th:src="@{/img/cancel.png}" style="width: 30px">
                                 </a>
                         </span>
 
