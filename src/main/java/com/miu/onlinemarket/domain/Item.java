@@ -15,6 +15,8 @@ public class Item {
 	private long quantity = 0;
 
 	private Status status;
+
+	private boolean reviewStatus =false;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "seller_id")
@@ -26,6 +28,10 @@ public class Item {
 	@OneToOne
 	@JoinColumn(name = "buyer_id")
 	Buyer buyer;
+
+	@OneToOne
+	Review review;
+
 	public Item(Product product, long quantity, Status status, Seller seller, Order order, Buyer buyer) {
 		this.product = product;
 		this.quantity = quantity;
@@ -36,6 +42,22 @@ public class Item {
 	}
 
 	public Item() {
+	}
+
+	public boolean isReviewStatus() {
+		return reviewStatus;
+	}
+
+	public void setReviewStatus(boolean reviewStatus) {
+		this.reviewStatus = reviewStatus;
+	}
+
+	public Review getReview() {
+		return review;
+	}
+
+	public void setReview(Review review) {
+		this.review = review;
 	}
 
 	public long getId() {

@@ -8,7 +8,7 @@ public class Review {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	@NotEmpty
 	private String review;
@@ -19,7 +19,7 @@ public class Review {
 	@JoinColumn(name = "buyer_id")
 	private Buyer buyer;
 
-	public Review(String review, boolean reviewStatus, Buyer buyer) {
+	public Review(String review, boolean reviewStatus, Buyer buyer){
 		this.review = review;
 		this.reviewStatus = reviewStatus;
 		this.buyer = buyer;
@@ -28,11 +28,11 @@ public class Review {
 	public Review() {
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

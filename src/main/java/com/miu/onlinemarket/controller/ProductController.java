@@ -111,10 +111,10 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/updateProductProcess", method = RequestMethod.POST)
-    public String updateProductProcess(@Valid @ModelAttribute("product") Product product,@RequestParam("id") Long id, BindingResult bindingResult,
-    		Principal principal) throws ResourceNotFoundException{
+    public String updateProductProcess(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,@RequestParam("id") Long id,
+    		Principal principal,Model model) throws ResourceNotFoundException{
         if(bindingResult.hasErrors()) {
-            System.out.println(bindingResult);
+            model.addAttribute("updateProduct",product);
             return "update-product";
         }
 		MultipartFile image = product.getImage();

@@ -11,7 +11,7 @@
 <div class="col" layout:fragment="main-content">
     <div class="container" style="text-align: center">
         <div sec:authorize="hasAuthority('ROLE_SELLER')">
-        <h1>Selled Items</h1>
+            <h1>Selled Items</h1>
             <table class="table table-bordered table-striped">
                 <thead class="thead-light">
                 <tr>
@@ -26,82 +26,139 @@
                     <td th:text="${item.getQuantity()}">Quantity</td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                               <span th:text="${item.getStatus()}">status</span>
+                            <button aria-expanded="false" aria-haspopup="true"
+                                    class="btn btn-outline-info dropdown-toggle"
+                                    data-toggle="dropdown" id="dropdownMenuButton" type="button">
+                                <span th:text="${item.getStatus()}">status</span>
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div th:if="${item.status == item.getStatus().PREPARED}"><a class="btn btn-outline-danger" th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().CANCELLED})}">CANCELLED</a></div>
-                                <div th:if="${item.status == item.getStatus().PREPARED}"><a  class="btn btn-outline-primary" th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().SHIPPED})}">SHIPPED</a></div>
-                                <div th:if="${item.status == item.getStatus().SHIPPED}"><a  class="btn btn-outline-info"th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().ON_THE_WAY})}">ON_THE_WAY</a></div>
-                                <div th:if="${item.status == item.getStatus().ON_THE_WAY}"><a  class="btn btn-outline-success"th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().DELIVERED})}">DELIVERED</a>
+                            <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+                                <div th:if="${item.status == item.getStatus().PREPARED}"><a
+                                        class="btn btn-outline-danger"
+                                        th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().CANCELLED})}">CANCELLED</a>
+                                </div>
+                                <div th:if="${item.status == item.getStatus().PREPARED}"><a
+                                        class="btn btn-outline-primary"
+                                        th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().SHIPPED})}">SHIPPED</a>
+                                </div>
+                                <div th:if="${item.status == item.getStatus().SHIPPED}"><a class="btn btn-outline-info"
+                                                                                           th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().ON_THE_WAY})}">ON_THE_WAY</a>
+                                </div>
+                                <div th:if="${item.status == item.getStatus().ON_THE_WAY}"><a
+                                        class="btn btn-outline-success"
+                                        th:href="@{'/changeStatus'(id=${item.id},status=${item.getStatus().DELIVERED})}">DELIVERED</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div sec:authorize="hasAuthority('ROLE_BUYER')">
+            <h1>Order List</h1>
+            <div th:if="${order.getItems().size() > 0 }">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Seller</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th th:if="${order.status != order.getStatus().PREPARED}">Shipping Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item: ${order.items}">
+                        <td th:text="${item.getProduct().getName()}">name</td>
+                        <td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
+                        <td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
+                        <td>
+                            <div class="input-group number-spinner">
+                                <input disabled min="1"
+                                       step="1" th:max="${item.getProduct().getQuantity()}"
+                                       th:value="${item.getQuantity()}"
+                                       type="number"/>
+                            </div>
+                        </td>
+
+                        <td th:if="${order.status != order.getStatus().PREPARED}">
+
+                            <a th:href="@{'/itemStatus'(id=${item.id})}"> <span th:text="${item.status}">status</span>
+                            </a>
+
+                            <!--                        <span class="btn btn-outline-info" ></span>-->
+                            <!--                        <span th:text="${item.getStatus()}">Shipping Status</span>-->
+                        </td>
+                        <td>
+
+                        <span th:if="${(item.status == item.getStatus().DELIVERED) and !(item.reviewStatus)}">
+                            <a class="btn btn-primary btn-sm mb-3"
+                               data-target="#myModal" data-toggle="modal"
+                               style="color: white; cursor: pointer;"
+                               th:attr="data-target='#myModal'+${order.id}"> Review </a>
+                        		</span>
+                            <div th:if="${item.reviewStatus}">
+                              <span class="d-inline-block" data-toggle="tooltip" tabindex="0"
+                                    title="YOU ALREADY ADDED REVIEW">
+                                    <button class="btn btn-info btn-sm mb-3" disabled
+                                            style="pointer-events: none;" type="button">Review
+                                    </button>
+                              </span>
+                            </div>
+                        </td>
+                        <div class="modal fade" th:id="myModal+${order.id}">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add Review...</h4>
+                                        <button class="close" data-dismiss="modal" type="button">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <div class="row" id="post-review-box">
+                                            <div class="col-md-12">
+                                                <form accept-charset="UTF-8" method="get"
+                                                      th:action="@{/addReview}">
+                                                    <input type="hidden" name="itemId" th:value="${item.id}"/>
+                                                    <textarea rows="5" cols="50"  name="review"></textarea>
+                                                    <input type="hidden" name="productId" th:value="${item.product.id}"/>
+
+                                                    <br><br>
+                                                    <input class="btn btn-primary text-right" type="submit"
+                                                           value="Save">
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
+                    </tr>
+                    </tbody>
+                    <tfoot class="thead-dark">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <th><h6 style="margin: 0">Sum</h6></th>
+                        <th><h6 style="margin: 0" th:text="${order.getTotalPrice()} + ' $'"></h6></th>
+                    </tr>
+                    </tfoot>
+                </table>
 
-                        </div>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-    </div>
-        <div sec:authorize="hasAuthority('ROLE_BUYER')">
-        <h1>Order List</h1>
-        <div th:if="${order.getItems().size() > 0 }">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Product Name</th>
-                    <th>Seller</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th th:if="${order.status != order.getStatus().PREPARED}">Shipping Status</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="item: ${order.items}">
-                    <td th:text="${item.getProduct().getName()}">name</td>
-                    <td th:text="${item.getProduct().getSeller().getUsername()}">Seller</td>
-                    <td th:text="${item.getProduct().getPrice()} + ' $'">Price</td>
-                    <td>
-                        <div class="input-group number-spinner" >
-                            <input type="number" disabled
-                                   th:value="${item.getQuantity()}" min="1" th:max="${item.getProduct().getQuantity()}"
-                                   step="1"/>
-                        </div>
-                    </td>
-
-                    <td th:if="${order.status != order.getStatus().PREPARED}">
-
-                            <a th:href="@{'/itemStatus'(id=${item.id})}"> <span th:text="${item.status}">status</span> </a>
-
-<!--                        <span class="btn btn-outline-info" ></span>-->
-<!--                        <span th:text="${item.getStatus()}">Shipping Status</span>-->
-                    </td>
-                    <td>
-
-                        <span th:if="${item.status == item.getStatus().DELIVERED}">
-								<a class="btn btn-danger btn-sm mb-3"
-                                   href="#">Review </a>
-                        		</span>
-                    </td>
-                </tr>
-                </tbody>
-                <tfoot class="thead-dark">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <th><h6 style="margin: 0">Sum</h6></th>
-                    <th><h6 style="margin: 0" th:text="${order.getTotalPrice()} + ' $'"></h6></th>
-                </tr>
-                </tfoot>
-            </table>
+            </div>
 
         </div>
-
-    </div>
     </div>
 </div>
 </body>

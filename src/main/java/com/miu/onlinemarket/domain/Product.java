@@ -1,5 +1,7 @@
 package com.miu.onlinemarket.domain;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -145,6 +147,13 @@ public class Product {
 
 	public void setPhoto(byte[] photo) {
 		this.photo = photo;
+	}
+
+	public void addReview(Review newReview){
+		if(reviews == null){
+			reviews = new HashSet<>();
+		}
+		reviews.add(newReview);
 	}
 
 }
