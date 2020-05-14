@@ -78,7 +78,9 @@ public class Buyer extends User {
 		}
 		seller.add(newSeller);
 	}
-
+	public void removeSeller(Seller newSeller){
+		seller.remove(newSeller);
+	}
 
 	public int getPoints() {
 		return points;

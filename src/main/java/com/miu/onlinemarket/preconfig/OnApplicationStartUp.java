@@ -153,7 +153,7 @@ public class OnApplicationStartUp {
 //		user.addOder(order);
 		LocalDate date = LocalDate.of(2020,9,15);
 		PaymentMethod paymentMethod= new PaymentMethod("2093",date,"263","ahmed");
-		Address address = new Address("1000 Nth",10,10,"72369",13);
+		Address address = new Address("1000 Nth",44506,3936,"52557",231);
 		user.setPaymentMethod(paymentMethod);
 		user.setAddress(address);
 		user.setPhoto(userPhoto());
@@ -173,6 +173,7 @@ public class OnApplicationStartUp {
 		user2.setUsername("bassem");
 		user2.setPassword("bassem");
 		Set<Role> roles = new HashSet<>();
+		user2.setApproved(true);
 		roles.add(roleRepo.findByName("ROLE_SELLER"));
 		user2.setRoles(roles);
 		user2.setPhoto(userPhoto());

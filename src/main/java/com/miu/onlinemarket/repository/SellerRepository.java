@@ -1,10 +1,13 @@
 package com.miu.onlinemarket.repository;
 
+import com.miu.onlinemarket.domain.Buyer;
 import com.miu.onlinemarket.domain.Product;
 import com.miu.onlinemarket.domain.Seller;
 import com.miu.onlinemarket.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,5 +23,5 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     @Query("select s from Seller s join s.buyers b where b.userId=:id")
     List<Seller> findSellersByBuyerId(Long id);
-
+    
 }

@@ -184,6 +184,17 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("status", "success");
 		return new RedirectView("/product/detail?id="+idVal);
 	}
+	@GetMapping("/unfollow")
+	public RedirectView unFollowSeller(@RequestParam("id") Long idVal, Principal principal, RedirectAttributes redirectAttributes,Model model) throws ResourceNotFoundException {
+
+		Seller seller = sellerService.findSellerById(idVal);
+		Buyer buyer = buyerService.findByUsername(principal.getName());
+		buyer.removeSeller(seller);
+		buyerService.update(buyer);
+		model.addAttribute("status", "success");
+		redirectAttributes.addFlashAttribute("status", "success");
+		return new RedirectView("/product/detail?id="+idVal);
+	}
 
 	@GetMapping("/viewFollowing")
 	public String BuyerViewFollowing(Model model, Principal principal) throws ResourceNotFoundException {
